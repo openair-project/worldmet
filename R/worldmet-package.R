@@ -15,7 +15,7 @@
 #'   <https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database>
 #'    and the map here <https://gis.ncdc.noaa.gov/maps/ncei>.
 #'
-#' @seealso See <https://github.com/davidcarslaw/openair> for information on the
+#' @seealso See <https://github.com/openair-project/openair> for information on the
 #'   related `openair` package.
 "_PACKAGE"
 ## usethis namespace: start

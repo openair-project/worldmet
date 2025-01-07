@@ -1,25 +1,6 @@
 url: https://openair-project.github.io/worldmet/
 template:
-  bootstrap: 5
-  bslib:
-    bootswatch: lumen
-    pkgdown-nav-height: 100px
-  
-navbar:
-  title: worldmet
-  structure:
-    left:  [intro, reference, news, articles, tutorials, book]
-    right: [search, github]
-  components:
-    reference:
-      text: Functions
-      href: reference/index.html
-    news:
-      text: News
-      href: news/index.html
-    book:
-      text: Book (External)
-      href: https://openair-project.github.io/book/sections/data-access/access-met-data.html
+  package: openairpkgdown
 
 reference:
 - title: Obtain Met Data

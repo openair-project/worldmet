@@ -37,6 +37,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 ByteCompile: true
+Config/Needs/website: openair-project/openairpkgdown
 Encoding: UTF-8
 Language: en-GB
 LazyData: true

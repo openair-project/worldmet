@@ -19,7 +19,7 @@ navbar:
       href: news/index.html
     book:
       text: Book (External)
-      href: https://bookdown.org/david_carslaw/openair/sections/data-access/access-met-data.html
+      href: https://openair-project.github.io/book/sections/data-access/access-met-data.html
 
 reference:
 - title: Obtain Met Data

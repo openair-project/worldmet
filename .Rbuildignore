@@ -11,3 +11,4 @@ README_cache
 ^pkgdown$
 ^vignettes/articles$
 ^LICENSE\.md$
+^cran-comments\.md$

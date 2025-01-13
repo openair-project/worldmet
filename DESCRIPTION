@@ -3,7 +3,6 @@ Package: worldmet
 Title: Import Surface Meteorological Data from NOAA Integrated Surface
     Database (ISD)
 Version: 0.9.9
-Date: 2023-02-01
 Authors@R: 
     person("David", "Carslaw", , "david.carslaw@york.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0991-950X"))

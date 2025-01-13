@@ -87,6 +87,6 @@ pak::pak("openair-project/worldmet")
 
 🏛️ **worldmet** is primarily maintained by [David Carslaw](https://github.com/davidcarslaw).
 
-📃 **worldmet** is licensed under the [GNU General Public License](https://openair-project.github.io/worldmet/LICENSE.html).
+📃 **worldmet** is licensed under the [MIT License](https://openair-project.github.io/worldmet/LICENSE.html).
 
 🧑‍💻 Contributions are welcome from the wider community. See the [contributing guide](https://openair-project.github.io/worldmet/CONTRIBUTING.html) and [code of conduct](https://openair-project.github.io/worldmet/CODE_OF_CONDUCT.html) for more information.

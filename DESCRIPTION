@@ -13,7 +13,7 @@ Description: Functions to import data from more than 30,000 surface
     and Atmospheric Administration (NOAA) Integrated Surface Database
     (ISD, see
     <https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database>).
-License: GPL (>= 2)
+License: MIT + file LICENSE
 URL: https://openair-project.github.io/worldmet/,
     https://github.com/openair-project/worldmet
 BugReports: https://github.com/openair-project/worldmet/issues

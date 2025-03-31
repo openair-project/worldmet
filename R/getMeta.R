@@ -57,17 +57,19 @@
 #' ## returns 'n' nearest by default
 #' getMeta(lat = 40, lon = 116.9)
 #' }
-getMeta <- function(site = "heathrow",
-                    lat = NA,
-                    lon = NA,
-                    crs = 4326,
-                    country = NA,
-                    state = NA,
-                    n = 10,
-                    end.year = "current",
-                    provider = c("OpenStreetMap", "Esri.WorldImagery"),
-                    plot = TRUE,
-                    returnMap = FALSE) {
+getMeta <- function(
+  site = "heathrow",
+  lat = NA,
+  lon = NA,
+  crs = 4326,
+  country = NA,
+  state = NA,
+  n = 10,
+  end.year = "current",
+  provider = c("OpenStreetMap", "Esri.WorldImagery"),
+  plot = TRUE,
+  returnMap = FALSE
+) {
   ## read the meta data
 
   ## download the file, else use the package version
@@ -76,7 +78,9 @@ getMeta <- function(site = "heathrow",
   # check year
   if (!any(end.year %in% c("current", "all"))) {
     if (!is.numeric(end.year)) {
-      stop("end.year should be one of 'current', 'all' or a numeric 4-digit year such as 2016.")
+      stop(
+        "end.year should be one of 'current', 'all' or a numeric 4-digit year such as 2016."
+      )
     }
   }
 
@@ -111,6 +115,7 @@ getMeta <- function(site = "heathrow",
 
   # make sure no missing lat / lon
   id <- which(is.na(meta$LON))
+
   if (length(id) > 0) {
     meta <- meta[-id, ]
   }
@@ -201,13 +206,15 @@ getMeta <- function(site = "heathrow",
         leaflet::addLayersControl(
           map = m,
           baseGroups = provider,
-          options = leaflet::layersControlOptions(collapsed = FALSE, autoZIndex = FALSE)
+          options = leaflet::layersControlOptions(
+            collapsed = FALSE,
+            autoZIndex = FALSE
+          )
         )
     }
 
     print(m)
   }
-
 
   if (returnMap) {
     return(m)
@@ -281,11 +288,7 @@ getMetaLive <- function(...) {
 
   ## full character string of site id
   meta$USAF <-
-    formatC(meta$USAF,
-      width = 6,
-      format = "d",
-      flag = "0"
-    )
+    formatC(meta$USAF, width = 6, format = "d", flag = "0")
 
   ## code used to query data
   meta$code <- paste0(meta$USAF, "-", meta$WBAN)

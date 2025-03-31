@@ -1,4 +1,8 @@
-# worldmet (development version)
+# worldmet 0.9.9
+
+## New Features
+
+- The `quiet` argument of `importNOAA()` now also toggles the progress bar.
 
 ## New Features
 
@@ -6,9 +10,11 @@
 
 ## Bug Fixes
 
-- fix join problem due to `{dplyr}` updates.
+- Fixed join problem due to `{dplyr}` updates.
 
-- fix spelling mistakes
+- Fixed spelling mistakes in `weatherCodes`
+
+- Converted the `{worldmet}` vignette to an article. This should ensure it is no longer reliant on NOAA's servers. It can now be accessed at <https://openair-project.github.io/worldmet/articles/worldmet.html>.
 
 # worldmet 0.9.6
 

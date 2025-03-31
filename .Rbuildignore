@@ -1,6 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-NEWS\.md
 ^\.travis\.yml$
 README_files
 README_cache
@@ -11,3 +10,4 @@ README_cache
 ^pkgdown$
 ^vignettes/articles$
 ^LICENSE\.md$
+^cran-comments\.md$

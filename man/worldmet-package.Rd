@@ -28,7 +28,7 @@ For general information of the ISD see
 and the map here \url{https://gis.ncdc.noaa.gov/maps/ncei}.
 }
 \seealso{
-See \url{https://github.com/davidcarslaw/openair} for information on the
+See \url{https://github.com/openair-project/openair} for information on the
 related \code{openair} package.
 }
 \author{

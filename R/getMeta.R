@@ -52,90 +52,95 @@
 #' ## returns 'n' nearest by default
 #' getMeta(lat = 40, lon = 116.9)
 #' }
-getMeta <- function(site = "heathrow",
-                    lat = NA,
-                    lon = NA,
-                    country = NA,
-                    state = NA,
-                    n = 10,
-                    end.year = "current",
-                    provider = c("OpenStreetMap", "Esri.WorldImagery"),
-                    plot = TRUE,
-                    returnMap = FALSE) {
+getMeta <- function(
+  site = "heathrow",
+  lat = NA,
+  lon = NA,
+  country = NA,
+  state = NA,
+  n = 10,
+  end.year = "current",
+  provider = c("OpenStreetMap", "Esri.WorldImagery"),
+  plot = TRUE,
+  returnMap = FALSE
+) {
   ## read the meta data
-  
+
   ## download the file, else use the package version
   meta <- getMetaLive()
-  
+
   # check year
   if (!any(end.year %in% c("current", "all"))) {
     if (!is.numeric(end.year)) {
-      stop("end.year should be one of 'current', 'all' or a numeric 4-digit year such as 2016.")
+      stop(
+        "end.year should be one of 'current', 'all' or a numeric 4-digit year such as 2016."
+      )
     }
   }
-  
+
   # we base the current year as the max available in the meta data
   if ("current" %in% end.year)
     end.year <-
       max(as.numeric(format(meta$END, "%Y")), na.rm = TRUE)
-  if ("all" %in% end.year)
-    end.year <- 1900:2100
-  
-  
-  
+  if ("all" %in% end.year) end.year <- 1900:2100
+
   ## search based on name of site
   if (!missing(site)) {
     ## search for station
-    meta <- meta[grep(site, meta$STATION, ignore.case = TRUE),]
+    meta <- meta[grep(site, meta$STATION, ignore.case = TRUE), ]
   }
-  
+
   ## search based on country codes
   if (!missing(country) && !is.na(country)) {
     ## search for country
     id <- which(meta$CTRY %in% toupper(country))
-    meta <- meta[id,]
+    meta <- meta[id, ]
   }
-  
+
   ## search based on state codes
   if (!missing(state)) {
     ## search for state
     id <- which(meta$ST %in% toupper(state))
-    meta <- meta[id,]
+    meta <- meta[id, ]
   }
-  
+
   # make sure no missing lat / lon
   id <- which(is.na(meta$LON))
-  if (length(id) > 0)
-    meta <- meta[-id,]
-  
+  if (length(id) > 0) meta <- meta[-id, ]
+
   id <- which(is.na(meta$LAT))
-  if (length(id) > 0)
-    meta <- meta[-id,]
-  
+  if (length(id) > 0) meta <- meta[-id, ]
+
   # filter by end year
   id <- which(format(meta$END, "%Y") %in% end.year)
-  meta <- meta[id,]
-  
+  meta <- meta[id, ]
+
   ## approximate distance to site
   if (!missing(lat) && !missing(lon)) {
     r <- 6371 # radius of the Earth
-    
+
     ## Coordinates need to be in radians
     meta$longR <- meta$LON * pi / 180
     meta$latR <- meta$LAT * pi / 180
     LON <- lon * pi / 180
     LAT <- lat * pi / 180
-    meta$dist <- acos(sin(LAT) * sin(meta$latR) + cos(LAT) *
-                        cos(meta$latR) * cos(meta$longR - LON)) * r
-    
+    meta$dist <- acos(
+      sin(LAT) *
+        sin(meta$latR) +
+        cos(LAT) *
+          cos(meta$latR) *
+          cos(meta$longR - LON)
+    ) *
+      r
+
     ## sort and retrun top n nearest
     meta <- utils::head(openair:::sortDataFrame(meta, key = "dist"), n)
   }
-  
+
   dat <- rename(meta, latitude = LAT, longitude = LON)
-  
+
   names(dat) <- tolower(names(dat))
-  
+
   if (plot) {
     content <- paste(
       paste0("<b>", dat$station, "</b>"),
@@ -144,7 +149,7 @@ getMeta <- function(site = "heathrow",
       paste("<b>End:</b>", dat$end),
       sep = "<br/>"
     )
-    
+
     if ("dist" %in% names(dat)) {
       content <- paste(
         content,
@@ -152,22 +157,22 @@ getMeta <- function(site = "heathrow",
         sep = "<br/>"
       )
     }
-    
+
     m <- leaflet::leaflet(dat)
-    
+
     for (i in provider) {
       m <- leaflet::addProviderTiles(map = m, provider = i, group = i)
     }
-    
+
     m <-
       leaflet::addMarkers(
         map = m,
-        ~ longitude,
-        ~ latitude,
+        ~longitude,
+        ~latitude,
         popup = content,
         clusterOptions = leaflet::markerClusterOptions()
       )
-    
+
     if (!is.na(lat) && !is.na(lon)) {
       m <- leaflet::addCircles(
         map = m,
@@ -185,24 +190,23 @@ getMeta <- function(site = "heathrow",
         )
       )
     }
-    
+
     if (length(provider) > 1) {
-      m <- 
+      m <-
         leaflet::addLayersControl(
           map = m,
-          baseGroups = provider, 
-          options = leaflet::layersControlOptions(collapsed = FALSE, autoZIndex = FALSE)
+          baseGroups = provider,
+          options = leaflet::layersControlOptions(
+            collapsed = FALSE,
+            autoZIndex = FALSE
+          )
         )
     }
-    
+
     print(m)
   }
-  
-  
-  if (returnMap)
-    return(m)
-  else
-    return(dat)
+
+  if (returnMap) return(m) else return(dat)
 }
 
 
@@ -222,7 +226,7 @@ getMeta <- function(site = "heathrow",
 #' @export
 getMetaLive <- function(...) {
   ## downloads the whole thing fresh
-  
+
   url <- "https://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv"
   meta <- read_csv(
     url,
@@ -240,10 +244,10 @@ getMetaLive <- function(...) {
       X9 = col_double(),
       X10 = col_date(format = "%Y%m%d"),
       X11 = col_date(format = "%Y%m%d")
-    ), 
+    ),
     progress = FALSE
   )
-  
+
   # if not available e.g. due to US Government shutdown, flag and exit
   # some header data may still be read, so check column number
   if (ncol(meta) == 1L)
@@ -251,7 +255,7 @@ getMetaLive <- function(...) {
       "File not available, check \nhttps://www1.ncdc.noaa.gov/pub/data/noaa/ for potential server problems.",
       call. = FALSE
     )
-  
+
   ## names in the meta file
   names(meta) <- c(
     "USAF",
@@ -266,17 +270,14 @@ getMetaLive <- function(...) {
     "BEGIN",
     "END"
   )
-  
+
   ## full character string of site id
   meta$USAF <-
-    formatC(meta$USAF,
-            width = 6,
-            format = "d",
-            flag = "0")
-  
+    formatC(meta$USAF, width = 6, format = "d", flag = "0")
+
   ## code used to query data
   meta$code <- paste0(meta$USAF, "-", meta$WBAN)
-  
+
   return(meta)
 }
 

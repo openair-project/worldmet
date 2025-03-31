@@ -9,10 +9,16 @@
 #' @param site A site name search string e.g. `site = "heathrow"`. The search
 #'   strings and be partial and can be upper or lower case e.g. `site =
 #'   "HEATHR"`.
-#' @param lat A latitude in decimal degrees to search. Takes the values -90 to
-#'   90.
-#' @param lon A longitude in decimal degrees to search. Takes values -180 to
-#'   180. Negative numbers are west of the Greenwich meridian.
+#' @param lat,lon Decimal latitude and longitude (or other Y/X coordinate if
+#'   using a different `crs`). If provided, the `n` closest ISD stations to this
+#'   coordinate will be returned.
+#' @param crs The coordinate reference system (CRS) of the data, passed to
+#'   [sf::st_crs()]. By default this is [EPSG:4326](https://epsg.io/4326), the
+#'   CRS associated with the commonly used latitude and longitude coordinates.
+#'   Different coordinate systems can be specified using `crs` (e.g., `crs =
+#'   27700` for the [British National Grid](https://epsg.io/27700)). Note that
+#'   non-lat/lng coordinate systems will be re-projected to EPSG:4326 for making
+#'   comparisons with the NOAA metadata plotting on the map.
 #' @param country The country code. This is a two letter code. For a full
 #'   listing see <https://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv>.
 #' @param state The state code. This is a two letter code.
@@ -41,7 +47,6 @@
 #'   direct querying.
 #' @author David Carslaw
 #' @examples
-#'
 #' \dontrun{
 #' ## search for sites with name beijing
 #' getMeta(site = "beijing")
@@ -56,6 +61,7 @@ getMeta <- function(
   site = "heathrow",
   lat = NA,
   lon = NA,
+  crs = 4326,
   country = NA,
   state = NA,
   n = 10,
@@ -79,10 +85,13 @@ getMeta <- function(
   }
 
   # we base the current year as the max available in the meta data
-  if ("current" %in% end.year)
+  if ("current" %in% end.year) {
     end.year <-
       max(as.numeric(format(meta$END, "%Y")), na.rm = TRUE)
-  if ("all" %in% end.year) end.year <- 1900:2100
+  }
+  if ("all" %in% end.year) {
+    end.year <- 1900:2100
+  }
 
   ## search based on name of site
   if (!missing(site)) {
@@ -106,35 +115,37 @@ getMeta <- function(
 
   # make sure no missing lat / lon
   id <- which(is.na(meta$LON))
-  if (length(id) > 0) meta <- meta[-id, ]
+
+  if (length(id) > 0) {
+    meta <- meta[-id, ]
+  }
 
   id <- which(is.na(meta$LAT))
-  if (length(id) > 0) meta <- meta[-id, ]
+  if (length(id) > 0) {
+    meta <- meta[-id, ]
+  }
 
   # filter by end year
   id <- which(format(meta$END, "%Y") %in% end.year)
   meta <- meta[id, ]
 
   ## approximate distance to site
-  if (!missing(lat) && !missing(lon)) {
-    r <- 6371 # radius of the Earth
+  if (!is.na(lat) && !is.na(lon)) {
+    point <-
+      sf::st_as_sf(
+        data.frame(lon = lon, lat = lat),
+        coords = c("lon", "lat"),
+        crs = sf::st_crs(crs)
+      ) %>%
+      sf::st_transform(crs = sf::st_crs(4326))
 
-    ## Coordinates need to be in radians
-    meta$longR <- meta$LON * pi / 180
-    meta$latR <- meta$LAT * pi / 180
-    LON <- lon * pi / 180
-    LAT <- lat * pi / 180
-    meta$dist <- acos(
-      sin(LAT) *
-        sin(meta$latR) +
-        cos(LAT) *
-          cos(meta$latR) *
-          cos(meta$longR - LON)
-    ) *
-      r
+    meta_sf <-
+      sf::st_as_sf(meta, coords = c("LON", "LAT"), crs = 4326)
 
-    ## sort and retrun top n nearest
-    meta <- utils::head(openair:::sortDataFrame(meta, key = "dist"), n)
+    meta$dist <- as.numeric(sf::st_distance(meta_sf, point)) / 1000L
+
+    ## sort and return top n nearest
+    meta <- dplyr::slice_min(meta, order_by = dist, n = n)
   }
 
   dat <- rename(meta, latitude = LAT, longitude = LON)
@@ -176,8 +187,7 @@ getMeta <- function(
     if (!is.na(lat) && !is.na(lon)) {
       m <- leaflet::addCircles(
         map = m,
-        lng = lon,
-        lat = lat,
+        data = point,
         weight = 20,
         radius = 200,
         stroke = TRUE,
@@ -206,7 +216,11 @@ getMeta <- function(
     print(m)
   }
 
-  if (returnMap) return(m) else return(dat)
+  if (returnMap) {
+    return(m)
+  } else {
+    return(dat)
+  }
 }
 
 
@@ -250,11 +264,12 @@ getMetaLive <- function(...) {
 
   # if not available e.g. due to US Government shutdown, flag and exit
   # some header data may still be read, so check column number
-  if (ncol(meta) == 1L)
+  if (ncol(meta) == 1L) {
     stop(
       "File not available, check \nhttps://www1.ncdc.noaa.gov/pub/data/noaa/ for potential server problems.",
       call. = FALSE
     )
+  }
 
   ## names in the meta file
   names(meta) <- c(

@@ -17,7 +17,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' ## import some data then export it
+#' # import some data then export it
 #' dat <- importNOAA(year = 2012)
 #' exportADMS(dat, out = "~/adms_met.MET")
 #' }
@@ -30,10 +30,7 @@ exportADMS <- function(
   # save input for later
   input <- dat
 
-  # keep R check quiet
-  wd <- u <- v <- NULL
-
-  ## make sure the data do not have gaps
+  # make sure the data do not have gaps
   all.dates <- data.frame(
     date = seq(
       ISOdatetime(
@@ -60,7 +57,7 @@ exportADMS <- function(
 
   dat <- merge(dat, all.dates, all = TRUE)
 
-  ## make sure precipitation is available
+  # make sure precipitation is available
   if (!"precip" %in% names(dat)) {
     dat$precip <- NA
   }
@@ -69,7 +66,11 @@ exportADMS <- function(
     varInterp <- c("ws", "u", "v", "air_temp", "RH", "cl")
 
     # transform wd
-    dat <- mutate(dat, u = sin(pi * wd / 180), v = cos(pi * wd / 180))
+    dat <- dplyr::mutate(
+      dat,
+      u = sin(pi * .data$wd / 180),
+      v = cos(pi * .data$wd / 180)
+    )
 
     for (variable in varInterp) {
       # if all missing, then don't interpolate
@@ -100,16 +101,19 @@ exportADMS <- function(
       dat[[variable]][id] <- NA
     }
 
-    dat <- mutate(dat, wd = as.vector(atan2(u, v) * 360 / 2 / pi))
+    dat <- dplyr::mutate(
+      dat,
+      wd = as.vector(atan2(.data$u, .data$v) * 360 / 2 / pi)
+    )
 
-    ## correct for negative wind directions
+    # correct for negative wind directions
     ids <- which(dat$wd < 0) ## ids where wd < 0
     dat$wd[ids] <- dat$wd[ids] + 360
 
-    dat <- select(dat, -v, -u)
+    dat <- dplyr::select(dat, -"v", -"u")
   }
 
-  ## exports met data to ADMS format file
+  # exports met data to ADMS format file
   year <- as.numeric(format(dat$date, "%Y"))
   day <- as.numeric(format(dat$date, "%j"))
   hour <- as.numeric(format(dat$date, "%H"))
@@ -119,7 +123,7 @@ exportADMS <- function(
   if (!"cl" %in% names(dat)) dat$cl <- NA
   if (!"precip" %in% names(dat)) dat$precip <- NA
 
-  ## data frame of met data needed
+  # data frame of met data needed
   adms <- data.frame(
     station,
     year,
@@ -134,7 +138,7 @@ exportADMS <- function(
     stringsAsFactors = FALSE
   )
 
-  ## print key data capture rates to the screen
+  # print key data capture rates to the screen
   dc <- round(100 - 100 * (length(which(is.na(dat$ws))) / length(dat$ws)), 1)
   print(paste("Data capture for wind speed:", dc, "%"))
 
@@ -150,10 +154,10 @@ exportADMS <- function(
   dc <- round(100 - 100 * (length(which(is.na(dat$cl))) / length(dat$cl)), 1)
   print(paste("Data capture for cloud cover:", dc, "%"))
 
-  ## replace NA with -999
+  # replace NA with -999
   adms[] <- lapply(adms, function(x) replace(x, is.na(x), -999))
 
-  ## write the data file
+  # write the data file
   utils::write.table(
     adms,
     file = out,
@@ -163,7 +167,7 @@ exportADMS <- function(
     quote = FALSE
   )
 
-  ## add the header lines
+  # add the header lines
   fConn <- file(out, "r+")
   Lines <- readLines(fConn)
   writeLines(

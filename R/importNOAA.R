@@ -135,7 +135,7 @@ importNOAA <- function(
     i <- NULL
 
     dat <- foreach::foreach(
-      i = 1:nrow(site_process),
+      i = seq_len(nrow(site_process)),
       .combine = "bind_rows",
       .export = "getDat",
       .errorhandling = "remove"
@@ -556,7 +556,6 @@ getDat <- function(code, year, hourly) {
     dates <- as.POSIXct(paste0(unique(pwc$date2), ":00:00"), tz = "GMT")
 
     pwc <- data.frame(date = dates, pwc = tmp$pwc)
-    PWC <- TRUE
   }
 
   ## average to hourly

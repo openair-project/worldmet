@@ -280,8 +280,3 @@ getMetaLive <- function(...) {
 
   return(meta)
 }
-
-# how to update meta data
-# meta <- getMeta(end.year = "all")
-# usethis::use_data(meta, overwrite = TRUE, internal = TRUE)
-# usethis::use_data(meta, overwrite = TRUE)

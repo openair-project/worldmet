@@ -149,7 +149,7 @@ importNOAA <- function(
     parallel::stopCluster(cl)
   } else {
     dat <-
-      purrr::pmap(site_process, getDat, hourly = hourly, .progress = !quiet) %>%
+      purrr::pmap(site_process, getDat, hourly = hourly, .progress = !quiet) |>
       purrr::list_rbind()
   }
 
@@ -159,9 +159,9 @@ importNOAA <- function(
   }
 
   # check to see what is missing and print to screen
-  actual <- select(dat, code, date, station) %>%
-    mutate(year = as.numeric(format(date, "%Y"))) %>%
-    group_by(code, year) %>%
+  actual <- select(dat, code, date, station) |>
+    mutate(year = as.numeric(format(date, "%Y"))) |>
+    group_by(code, year) |>
     slice(1)
 
   actual <- left_join(site_process, actual, by = c("code", "year"))
@@ -186,8 +186,8 @@ importNOAA <- function(
       return(dat)
     }
 
-    mutate(dat, year = format(date, "%Y")) %>%
-      group_by(code, year) %>%
+    mutate(dat, year = format(date, "%Y")) |>
+      group_by(code, year) |>
       do(writeMet(.))
   }
 
@@ -496,7 +496,7 @@ getDat <- function(code, year, hourly) {
     )
 
     met_data <- left_join(met_data, worldmet::weatherCodes, by = "pwc")
-    met_data <- select(met_data, -pwc) %>%
+    met_data <- select(met_data, -pwc) |>
       rename(pwc = description)
   }
 

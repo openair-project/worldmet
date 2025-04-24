@@ -20,7 +20,6 @@
 "_PACKAGE"
 ## usethis namespace: start
 #' @importFrom foreach %dopar%
-#' @importFrom magrittr %>%
 #' @importFrom tibble tibble
 ## usethis namespace: end
 NULL

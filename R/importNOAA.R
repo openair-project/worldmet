@@ -253,12 +253,12 @@ getDat <- function(code, year, hourly) {
 
   met_data <- dplyr::rename(
     met_data,
-    code = STATION,
-    station = NAME,
-    date = DATE,
-    latitude = LATITUDE,
-    longitude = LONGITUDE,
-    elev = ELEVATION
+    code = "STATION",
+    station = "NAME",
+    date = "DATE",
+    latitude = "LATITUDE",
+    longitude = "LONGITUDE",
+    elev = "ELEVATION"
   )
 
   met_data$code <- code
@@ -399,7 +399,11 @@ getDat <- function(code, year, hourly) {
     met_data <- dplyr::mutate(
       met_data,
       cl_1 = as.numeric(.data$cl_1),
-      cl_1 = ifelse((is.na(.data$cl_1) & ceil_hgt == 22000), 0, .data$cl_1),
+      cl_1 = ifelse(
+        (is.na(.data$cl_1) & .data$ceil_hgt == 22000),
+        0,
+        .data$cl_1
+      ),
       cl_1 = ifelse(.data$cl_1 == 99, NA, .data$cl_1),
       cl_1_height = as.numeric(.data$cl_1_height),
       cl_1_height = ifelse(.data$cl_1_height == 99999, NA, .data$cl_1_height)

@@ -87,7 +87,6 @@
 #'   the chosen location e.g.  `path = "C:/Users/David"`. Files are saved by
 #'   year and site.
 #' @export
-#' @import readr tidyr dplyr
 #' @return Returns a data frame of surface observations. The data frame is
 #'   consistent for use with the `openair` package. Note that the data are
 #'   returned in GMT (UTC) time zone format. Users may wish to express the data
@@ -111,17 +110,15 @@ importNOAA <- function(
   quiet = FALSE,
   path = NA
 ) {
-  ## main web site https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database
+  # main web site https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database
 
-  ## formats document https://www.ncei.noaa.gov/data/global-hourly/doc/isd-format-document.pdf
+  # formats document https://www.ncei.noaa.gov/data/global-hourly/doc/isd-format-document.pdf
 
   # brief csv file description https://www.ncei.noaa.gov/data/global-hourly/doc/CSV_HELP.pdf
 
-  ## gis map https://gis.ncdc.noaa.gov/map/viewer/#app=cdo&cfg=cdo&theme=hourly&layers=1
+  # gis map https://gis.ncdc.noaa.gov/map/viewer/#app=cdo&cfg=cdo&theme=hourly&layers=1
 
-  ## go through each of the years selected, use parallel processing
-
-  i <- station <- . <- NULL
+  # go through each of the years selected, use parallel processing
 
   # sites and years to process
   site_process <- expand.grid(
@@ -134,8 +131,11 @@ importNOAA <- function(
     cl <- parallel::makeCluster(n.cores)
     doParallel::registerDoParallel(cl)
 
+    # R CMD check
+    i <- NULL
+
     dat <- foreach::foreach(
-      i = 1:nrow(site_process),
+      i = seq_len(nrow(site_process)),
       .combine = "bind_rows",
       .export = "getDat",
       .errorhandling = "remove"
@@ -149,7 +149,7 @@ importNOAA <- function(
     parallel::stopCluster(cl)
   } else {
     dat <-
-      purrr::pmap(site_process, getDat, hourly = hourly, .progress = !quiet) %>%
+      purrr::pmap(site_process, getDat, hourly = hourly, .progress = !quiet) |>
       purrr::list_rbind()
   }
 
@@ -159,16 +159,15 @@ importNOAA <- function(
   }
 
   # check to see what is missing and print to screen
-  actual <- select(dat, code, date, station) %>%
-    mutate(year = as.numeric(format(date, "%Y"))) %>%
-    group_by(code, year) %>%
-    slice(1)
+  actual <- dplyr::select(dat, "code", "date", "station") |>
+    dplyr::mutate(year = as.numeric(format(.data$date, "%Y"))) |>
+    dplyr::slice(1, .by = c("code", "year"))
 
-  actual <- left_join(site_process, actual, by = c("code", "year"))
+  actual <- dplyr::left_join(site_process, actual, by = c("code", "year"))
 
   if (length(which(is.na(actual$date))) > 0 && !quiet) {
     print("The following sites / years are missing:")
-    print(filter(actual, is.na(date)))
+    print(dplyr::filter(actual, is.na(.data$date)))
   }
 
   if (!is.na(path)) {
@@ -186,9 +185,10 @@ importNOAA <- function(
       return(dat)
     }
 
-    mutate(dat, year = format(date, "%Y")) %>%
-      group_by(code, year) %>%
-      do(writeMet(.))
+    dat |>
+      dplyr::mutate(year = format(.data$date, "%Y")) |>
+      (\(x) split(x, x[c("code", "year")]))() |>
+      purrr::map(writeMet)
   }
 
   return(dat)
@@ -215,30 +215,30 @@ getDat <- function(code, year, hourly) {
   # suppress warnings because some fields might be missing in the list
   # Note that not all available data is returned - just what I think is most useful
   met_data <- try(
-    suppressWarnings(read_csv(
+    suppressWarnings(readr::read_csv(
       file.name,
-      col_types = cols_only(
-        STATION = col_character(),
-        DATE = col_datetime(format = ""),
-        SOURCE = col_double(),
-        LATITUDE = col_double(),
-        LONGITUDE = col_double(),
-        ELEVATION = col_double(),
-        NAME = col_character(),
-        REPORT_TYPE = col_character(),
-        CALL_SIGN = col_double(),
-        QUALITY_CONTROL = col_character(),
-        WND = col_character(),
-        CIG = col_character(),
-        VIS = col_character(),
-        TMP = col_character(),
-        DEW = col_character(),
-        SLP = col_character(),
-        AA1 = col_character(),
-        AW1 = col_character(),
-        GA1 = col_character(),
-        GA2 = col_character(),
-        GA3 = col_character()
+      col_types = readr::cols_only(
+        STATION = readr::col_character(),
+        DATE = readr::col_datetime(format = ""),
+        SOURCE = readr::col_double(),
+        LATITUDE = readr::col_double(),
+        LONGITUDE = readr::col_double(),
+        ELEVATION = readr::col_double(),
+        NAME = readr::col_character(),
+        REPORT_TYPE = readr::col_character(),
+        CALL_SIGN = readr::col_double(),
+        QUALITY_CONTROL = readr::col_character(),
+        WND = readr::col_character(),
+        CIG = readr::col_character(),
+        VIS = readr::col_character(),
+        TMP = readr::col_character(),
+        DEW = readr::col_character(),
+        SLP = readr::col_character(),
+        AA1 = readr::col_character(),
+        AW1 = readr::col_character(),
+        GA1 = readr::col_character(),
+        GA2 = readr::col_character(),
+        GA3 = readr::col_character()
       ),
       progress = FALSE
     )),
@@ -251,14 +251,14 @@ getDat <- function(code, year, hourly) {
     return()
   }
 
-  met_data <- rename(
+  met_data <- dplyr::rename(
     met_data,
-    code = STATION,
-    station = NAME,
-    date = DATE,
-    latitude = LATITUDE,
-    longitude = LONGITUDE,
-    elev = ELEVATION
+    code = "STATION",
+    station = "NAME",
+    date = "DATE",
+    latitude = "LATITUDE",
+    longitude = "LONGITUDE",
+    elev = "ELEVATION"
   )
 
   met_data$code <- code
@@ -266,100 +266,112 @@ getDat <- function(code, year, hourly) {
   # separate WND column
 
   if ("WND" %in% names(met_data)) {
-    met_data <- separate(met_data, WND, into = c("wd", "x", "y", "ws", "z"))
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "WND",
+      into = c("wd", "x", "y", "ws", "z")
+    )
 
-    met_data <- mutate(
+    met_data <- dplyr::mutate(
       met_data,
-      wd = as.numeric(wd),
-      wd = ifelse(wd == 999, NA, wd),
-      ws = as.numeric(ws),
-      ws = ifelse(ws == 9999, NA, ws),
-      ws = ws / 10
+      wd = as.numeric(.data$wd),
+      wd = ifelse(.data$wd == 999, NA, .data$wd),
+      ws = as.numeric(.data$ws),
+      ws = ifelse(.data$ws == 9999, NA, .data$ws),
+      ws = .data$ws / 10
     )
   }
 
   # separate TMP column
   if ("TMP" %in% names(met_data)) {
-    met_data <- separate(
-      met_data,
-      TMP,
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "TMP",
       into = c("air_temp", "flag_temp"),
       sep = ","
     )
 
-    met_data <- mutate(
+    met_data <- dplyr::mutate(
       met_data,
-      air_temp = as.numeric(air_temp),
-      air_temp = ifelse(air_temp == 9999, NA, air_temp),
-      air_temp = air_temp / 10
+      air_temp = as.numeric(.data$air_temp),
+      air_temp = ifelse(.data$air_temp == 9999, NA, .data$air_temp),
+      air_temp = .data$air_temp / 10
     )
   }
 
   # separate VIS column
   if ("VIS" %in% names(met_data)) {
-    met_data <- separate(
-      met_data,
-      VIS,
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "VIS",
       into = c("visibility", "flag_vis1", "flag_vis2", "flag_vis3"),
       sep = ",",
       fill = "right"
     )
 
-    met_data <- mutate(
+    met_data <- dplyr::mutate(
       met_data,
-      visibility = as.numeric(visibility),
-      visibility = ifelse(visibility %in% c(9999, 999999), NA, visibility)
+      visibility = as.numeric(.data$visibility),
+      visibility = ifelse(
+        .data$visibility %in% c(9999, 999999),
+        NA,
+        .data$visibility
+      )
     )
   }
 
   # separate DEW column
   if ("DEW" %in% names(met_data)) {
-    met_data <- separate(
-      met_data,
-      DEW,
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "DEW",
       into = c("dew_point", "flag_dew"),
       sep = ","
     )
 
-    met_data <- mutate(
-      met_data,
-      dew_point = as.numeric(dew_point),
-      dew_point = ifelse(dew_point == 9999, NA, dew_point),
-      dew_point = dew_point / 10
+    met_data <- dplyr::mutate(
+      data = met_data,
+      dew_point = as.numeric(.data$dew_point),
+      dew_point = ifelse(.data$dew_point == 9999, NA, .data$dew_point),
+      dew_point = .data$dew_point / 10
     )
   }
   # separate SLP column
   if ("SLP" %in% names(met_data)) {
-    met_data <- separate(
-      met_data,
-      SLP,
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "SLP",
       into = c("atmos_pres", "flag_pres"),
       sep = ",",
       fill = "right"
     )
 
-    met_data <- mutate(
+    met_data <- dplyr::mutate(
       met_data,
-      atmos_pres = as.numeric(atmos_pres),
-      atmos_pres = ifelse(atmos_pres %in% c(99999, 999999), NA, atmos_pres),
-      atmos_pres = atmos_pres / 10
+      atmos_pres = as.numeric(.data$atmos_pres),
+      atmos_pres = ifelse(
+        .data$atmos_pres %in% c(99999, 999999),
+        NA,
+        .data$atmos_pres
+      ),
+      atmos_pres = .data$atmos_pres / 10
     )
   }
 
   # separate CIG (sky condition) column
   if ("CIG" %in% names(met_data)) {
-    met_data <- separate(
-      met_data,
-      CIG,
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "CIG",
       into = c("ceil_hgt", "flag_sky1", "flag_sky2", "flag_sky3"),
       sep = ",",
       fill = "right"
     )
 
-    met_data <- mutate(
+    met_data <- dplyr::mutate(
       met_data,
-      ceil_hgt = as.numeric(ceil_hgt),
-      ceil_hgt = ifelse(ceil_hgt == 99999, NA, ceil_hgt)
+      ceil_hgt = as.numeric(.data$ceil_hgt),
+      ceil_hgt = ifelse(.data$ceil_hgt == 99999, NA, .data$ceil_hgt)
     )
   }
 
@@ -370,9 +382,9 @@ getDat <- function(code, year, hourly) {
 
   if ("GA1" %in% names(met_data)) {
     # separate GA1 (cloud layer 1 height, amount) column
-    met_data <- separate(
-      met_data,
-      GA1,
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "GA1",
       into = c(
         "cl_1",
         "code_1",
@@ -384,20 +396,24 @@ getDat <- function(code, year, hourly) {
       sep = ","
     )
 
-    met_data <- mutate(
+    met_data <- dplyr::mutate(
       met_data,
-      cl_1 = as.numeric(cl_1),
-      cl_1 = ifelse((is.na(cl_1) & ceil_hgt == 22000), 0, cl_1),
-      cl_1 = ifelse(cl_1 == 99, NA, cl_1),
-      cl_1_height = as.numeric(cl_1_height),
-      cl_1_height = ifelse(cl_1_height == 99999, NA, cl_1_height)
+      cl_1 = as.numeric(.data$cl_1),
+      cl_1 = ifelse(
+        (is.na(.data$cl_1) & .data$ceil_hgt == 22000),
+        0,
+        .data$cl_1
+      ),
+      cl_1 = ifelse(.data$cl_1 == 99, NA, .data$cl_1),
+      cl_1_height = as.numeric(.data$cl_1_height),
+      cl_1_height = ifelse(.data$cl_1_height == 99999, NA, .data$cl_1_height)
     )
   }
 
   if ("GA2" %in% names(met_data)) {
-    met_data <- separate(
-      met_data,
-      GA2,
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "GA2",
       into = c(
         "cl_2",
         "code_1",
@@ -409,19 +425,19 @@ getDat <- function(code, year, hourly) {
       sep = ","
     )
 
-    met_data <- mutate(
+    met_data <- dplyr::mutate(
       met_data,
-      cl_2 = as.numeric(cl_2),
-      cl_2 = ifelse(cl_2 == 99, NA, cl_2),
-      cl_2_height = as.numeric(cl_2_height),
-      cl_2_height = ifelse(cl_2_height == 99999, NA, cl_2_height)
+      cl_2 = as.numeric(.data$cl_2),
+      cl_2 = ifelse(.data$cl_2 == 99, NA, .data$cl_2),
+      cl_2_height = as.numeric(.data$cl_2_height),
+      cl_2_height = ifelse(.data$cl_2_height == 99999, NA, .data$cl_2_height)
     )
   }
 
   if ("GA3" %in% names(met_data)) {
-    met_data <- separate(
-      met_data,
-      GA3,
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "GA3",
       into = c(
         "cl_3",
         "code_1",
@@ -433,12 +449,12 @@ getDat <- function(code, year, hourly) {
       sep = ","
     )
 
-    met_data <- mutate(
+    met_data <- dplyr::mutate(
       met_data,
-      cl_3 = as.numeric(cl_3),
-      cl_3 = ifelse(cl_3 == 99, NA, cl_3),
-      cl_3_height = as.numeric(cl_3_height),
-      cl_3_height = ifelse(cl_3_height == 99999, NA, cl_3_height)
+      cl_3 = as.numeric(.data$cl_3),
+      cl_3 = ifelse(.data$cl_3 == 99, NA, .data$cl_3),
+      cl_3_height = as.numeric(.data$cl_3_height),
+      cl_3_height = ifelse(.data$cl_3_height == 99999, NA, .data$cl_3_height)
     )
   }
 
@@ -454,18 +470,18 @@ getDat <- function(code, year, hourly) {
 
   # PRECIP AA1
   if ("AA1" %in% names(met_data)) {
-    met_data <- separate(
-      met_data,
-      AA1,
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "AA1",
       into = c("precip_code", "precip_raw", "code_1", "code_2"),
       sep = ","
     )
 
-    met_data <- mutate(
+    met_data <- dplyr::mutate(
       met_data,
-      precip_raw = as.numeric(precip_raw),
-      precip_raw = ifelse(precip_raw == 9999, NA, precip_raw),
-      precip_raw = precip_raw / 10
+      precip_raw = as.numeric(.data$precip_raw),
+      precip_raw = ifelse(.data$precip_raw == 9999, NA, .data$precip_raw),
+      precip_raw = .data$precip_raw / 10
     )
 
     # deal with 6 and 12 hour precip
@@ -487,23 +503,23 @@ getDat <- function(code, year, hourly) {
   # weather codes, AW1
 
   if ("AW1" %in% names(met_data)) {
-    met_data <- separate(
-      met_data,
-      AW1,
+    met_data <- tidyr::separate(
+      data = met_data,
+      col = "AW1",
       into = c("pwc", "code_1"),
       sep = ",",
       fill = "right"
     )
 
-    met_data <- left_join(met_data, worldmet::weatherCodes, by = "pwc")
-    met_data <- select(met_data, -pwc) %>%
-      rename(pwc = description)
+    met_data <- dplyr::left_join(met_data, worldmet::weatherCodes, by = "pwc")
+    met_data <- dplyr::select(met_data, -"pwc") |>
+      dplyr::rename(pwc = "description")
   }
 
   ## select the variables we want
-  met_data <- select(
+  met_data <- dplyr::select(
     met_data,
-    any_of(c(
+    dplyr::any_of(c(
       "date",
       "code",
       "station",
@@ -540,7 +556,6 @@ getDat <- function(code, year, hourly) {
     dates <- as.POSIXct(paste0(unique(pwc$date2), ":00:00"), tz = "GMT")
 
     pwc <- data.frame(date = dates, pwc = tmp$pwc)
-    PWC <- TRUE
   }
 
   ## average to hourly
@@ -555,7 +570,7 @@ getDat <- function(code, year, hourly) {
 
   ## add pwc back in
   if (exists("pwc")) {
-    met_data <- left_join(met_data, pwc, by = "date")
+    met_data <- dplyr::left_join(met_data, pwc, by = "date")
   }
 
   ## add precipitation - based on 12 HOUR averages, so work with hourly data
@@ -586,5 +601,5 @@ getDat <- function(code, year, hourly) {
     replace(x, is.nan(x), NA)
   })
 
-  return(as_tibble(met_data))
+  return(dplyr::as_tibble(met_data))
 }

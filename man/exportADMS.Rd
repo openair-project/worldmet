@@ -29,7 +29,7 @@ with optional interpolation of missing values.
 }
 \examples{
 \dontrun{
-## import some data then export it
+# import some data then export it
 dat <- importNOAA(year = 2012)
 exportADMS(dat, out = "~/adms_met.MET")
 }

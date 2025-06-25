@@ -330,7 +330,7 @@ getDat <- function(code, year, hourly) {
     )
 
     met_data <- dplyr::mutate(
-      data = met_data,
+      met_data,
       dew_point = as.numeric(.data$dew_point),
       dew_point = ifelse(.data$dew_point == 9999, NA, .data$dew_point),
       dew_point = .data$dew_point / 10

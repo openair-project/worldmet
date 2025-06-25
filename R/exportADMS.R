@@ -74,7 +74,9 @@ exportADMS <- function(
 
     for (variable in varInterp) {
       # if all missing, then don't interpolate
-      if (all(is.na(dat[[variable]]))) return()
+      if (all(is.na(dat[[variable]]))) {
+        return()
+      }
 
       # first fill with linear interpolation
       filled <- stats::approx(
@@ -120,8 +122,12 @@ exportADMS <- function(
   station <- "0000"
 
   # check if present
-  if (!"cl" %in% names(dat)) dat$cl <- NA
-  if (!"precip" %in% names(dat)) dat$precip <- NA
+  if (!"cl" %in% names(dat)) {
+    dat$cl <- NA
+  }
+  if (!"precip" %in% names(dat)) {
+    dat$precip <- NA
+  }
 
   # data frame of met data needed
   adms <- data.frame(

@@ -79,10 +79,13 @@ getMeta <- function(
   }
 
   # we base the current year as the max available in the meta data
-  if ("current" %in% end.year)
+  if ("current" %in% end.year) {
     end.year <-
       max(as.numeric(format(meta$END, "%Y")), na.rm = TRUE)
-  if ("all" %in% end.year) end.year <- 1900:2100
+  }
+  if ("all" %in% end.year) {
+    end.year <- 1900:2100
+  }
 
   ## search based on name of site
   if (!missing(site)) {
@@ -106,10 +109,14 @@ getMeta <- function(
 
   # make sure no missing lat / lon
   id <- which(is.na(meta$LON))
-  if (length(id) > 0) meta <- meta[-id, ]
+  if (length(id) > 0) {
+    meta <- meta[-id, ]
+  }
 
   id <- which(is.na(meta$LAT))
-  if (length(id) > 0) meta <- meta[-id, ]
+  if (length(id) > 0) {
+    meta <- meta[-id, ]
+  }
 
   # filter by end year
   id <- which(format(meta$END, "%Y") %in% end.year)
@@ -250,11 +257,12 @@ getMetaLive <- function(...) {
 
   # if not available e.g. due to US Government shutdown, flag and exit
   # some header data may still be read, so check column number
-  if (ncol(meta) == 1L)
+  if (ncol(meta) == 1L) {
     stop(
       "File not available, check \nhttps://www1.ncdc.noaa.gov/pub/data/noaa/ for potential server problems.",
       call. = FALSE
     )
+  }
 
   ## names in the meta file
   names(meta) <- c(

@@ -93,14 +93,13 @@
 #'   in other time zones, e.g., to merge with air pollution data. The
 #'   [lubridate][lubridate::lubridate-package] package is useful in this
 #'   respect.
-#' @seealso [getMeta()] to obtain the codes based on various site search
-#'   approaches.
+#'
+#' @family NOAA ISD functions
 #' @author David Carslaw
 #' @examples
 #'
 #' \dontrun{
-#' ## use Beijing airport code (see getMeta example)
-#' dat <- importNOAA(code = "545110-99999", year = 2010:2011)
+#' beijing_met <- importNOAA(code = "545110-99999", year = 2010:2011)
 #' }
 importNOAA <- function(
   code = "037720-99999",

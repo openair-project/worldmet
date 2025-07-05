@@ -55,15 +55,8 @@
 #'   separated by a \dQuote{-} e.g. `code = "037720-99999"`.
 #' @param year The year to import. This can be a vector of years e.g. `year =
 #'   2000:2005`.
-#' @param hourly Should hourly means be calculated? The default is `TRUE`. If
-#'   `FALSE` then the raw data are returned.
-#' @param n.cores Number of cores to use for parallel processing. Default is 1
-#'   and hence no parallelism.
 #' @param quiet If `FALSE`, print missing sites / years to the screen, and show
 #'   a progress bar if multiple sites are imported.
-#' @param path If a file path is provided, the data are saved as an rds file at
-#'   the chosen location e.g.  `path = "C:/Users/David"`. Files are saved by
-#'   year and site.
 #' @export
 #' @return Returns a data frame of surface observations. The data frame is
 #'   consistent for use with the `openair` package. Note that the data are
@@ -99,9 +92,9 @@ importNOAAlite <- function(
 
     t <- tempfile(fileext = ".gz")
 
-    download.file(path, t, quiet = TRUE)
+    utils::download.file(path, t, quiet = TRUE)
 
-    read.fwf(
+    utils::read.fwf(
       t,
       widths = c(5, 3, 3, 2, 6, 6, 6, 6, 6, 6, 6, 6),
       col.names = c(
@@ -119,7 +112,7 @@ importNOAAlite <- function(
         "precip_6"
       )
     ) |>
-      tibble::tibble() |>
+      dplyr::tibble() |>
       dplyr::mutate(
         dplyr::across(
           dplyr::where(is.numeric),
@@ -127,7 +120,7 @@ importNOAAlite <- function(
         )
       ) |>
       dplyr::mutate(
-        date = lubridate::make_datetime(
+        date = ISOdate(
           year = .data$year,
           month = .data$month,
           day = .data$day,

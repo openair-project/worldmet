@@ -116,14 +116,16 @@ could then be merged based on \code{date}.
 \examples{
 
 \dontrun{
-## use Beijing airport code (see getMeta example)
-dat <- importNOAA(code = "545110-99999", year = 2010:2011)
+beijing_met <- importNOAA(code = "545110-99999", year = 2010:2011)
 }
 }
 \seealso{
-\code{\link[=getMeta]{getMeta()}} to obtain the codes based on various site search
-approaches.
+Other NOAA ISD functions: 
+\code{\link{getMeta}()},
+\code{\link{getMetaLive}()},
+\code{\link{importNOAAlite}()}
 }
 \author{
 David Carslaw
 }
+\concept{NOAA ISD functions}

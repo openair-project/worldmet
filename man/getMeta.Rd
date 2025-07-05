@@ -69,7 +69,6 @@ sites can be carried out based on the site name and based on the nearest
 locations based on user-supplied latitude and longitude.
 }
 \examples{
-
 \dontrun{
 ## search for sites with name beijing
 getMeta(site = "beijing")
@@ -82,9 +81,12 @@ getMeta(lat = 40, lon = 116.9)
 }
 }
 \seealso{
-\code{\link[=getMetaLive]{getMetaLive()}} to download the all meta data to allow re-use and
-direct querying.
+Other NOAA ISD functions: 
+\code{\link{getMetaLive}()},
+\code{\link{importNOAA}()},
+\code{\link{importNOAAlite}()}
 }
 \author{
 David Carslaw
 }
+\concept{NOAA ISD functions}

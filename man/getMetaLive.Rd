@@ -21,3 +21,10 @@ meta <- getMetaLive()
 head(meta)
 }
 }
+\seealso{
+Other NOAA ISD functions: 
+\code{\link{getMeta}()},
+\code{\link{importNOAA}()},
+\code{\link{importNOAAlite}()}
+}
+\concept{NOAA ISD functions}

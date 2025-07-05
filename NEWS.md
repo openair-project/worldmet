@@ -1,3 +1,9 @@
+# worldmet (development version)
+
+## New Features 
+
+- Added `importNOAALite()` to access the ISDLite filestore.
+
 # worldmet 0.9.9
 
 ## New Features

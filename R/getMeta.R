@@ -37,11 +37,9 @@
 #'   latitude and longitude searches are made an approximate distance, `dist` in
 #'   km is also returned.
 #' @export
-#' @seealso [getMetaLive()] to download the all meta data to allow re-use and
-#'   direct querying.
 #' @author David Carslaw
+#' @family NOAA ISD functions
 #' @examples
-#'
 #' \dontrun{
 #' ## search for sites with name beijing
 #' getMeta(site = "beijing")
@@ -224,6 +222,8 @@ getMeta <- function(
 #' @param ... Currently unused.
 #'
 #' @return a [tibble][tibble::tibble-package]
+#'
+#' @family NOAA ISD functions
 #'
 #' @examples
 #' \dontrun{

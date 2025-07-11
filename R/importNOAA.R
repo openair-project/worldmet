@@ -79,13 +79,16 @@
 #'   2000:2005`.
 #' @param hourly Should hourly means be calculated? The default is `TRUE`. If
 #'   `FALSE` then the raw data are returned.
-#' @param n.cores Number of cores to use for parallel processing. Default is 1
-#'   and hence no parallelism.
-#' @param quiet If `FALSE`, print missing sites / years to the screen, and show a
-#'   progress bar if multiple sites are imported.
+#' @param quiet If `FALSE`, print missing sites / years to the screen, and show
+#'   a progress bar if multiple sites are imported.
 #' @param path If a file path is provided, the data are saved as an rds file at
 #'   the chosen location e.g.  `path = "C:/Users/David"`. Files are saved by
 #'   year and site.
+#' @param n.cores No longer recommended; please set [mirai::daemons()] in your R
+#'   session. This argument is provided for back compatibility, and is passed to
+#'   the `n` argument of [mirai::daemons()] on behalf of the user. Any set
+#'   daemons will be reset once the function completes. Default is `NULL`, which
+#'   means no parallelism. `n.cores = 1L` is equivalent to `n.cores = NULL`.
 #' @export
 #' @return Returns a data frame of surface observations. The data frame is
 #'   consistent for use with the `openair` package. Note that the data are
@@ -105,18 +108,35 @@ importNOAA <- function(
   code = "037720-99999",
   year = 2014,
   hourly = TRUE,
-  n.cores = 1,
   quiet = FALSE,
-  path = NA
+  path = NA,
+  n.cores = NULL
 ) {
+  if (!is.null(n.cores)) {
+    if (!rlang::is_integerish(n.cores)) {
+      cli::cli_abort(
+        "{.field n.cores} should be an integer. You have provided a {class(n.cores)}."
+      )
+    }
+    if (n.cores > 1L) {
+      rlang::check_installed("mirai")
+      on.exit(mirai::daemons(0))
+      cli::cli_warn(
+        c(
+          "!" = "Using {.fun mirai::daemons} to set multiple workers. These will be reset at the end of the function call.",
+          "i" = "It is now preferred that users use {.fun mirai::daemons} directly over the use of {.field n.cores}."
+        ),
+        .frequency = "regularly",
+        .frequency_id = "worldmet_mirai"
+      )
+      mirai::daemons(n.cores)
+    }
+  }
+
   # main web site https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database
-
   # formats document https://www.ncei.noaa.gov/data/global-hourly/doc/isd-format-document.pdf
-
   # brief csv file description https://www.ncei.noaa.gov/data/global-hourly/doc/CSV_HELP.pdf
-
   # gis map https://gis.ncdc.noaa.gov/map/viewer/#app=cdo&cfg=cdo&theme=hourly&layers=1
-
   # go through each of the years selected, use parallel processing
 
   # sites and years to process
@@ -126,31 +146,19 @@ importNOAA <- function(
     stringsAsFactors = FALSE
   )
 
-  if (n.cores > 1) {
-    cl <- parallel::makeCluster(n.cores)
-    doParallel::registerDoParallel(cl)
-
-    # R CMD check
-    i <- NULL
-
-    dat <- foreach::foreach(
-      i = seq_len(nrow(site_process)),
-      .combine = "bind_rows",
-      .export = "getDat",
-      .errorhandling = "remove"
-    ) %dopar%
-      getDat(
-        year = site_process$year[i],
-        code = site_process$code[i],
+  # read in files - in_parallel defaults to sequential if no cores, will
+  # use parallelism if daemons are set
+  dat <-
+    purrr::pmap(
+      site_process,
+      purrr::in_parallel(
+        \(code, year) getDat(code = code, year = year, hourly = hourly),
+        getDat = getDat,
         hourly = hourly
-      )
-
-    parallel::stopCluster(cl)
-  } else {
-    dat <-
-      purrr::pmap(site_process, getDat, hourly = hourly, .progress = !quiet) |>
-      purrr::list_rbind()
-  }
+      ),
+      .progress = !quiet
+    ) |>
+    purrr::list_rbind()
 
   if (is.null(dat) || nrow(dat) == 0) {
     print("site(s) do not exist.")

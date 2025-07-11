@@ -19,18 +19,16 @@ BugReports: https://github.com/openair-project/worldmet/issues
 Depends:
     R (>= 4.1.0)
 Imports:
-    doParallel,
     dplyr,
-    foreach,
     leaflet,
     openair,
-    parallel,
-    purrr (>= 1.0.0),
+    purrr (>= 1.1.0),
     readr,
     rlang,
     tidyr
 Suggests: 
     knitr,
+    mirai,
     rmarkdown
 ByteCompile: true
 Config/Needs/website: openair-project/openairpkgdown

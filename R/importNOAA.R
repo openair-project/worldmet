@@ -120,16 +120,23 @@ importNOAA <- function(
     }
     if (n.cores > 1L) {
       rlang::check_installed("mirai")
-      on.exit(mirai::daemons(0))
-      cli::cli_warn(
-        c(
-          "!" = "Using {.fun mirai::daemons} to set multiple workers. These will be reset at the end of the function call.",
-          "i" = "It is now preferred that users use {.fun mirai::daemons} directly over the use of {.field n.cores}."
-        ),
-        .frequency = "regularly",
-        .frequency_id = "worldmet_mirai"
-      )
-      mirai::daemons(n.cores)
+      if (mirai::daemons_set()) {
+        cli::cli_warn(
+          "{.fun mirai::daemons} have already been set. Ignoring {.field n.cores}."
+        )
+      } else {
+        on.exit(mirai::daemons(0))
+        cli::cli_warn(
+          c(
+            "!" = "Using {.fun mirai::daemons} to set multiple workers. These will be reset at the end of the function call.",
+            "i" = "It is now preferred that users use {.fun mirai::daemons} directly over the use of {.field n.cores}.",
+            "i" = "See {.url https://openair-project.github.io/worldmet/articles/worldmet.html} for an example."
+          ),
+          .frequency = "regularly",
+          .frequency_id = "worldmet_mirai"
+        )
+        mirai::daemons(n.cores)
+      }
     }
   }
 

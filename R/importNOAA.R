@@ -102,7 +102,12 @@
 #' @examples
 #'
 #' \dontrun{
+#' # import some data
 #' beijing_met <- importNOAA(code = "545110-99999", year = 2010:2011)
+#'
+#' # importing lots of data? use mirai for parallel processing
+#' mirai::daemons(4)
+#' beijing_met2 <- importNOAA(code = "545110-99999", year = 2010:2025)
 #' }
 importNOAA <- function(
   code = "037720-99999",

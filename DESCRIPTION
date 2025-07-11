@@ -19,6 +19,7 @@ BugReports: https://github.com/openair-project/worldmet/issues
 Depends:
     R (>= 4.1.0)
 Imports:
+    cli,
     dplyr,
     leaflet,
     openair,

@@ -161,7 +161,7 @@ importNOAA <- function(
     purrr::list_rbind()
 
   if (is.null(dat) || nrow(dat) == 0) {
-    print("site(s) do not exist.")
+    cli::cli_inform("Specified {.field site}(s) do not exist.")
     return()
   }
 
@@ -173,13 +173,21 @@ importNOAA <- function(
   actual <- dplyr::left_join(site_process, actual, by = c("code", "year"))
 
   if (length(which(is.na(actual$date))) > 0 && !quiet) {
-    print("The following sites / years are missing:")
-    print(dplyr::filter(actual, is.na(.data$date)))
+    cli::cli_h1("The following sites / years are missing:")
+    cli::cli_ul(id = "worldmetmissing")
+    missing <- dplyr::filter(actual, is.na(.data$date))
+    for (i in seq_len(nrow(missing))) {
+      df_i <- missing[i, ]
+      cli::cli_li(
+        items = "{.field site:} {df_i$code} in {.field year:} {df_i$year}"
+      )
+    }
+    cli::cli_end(id = "worldmetmissing")
   }
 
   if (!is.na(path)) {
     if (!dir.exists(path)) {
-      warning("Directory does not exist, file not saved", call. = FALSE)
+      cli::cli_warn("Directory does not exist, file not saved", call. = FALSE)
       return()
     }
 
@@ -253,7 +261,6 @@ getDat <- function(code, year, hourly) {
   )
 
   if (class(met_data)[1] == "try-error") {
-    message(paste0("Missing data for site ", code, " and year ", year))
     met_data <- NULL
     return()
   }

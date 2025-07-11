@@ -70,8 +70,8 @@ getMeta <- function(
   # check year
   if (!any(end.year %in% c("current", "all"))) {
     if (!is.numeric(end.year)) {
-      stop(
-        "end.year should be one of 'current', 'all' or a numeric 4-digit year such as 2016."
+      cli::cli_abort(
+        "{.field end.year} should be one of 'current', 'all' or a numeric 4-digit year such as {2016}."
       )
     }
   }
@@ -258,8 +258,8 @@ getMetaLive <- function(...) {
   # if not available e.g. due to US Government shutdown, flag and exit
   # some header data may still be read, so check column number
   if (ncol(meta) == 1L) {
-    stop(
-      "File not available, check \nhttps://www1.ncdc.noaa.gov/pub/data/noaa/ for potential server problems.",
+    cli::cli_abort(
+      "File not available, check {.url https://www1.ncdc.noaa.gov/pub/data/noaa/} for potential server problems.",
       call. = FALSE
     )
   }

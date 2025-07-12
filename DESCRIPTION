@@ -27,6 +27,8 @@ Imports:
     parallel,
     purrr (>= 1.0.0),
     readr,
+    sf,
+    tibble,
     rlang,
     tidyr
 Suggests: 

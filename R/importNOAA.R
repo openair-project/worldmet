@@ -173,7 +173,12 @@ importNOAA <- function(
     purrr::list_rbind()
 
   if (is.null(dat) || nrow(dat) == 0) {
-    cli::cli_inform("Specified {.field site}(s) do not exist.")
+    cli::cli_inform(
+      c(
+        "x" = "Specified {.field site}-{.field year} combinations do not exist.",
+        "i" = "Is the ISD service down? Check {.url https://www.ncei.noaa.gov/data/global-hourly/}."
+      )
+    )
     return()
   }
 

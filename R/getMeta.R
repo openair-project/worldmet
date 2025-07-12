@@ -43,9 +43,8 @@
 #'   latitude and longitude searches are made an approximate distance, `dist` in
 #'   km is also returned.
 #' @export
-#' @seealso [getMetaLive()] to download the all meta data to allow re-use and
-#'   direct querying.
 #' @author David Carslaw
+#' @family NOAA ISD functions
 #' @examples
 #' \dontrun{
 #' ## search for sites with name beijing
@@ -148,7 +147,7 @@ getMeta <- function(
     meta <- dplyr::slice_min(meta, order_by = dist, n = n)
   }
 
-  dat <- rename(meta, latitude = LAT, longitude = LON)
+  dat <- dplyr::rename(meta, latitude = LAT, longitude = LON)
 
   names(dat) <- tolower(names(dat))
 
@@ -232,6 +231,8 @@ getMeta <- function(
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
+#' @family NOAA ISD functions
+#'
 #' @examples
 #' \dontrun{
 #' meta <- getMetaLive()
@@ -242,22 +243,22 @@ getMetaLive <- function(...) {
   ## downloads the whole thing fresh
 
   url <- "https://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv"
-  meta <- read_csv(
+  meta <- readr::read_csv(
     url,
     skip = 21,
     col_names = FALSE,
-    col_types = cols(
-      X1 = col_character(),
-      X2 = col_character(),
-      X3 = col_character(),
-      X4 = col_character(),
-      X5 = col_character(),
-      X6 = col_character(),
-      X7 = col_double(),
-      X8 = col_double(),
-      X9 = col_double(),
-      X10 = col_date(format = "%Y%m%d"),
-      X11 = col_date(format = "%Y%m%d")
+    col_types = readr::cols(
+      X1 = readr::col_character(),
+      X2 = readr::col_character(),
+      X3 = readr::col_character(),
+      X4 = readr::col_character(),
+      X5 = readr::col_character(),
+      X6 = readr::col_character(),
+      X7 = readr::col_double(),
+      X8 = readr::col_double(),
+      X9 = readr::col_double(),
+      X10 = readr::col_date(format = "%Y%m%d"),
+      X11 = readr::col_date(format = "%Y%m%d")
     ),
     progress = FALSE
   )
@@ -295,8 +296,3 @@ getMetaLive <- function(...) {
 
   return(meta)
 }
-
-# how to update meta data
-# meta <- getMeta(end.year = "all")
-# usethis::use_data(meta, overwrite = TRUE, internal = TRUE)
-# usethis::use_data(meta, overwrite = TRUE)

@@ -3,19 +3,33 @@ template:
   package: openairpkgdown
 
 reference:
-- title: Obtain Met Data
+- title: Integrated Surface Database (ISD)
+- subtitle: ~
+  desc: >
+    These functions access data from the NOAA 
+    [Integrated Surface Database](https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database) 
+    (ISD), a global database that consists of hourly and synoptic surface 
+    observations compiled from numerous sources into a single common ASCII 
+    format and common data model. The ISD includes numerous parameters such as 
+    wind speed and direction, wind gust, temperature, dew point, cloud data, 
+    sea level pressure, altimeter setting, station pressure, present weather, 
+    visibility, precipitation amounts for various time periods, snow depth, 
+    and various other elements as observed by each station.
+- subtitle: Import Met Data
+  desc: Directly import NOAA meteorological data.
+  contents:
+  - importNOAA
+  - importNOAAlite
 - subtitle: View Metadata
   desc: Read and visualise meta data relating to meteorological measurement sites.
   contents:
   - getMeta
   - getMetaLive
   - weatherCodes
-- subtitle: Import Met Data
-  desc: Directly import NOAA meteorological data.
-  contents:
-  - importNOAA
 
-- title: ADMS
-  desc: Functions relating to the Atmospheric Dispersion Modelling System.
+- title: ADMS Data
+  desc: >
+    These functions assist with working with the Atmospheric Dispersion Modelling
+    System (ADMS).
   contents:
   - exportADMS

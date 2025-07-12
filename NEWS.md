@@ -1,3 +1,9 @@
+# worldmet (development version)
+
+## New Features 
+
+- Added `importNOAALite()` to access the ISDLite filestore.
+
 # worldmet 0.9.9
 
 ## New Features
@@ -93,7 +99,7 @@ without having to `library(worldmet)`.
 
 - query live meta data when using `getMeta()`
 - parallel processing for sites and years
-- use `read_csv()` for meta data (`read.csv()` seems very slow in R 3.4.3)
+- use `readr::read_csv()` for meta data (`read.csv()` seems very slow in R 3.4.3)
 
 ## Bug Fixes
 

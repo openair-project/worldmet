@@ -87,9 +87,12 @@ getMeta(lat = 40, lon = 116.9)
 }
 }
 \seealso{
-\code{\link[=getMetaLive]{getMetaLive()}} to download the all meta data to allow re-use and
-direct querying.
+Other NOAA ISD functions: 
+\code{\link{getMetaLive}()},
+\code{\link{importNOAA}()},
+\code{\link{importNOAAlite}()}
 }
 \author{
 David Carslaw
 }
+\concept{NOAA ISD functions}

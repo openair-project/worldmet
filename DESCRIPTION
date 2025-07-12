@@ -28,6 +28,7 @@ Imports:
     rlang,
     tidyr
 Suggests: 
+    carrier,
     knitr,
     mirai,
     rmarkdown

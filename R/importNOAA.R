@@ -124,7 +124,7 @@ importNOAA <- function(
       )
     }
     if (n.cores > 1L) {
-      rlang::check_installed("mirai")
+      rlang::check_installed(c("mirai", "carrier"))
       if (mirai::daemons_set()) {
         cli::cli_warn(
           "{.fun mirai::daemons} have already been set. Ignoring {.field n.cores}."

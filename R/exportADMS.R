@@ -144,21 +144,18 @@ exportADMS <- function(
     stringsAsFactors = FALSE
   )
 
-  # print key data capture rates to the screen
-  dc <- round(100 - 100 * (length(which(is.na(dat$ws))) / length(dat$ws)), 1)
-  print(paste("Data capture for wind speed:", dc, "%"))
-
-  dc <- round(100 - 100 * (length(which(is.na(dat$wd))) / length(dat$wd)), 1)
-  print(paste("Data capture for wind direction:", dc, "%"))
-
-  dc <- round(
-    100 - 100 * (length(which(is.na(dat$air_temp))) / length(dat$air_temp)),
-    1
+  # message key data capture rates
+  calc_dc <- function(x) {
+    round(100 * mean(!is.na(x)), 1)
+  }
+  cli::cli_inform(
+    c(
+      "i" = "Data capture for {.strong wind speed}: {calc_dc(dat$ws)}%",
+      "i" = "Data capture for {.strong wind direction}: {calc_dc(dat$wd)}%",
+      "i" = "Data capture for {.strong temperature}: {calc_dc(dat$air_temp)}%",
+      "i" = "Data capture for {.strong cloud cover}: {calc_dc(dat$cl)}%"
+    )
   )
-  print(paste("Data capture for temperature:", dc, "%"))
-
-  dc <- round(100 - 100 * (length(which(is.na(dat$cl))) / length(dat$cl)), 1)
-  print(paste("Data capture for cloud cover:", dc, "%"))
 
   # replace NA with -999
   adms[] <- lapply(adms, function(x) replace(x, is.na(x), -999))

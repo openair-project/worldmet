@@ -2,6 +2,10 @@
 
 ## New Features 
 
+- Parallel importing of NOAA data is now powered by `{mirai}`. This reduces the number of dependencies of `{worldmet}`, and also allows users to be more flexible with how parallel processing is achieved.
+
+    - Due to this change, users are recommended to set `mirai::daemons()` themselves. `n.core` will stil work for back-compatibility, but will give a once-per-session warning.
+
 - Added `importNOAALite()` to access the ISDLite filestore.
 
 # worldmet 0.9.9

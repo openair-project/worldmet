@@ -135,7 +135,7 @@ getMeta <- function(
         data.frame(lon = lon, lat = lat),
         coords = c("lon", "lat"),
         crs = sf::st_crs(crs)
-      ) %>%
+      ) |>
       sf::st_transform(crs = sf::st_crs(4326))
 
     meta_sf <-

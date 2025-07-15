@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">worldmet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.9.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,10 +31,13 @@
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-packages" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Packages</button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-packages"><li><a class="external-link dropdown-item" href="https://openair-project.github.io/openair/">🧭 openair</a></li>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-packages"><li><h6 class="dropdown-header" data-toc-skip>Data Analysis</h6></li>
+    <li><a class="external-link dropdown-item" href="https://openair-project.github.io/openair/">🧭 openair</a></li>
     <li><a class="external-link dropdown-item" href="https://openair-project.github.io/openairmaps/">🗺️ openairmaps</a></li>
-    <li><a class="dropdown-item" href="https://openair-project.github.io/worldmet/">🍃 worldmet</a></li>
     <li><a class="external-link dropdown-item" href="https://openair-project.github.io/deweather/">📉 deweather</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Data Access</h6></li>
+    <li><a class="dropdown-item" href="https://openair-project.github.io/worldmet/">🍃 worldmet</a></li>
+    <li><a class="external-link dropdown-item" href="https://openair-project.github.io/euroaq/">🌍 euroaq</a></li>
   </ul></li>
       </ul></div>
 
@@ -143,8 +146,10 @@ locations based on user-supplied latitude and longitude.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="getMetaLive.html">getMetaLive()</a></code> to download the all meta data to allow re-use and
-direct querying.</p></div>
+    <div class="dont-index"><p>Other NOAA ISD functions:
+<code><a href="getMetaLive.html">getMetaLive</a>()</code>,
+<code><a href="importNOAA.html">importNOAA</a>()</code>,
+<code><a href="importNOAAlite.html">importNOAAlite</a>()</code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -153,8 +158,7 @@ direct querying.</p></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co">## search for sites with name beijing</span></span></span>
 <span class="r-in"><span><span class="fu">getMeta</span><span class="op">(</span>site <span class="op">=</span> <span class="st">"beijing"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>

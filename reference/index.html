@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">worldmet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.9.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,10 +31,13 @@
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-packages" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Packages</button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-packages"><li><a class="external-link dropdown-item" href="https://openair-project.github.io/openair/">🧭 openair</a></li>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-packages"><li><h6 class="dropdown-header" data-toc-skip>Data Analysis</h6></li>
+    <li><a class="external-link dropdown-item" href="https://openair-project.github.io/openair/">🧭 openair</a></li>
     <li><a class="external-link dropdown-item" href="https://openair-project.github.io/openairmaps/">🗺️ openairmaps</a></li>
-    <li><a class="dropdown-item" href="https://openair-project.github.io/worldmet/">🍃 worldmet</a></li>
     <li><a class="external-link dropdown-item" href="https://openair-project.github.io/deweather/">📉 deweather</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Data Access</h6></li>
+    <li><a class="dropdown-item" href="https://openair-project.github.io/worldmet/">🍃 worldmet</a></li>
+    <li><a class="external-link dropdown-item" href="https://openair-project.github.io/euroaq/">🌍 euroaq</a></li>
   </ul></li>
       </ul></div>
 
@@ -47,12 +50,41 @@
     </div>
 
     <div class="section level2">
-      <h2 id="obtain-met-data">Obtain Met Data<a class="anchor" aria-label="anchor" href="#obtain-met-data"></a></h2>
+      <h2 id="integrated-surface-database-isd-">Integrated Surface Database (ISD)<a class="anchor" aria-label="anchor" href="#integrated-surface-database-isd-"></a></h2>
 
 
 
 
     </div><div class="section level2">
+
+
+      <div class="section-desc"><p>These functions access data from the NOAA <a href="https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database" class="external-link">Integrated Surface Database</a> (ISD), a global database that consists of hourly and synoptic surface observations compiled from numerous sources into a single common ASCII format and common data model. The ISD includes numerous parameters such as wind speed and direction, wind gust, temperature, dew point, cloud data, sea level pressure, altimeter setting, station pressure, present weather, visibility, precipitation amounts for various time periods, snow depth, and various other elements as observed by each station.</p></div>
+
+
+    </div><div class="section level2">
+
+      <h3 id="import-met-data">Import Met Data<a class="anchor" aria-label="anchor" href="#import-met-data"></a></h3>
+      <div class="section-desc"><p>Directly import NOAA meteorological data.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="importNOAA.html">importNOAA()</a></code>
+
+        </dt>
+        <dd>Import Meteorological data from the NOAA Integrated Surface Database (ISD)</dd>
+      </dl><dl><dt>
+
+          <code><a href="importNOAAlite.html">importNOAAlite()</a></code>
+
+        </dt>
+        <dd>Import "Lite" Meteorological data from the NOAA Integrated Surface Database (ISD)</dd>
+      </dl></div><div class="section level2">
 
       <h3 id="view-metadata">View Metadata<a class="anchor" aria-label="anchor" href="#view-metadata"></a></h3>
       <div class="section-desc"><p>Read and visualise meta data relating to meteorological measurement sites.</p></div>
@@ -82,26 +114,9 @@
         </dt>
         <dd>Codes for weather types</dd>
       </dl></div><div class="section level2">
+      <h2 id="adms-data">ADMS Data<a class="anchor" aria-label="anchor" href="#adms-data"></a></h2>
 
-      <h3 id="import-met-data">Import Met Data<a class="anchor" aria-label="anchor" href="#import-met-data"></a></h3>
-      <div class="section-desc"><p>Directly import NOAA meteorological data.</p></div>
-
-
-    </div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="importNOAA.html">importNOAA()</a></code>
-
-        </dt>
-        <dd>Import Meteorological data from the NOAA Integrated Surface Database (ISD)</dd>
-      </dl></div><div class="section level2">
-      <h2 id="adms">ADMS<a class="anchor" aria-label="anchor" href="#adms"></a></h2>
-
-      <div class="section-desc"><p>Functions relating to the Atmospheric Dispersion Modelling System.</p></div>
+      <div class="section-desc"><p>These functions assist with working with the Atmospheric Dispersion Modelling System (ADMS).</p></div>
 
 
     </div><div class="section level2">

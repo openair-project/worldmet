@@ -8,6 +8,8 @@
 
 - Added `importNOAALite()` to access the ISDLite filestore.
 
+- Added the `importNOAA(source=)` argument to import ISD data from different file stores. This option can be useful if one of the file stores is not available for whatever reason.
+
 # worldmet 0.9.9
 
 ## New Features

@@ -54,7 +54,11 @@
 <h2 class="pkg-version" data-toc-text="development version" id="worldmet-development-version">worldmet (development version)<a class="anchor" aria-label="anchor" href="#worldmet-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>Added <code>importNOAALite()</code> to access the ISDLite filestore.</li>
+<ul><li>
+<p>Parallel importing of NOAA data is now powered by <a href="https://mirai.r-lib.org" class="external-link">mirai</a>. This reduces the number of dependencies of <a href="https://openair-project.github.io/worldmet/">worldmet</a>, and also allows users to be more flexible with how parallel processing is achieved.</p>
+<ul><li>Due to this change, users are recommended to set <code><a href="https://mirai.r-lib.org/reference/daemons.html" class="external-link">mirai::daemons()</a></code> themselves. <code>n.core</code> will stil work for back-compatibility, but will give a once-per-session warning.</li>
+</ul></li>
+<li><p>Added <code>importNOAALite()</code> to access the ISDLite filestore.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -62,6 +66,11 @@
 <div class="section level3">
 <h3 id="new-features-0-9-9">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-9"></a></h3>
 <ul><li>The <code>quiet</code> argument of <code><a href="../reference/importNOAA.html">importNOAA()</a></code> now also toggles the progress bar.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-9-9-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-9-1"></a></h3>
+<ul><li>
+<code><a href="../reference/getMeta.html">getMeta()</a></code> has gained the <code>crs</code> argument, which allows <code>getMeta(lat =, lon =)</code> to be defined using other coordinate systems.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-9-9">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-9"></a></h3>

@@ -10,6 +10,10 @@
 
 - The `quiet` argument of `importNOAA()` now also toggles the progress bar.
 
+## New Features
+
+- `getMeta()` has gained the `crs` argument, which allows `getMeta(lat =, lon =)` to be defined using other coordinate systems.
+
 ## Bug Fixes
 
 - Fixed join problem due to `{dplyr}` updates.

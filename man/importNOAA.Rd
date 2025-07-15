@@ -8,9 +8,9 @@ importNOAA(
   code = "037720-99999",
   year = 2014,
   hourly = TRUE,
-  n.cores = 1,
   quiet = FALSE,
-  path = NA
+  path = NA,
+  n.cores = NULL
 )
 }
 \arguments{
@@ -23,15 +23,18 @@ separated by a \dQuote{-} e.g. \code{code = "037720-99999"}.}
 \item{hourly}{Should hourly means be calculated? The default is \code{TRUE}. If
 \code{FALSE} then the raw data are returned.}
 
-\item{n.cores}{Number of cores to use for parallel processing. Default is 1
-and hence no parallelism.}
-
-\item{quiet}{If \code{FALSE}, print missing sites / years to the screen, and show a
-progress bar if multiple sites are imported.}
+\item{quiet}{If \code{FALSE}, print missing sites / years to the screen, and show
+a progress bar if multiple sites are imported.}
 
 \item{path}{If a file path is provided, the data are saved as an rds file at
 the chosen location e.g.  \code{path = "C:/Users/David"}. Files are saved by
 year and site.}
+
+\item{n.cores}{No longer recommended; please set \code{\link[mirai:daemons]{mirai::daemons()}} in your R
+session. This argument is provided for back compatibility, and is passed to
+the \code{n} argument of \code{\link[mirai:daemons]{mirai::daemons()}} on behalf of the user. Any set
+daemons will be reset once the function completes. Default is \code{NULL}, which
+means no parallelism. \code{n.cores = 1L} is equivalent to \code{n.cores = NULL}.}
 }
 \value{
 Returns a data frame of surface observations. The data frame is
@@ -116,7 +119,12 @@ could then be merged based on \code{date}.
 \examples{
 
 \dontrun{
+# import some data
 beijing_met <- importNOAA(code = "545110-99999", year = 2010:2011)
+
+# importing lots of data? use mirai for parallel processing
+mirai::daemons(4)
+beijing_met2 <- importNOAA(code = "545110-99999", year = 2010:2025)
 }
 }
 \seealso{

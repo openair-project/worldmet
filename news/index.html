@@ -58,6 +58,7 @@
 <p>Parallel importing of NOAA data is now powered by <a href="https://mirai.r-lib.org" class="external-link">mirai</a>. This reduces the number of dependencies of <a href="https://openair-project.github.io/worldmet/">worldmet</a>, and also allows users to be more flexible with how parallel processing is achieved.</p>
 <ul><li>Due to this change, users are recommended to set <code><a href="https://mirai.r-lib.org/reference/daemons.html" class="external-link">mirai::daemons()</a></code> themselves. <code>n.core</code> will stil work for back-compatibility, but will give a once-per-session warning.</li>
 </ul></li>
+<li><p><code><a href="../reference/getMeta.html">getMeta()</a></code> has gained the <code>crs</code> argument to search NOAA ISD stations by coordinates other than latitude and longitude.</p></li>
 <li><p>Added <code>importNOAALite()</code> to access the ISDLite filestore.</p></li>
 </ul></div>
 </div>

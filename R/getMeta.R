@@ -144,10 +144,10 @@ getMeta <- function(
     meta$dist <- as.numeric(sf::st_distance(meta_sf, point)) / 1000L
 
     ## sort and return top n nearest
-    meta <- dplyr::slice_min(meta, order_by = dist, n = n)
+    meta <- dplyr::slice_min(meta, order_by = .data$dist, n = n)
   }
 
-  dat <- dplyr::rename(meta, latitude = LAT, longitude = LON)
+  dat <- dplyr::rename(meta, latitude = "LAT", longitude = "LON")
 
   names(dat) <- tolower(names(dat))
 

@@ -8,6 +8,7 @@ importNOAA(
   code = "037720-99999",
   year = 2014,
   hourly = TRUE,
+  source = c("delim", "fwf"),
   quiet = FALSE,
   path = NA,
   n.cores = NULL
@@ -22,6 +23,11 @@ separated by a \dQuote{-} e.g. \code{code = "037720-99999"}.}
 
 \item{hourly}{Should hourly means be calculated? The default is \code{TRUE}. If
 \code{FALSE} then the raw data are returned.}
+
+\item{source}{The NOAA ISD datastore stores files in two formats; as
+delimited CSV files (\code{"delim"}) and as fixed width files (\code{"fwf"}).
+\code{\link[=importNOAA]{importNOAA()}} defaults to \code{"delim"} but, if the delimited filestore is
+down, users may wish to try \code{"fwf"} instead.}
 
 \item{quiet}{If \code{FALSE}, print missing sites / years to the screen, and show
 a progress bar if multiple sites are imported.}

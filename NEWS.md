@@ -6,6 +6,8 @@
 
     - Due to this change, users are recommended to set `mirai::daemons()` themselves. `n.core` will stil work for back-compatibility, but will give a once-per-session warning.
 
+- `getMeta()` has gained the `crs` argument to search NOAA ISD stations by coordinates other than latitude and longitude.
+
 - Added `importNOAALite()` to access the ISDLite filestore.
 
 # worldmet 0.9.9

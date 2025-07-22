@@ -745,7 +745,12 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
       })
       cl <- as.numeric(cl)
 
-      miss <- which(cl > 8) # missing or obscured in some way
+      #    miss <- which(cl > 8) # missing or obscured in some way
+      #   if (length(miss) > 0) {
+      #     cl[miss] <- NA
+      #   }
+      miss <- which(cl == 99) # missing
+
       if (length(miss) > 0) {
         cl[miss] <- NA
       }
@@ -961,6 +966,21 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
   # for cloud cover, make new 'cl' max of 3 cloud layers
   dat$cl <- pmax(dat$cl_1, dat$cl_2, dat$cl_3, na.rm = TRUE)
 
+  # additional condition, when ceil_height = 22000 and cl_1 is NA, assume no cloud
+  dat <- dat |>
+    mutate(
+      cl = ifelse(
+        (is.na(cl_1) & ceil_hgt == 22000),
+        0,
+        cl
+      ),
+      cl_1 = ifelse(
+        (is.na(cl_1) & ceil_hgt == 22000),
+        0,
+        cl_1
+      )
+    )
+
   # select the variables we want
   dat <- dat[
     names(dat) %in%
@@ -1010,7 +1030,7 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
   }
 
   # add pwc back in
-  if (PWC) {
+  if (PWC && hourly) {
     dat <- merge(dat, pwc, by = "date", all = TRUE)
   }
 

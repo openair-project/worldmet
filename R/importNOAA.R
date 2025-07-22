@@ -968,7 +968,7 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
 
   # additional condition, when ceil_height = 22000 and cl_1 is NA, assume no cloud
   dat <- dat |>
-    mutate(
+    dplyr::mutate(
       cl = ifelse(
         (is.na(cl_1) & ceil_hgt == 22000),
         0,

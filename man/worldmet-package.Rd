@@ -34,5 +34,10 @@ related \code{openair} package.
 \author{
 \strong{Maintainer}: David Carslaw \email{david.carslaw@york.ac.uk} (\href{https://orcid.org/0000-0003-0991-950X}{ORCID})
 
+Authors:
+\itemize{
+  \item Jack Davison \email{jack.davison@ricardo.com} (\href{https://orcid.org/0000-0003-2653-6615}{ORCID})
+}
+
 }
 \keyword{internal}

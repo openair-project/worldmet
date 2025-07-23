@@ -3,9 +3,12 @@ Package: worldmet
 Title: Import Surface Meteorological Data from NOAA Integrated Surface
     Database (ISD)
 Version: 0.9.9.9000
-Authors@R: 
+Authors@R: c(
     person("David", "Carslaw", , "david.carslaw@york.ac.uk", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-0991-950X"))
+           comment = c(ORCID = "0000-0003-0991-950X")),
+    person("Jack", "Davison", , "jack.davison@ricardo.com", role = "aut",
+           comment = c(ORCID = "0000-0003-2653-6615"))
+  )
 Maintainer: David Carslaw <david.carslaw@york.ac.uk>
 Description: Functions to import data from more than 30,000 surface
     meteorological sites around the world managed by the National Oceanic
@@ -25,8 +28,8 @@ Imports:
     openair,
     purrr (>= 1.1.0),
     readr,
-    sf,
     rlang,
+    sf,
     tidyr
 Suggests: 
     carrier,

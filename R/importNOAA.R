@@ -127,7 +127,7 @@ importNOAA <- function(
   if (!is.null(n.cores)) {
     if (!rlang::is_integerish(n.cores)) {
       cli::cli_abort(
-        "{.field n.cores} should be an integer. You have provided a {class(n.cores)}."
+        "{.field n.cores} should be an integer. You have provided {.type {n.cores}}."
       )
     }
     if (n.cores > 1L) {
@@ -235,7 +235,7 @@ importNOAA <- function(
 
   if (!is.na(path)) {
     if (!dir.exists(path)) {
-      cli::cli_warn("Directory does not exist, file not saved", call. = FALSE)
+      cli::cli_warn("Directory does not exist; file not saved.", call. = FALSE)
       return()
     }
 

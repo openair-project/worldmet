@@ -12,6 +12,8 @@
 
 - Added the `importNOAA(source=)` argument to import ISD data from different file stores. This option can be useful if one of the file stores is not available for whatever reason.
 
+- All error and warning messages are now powered by `{cli}` and are more informative.
+
 # worldmet 0.9.9
 
 ## New Features

@@ -970,14 +970,14 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
   dat <- dat |>
     dplyr::mutate(
       cl = ifelse(
-        (is.na(cl_1) & ceil_hgt == 22000),
+        (is.na(.data$cl_1) & .data$ceil_hgt == 22000),
         0,
-        cl
+        .data$cl
       ),
       cl_1 = ifelse(
-        (is.na(cl_1) & ceil_hgt == 22000),
+        (is.na(.data$cl_1) & .data$ceil_hgt == 22000),
         0,
-        cl_1
+        .data$cl_1
       )
     )
 

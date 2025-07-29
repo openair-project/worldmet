@@ -1,4 +1,4 @@
-# worldmet (development version)
+# worldmet 0.10.0
 
 ## New Features 
 

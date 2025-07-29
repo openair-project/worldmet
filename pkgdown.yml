@@ -3,7 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   articles/worldmet: worldmet.html
-last_built: 2025-07-29T09:08Z
+last_built: 2025-07-29T09:13Z
 urls:
   reference: https://openair-project.github.io/worldmet/reference
   article: https://openair-project.github.io/worldmet/articles

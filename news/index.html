@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">worldmet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.9.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,9 +51,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="worldmet-development-version">worldmet (development version)<a class="anchor" aria-label="anchor" href="#worldmet-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.10.0" id="worldmet-0100">worldmet 0.10.0<a class="anchor" aria-label="anchor" href="#worldmet-0100"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-10-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-10-0"></a></h3>
 <ul><li>
 <p>Parallel importing of NOAA data is now powered by <a href="https://mirai.r-lib.org" class="external-link">mirai</a>. This reduces the number of dependencies of <a href="https://openair-project.github.io/worldmet/">worldmet</a>, and also allows users to be more flexible with how parallel processing is achieved.</p>
 <ul><li>Due to this change, users are recommended to set <code><a href="https://mirai.r-lib.org/reference/daemons.html" class="external-link">mirai::daemons()</a></code> themselves. <code>n.core</code> will stil work for back-compatibility, but will give a once-per-session warning.</li>

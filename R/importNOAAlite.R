@@ -86,7 +86,7 @@ importNOAAlite <- function(
     longitude <- meta[meta$code == code, ]$longitude
     elevation <- meta[meta$code == code, ]$`elev(m)`
 
-    path <- "https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/2025/DATACODE-DATAYEAR.gz"
+    path <- "https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/DATAYEAR/DATACODE-DATAYEAR.gz"
     path <- gsub("DATACODE", code, path)
     path <- gsub("DATAYEAR", year, path)
 

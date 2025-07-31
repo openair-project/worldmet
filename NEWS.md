@@ -1,3 +1,9 @@
+# worldmet (development version)
+
+## Bug Fixes
+
+- `importNOAAlite()` can now import data from years other than 2025.
+
 # worldmet 0.10.0
 
 ## New Features 

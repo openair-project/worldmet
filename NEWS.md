@@ -1,3 +1,15 @@
+# worldmet (development version)
+
+## New Features
+
+- `importNOAAlite()` has gained the `path` argument, in line with `importNOAA()`.
+
+- `importNOAAlite()` now supports parallel processing using the `{mirai}` package, in line with `importNOAA()`.
+
+## Bug Fixes
+
+- `importNOAAlite()` can now import data from years other than 2025.
+
 # worldmet 0.10.0
 
 ## New Features 

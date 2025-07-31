@@ -11,3 +11,4 @@ README_cache
 ^vignettes/articles$
 ^LICENSE\.md$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$

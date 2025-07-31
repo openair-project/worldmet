@@ -50,13 +50,9 @@
 #' "Etc/GMT-8"` for a meteorological data frame called `met`. The two data sets
 #' could then be merged based on `date`.
 #'
-#' @param code The identifying code as a character string. The code is a
-#'   combination of the USAF and the WBAN unique identifiers. The codes are
-#'   separated by a \dQuote{-} e.g. `code = "037720-99999"`.
-#' @param year The year to import. This can be a vector of years e.g. `year =
-#'   2000:2005`.
-#' @param quiet If `FALSE`, print missing sites / years to the screen, and show
-#'   a progress bar if multiple sites are imported.
+#' @inheritSection importNOAA Parallel Processing
+#'
+#' @inheritParams importNOAA
 #' @export
 #' @return Returns a data frame of surface observations. The data frame is
 #'   consistent for use with the `openair` package. Note that the data are
@@ -76,7 +72,8 @@
 importNOAAlite <- function(
   code = "037720-99999",
   year = 2025,
-  quiet = FALSE
+  quiet = FALSE,
+  path = NA
 ) {
   meta <- getMeta(returnMap = F, plot = F)
 
@@ -86,13 +83,31 @@ importNOAAlite <- function(
     longitude <- meta[meta$code == code, ]$longitude
     elevation <- meta[meta$code == code, ]$`elev(m)`
 
-    path <- "https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/2025/DATACODE-DATAYEAR.gz"
+    path <- "https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/DATAYEAR/DATACODE-DATAYEAR.gz"
     path <- gsub("DATACODE", code, path)
     path <- gsub("DATAYEAR", year, path)
 
     t <- tempfile(fileext = ".gz")
 
-    utils::download.file(path, t, quiet = TRUE)
+    download_success <- tryCatch(
+      {
+        suppressWarnings(utils::download.file(path, t, quiet = TRUE))
+        TRUE
+      },
+      error = function(e) {
+        message(sprintf(
+          "Download failed for code '%s' and year '%s': %s",
+          code,
+          year,
+          e$message
+        ))
+        FALSE
+      }
+    )
+
+    if (!download_success) {
+      return(NULL)
+    }
 
     utils::read.fwf(
       t,
@@ -164,10 +179,51 @@ importNOAAlite <- function(
       )
   }
 
-  tidyr::crossing(
-    code = code,
-    year = year
-  ) |>
-    purrr::pmap(purrr::possibly(import_lite), .progress = !quiet) |>
+  dat <-
+    tidyr::crossing(
+      code = code,
+      year = year
+    ) |>
+    purrr::pmap(
+      purrr::in_parallel(
+        \(code, year) import_lite(code = code, year = year),
+        import_lite = import_lite,
+        meta = meta
+      ),
+      .progress = !quiet
+    ) |>
     dplyr::bind_rows()
+
+  if (is.null(dat) || nrow(dat) == 0) {
+    cli::cli_inform(
+      c(
+        "x" = "Specified {.field site}-{.field year} combinations do not exist.",
+        "i" = "Is the ISD service down? Check {.url https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/}."
+      )
+    )
+    return()
+  }
+
+  if (!is.na(path)) {
+    if (!dir.exists(path)) {
+      cli::cli_warn("Directory does not exist; file not saved.", call. = FALSE)
+      return()
+    }
+
+    # save as year / site files
+    writeMet <- function(dat) {
+      saveRDS(
+        dat,
+        paste0(path, "/", unique(dat$code), "_", unique(dat$year), "_lite.rds")
+      )
+      return(dat)
+    }
+
+    dat |>
+      dplyr::mutate(year = format(.data$date, "%Y")) |>
+      (\(x) split(x, x[c("code", "year")]))() |>
+      purrr::map(writeMet)
+  }
+
+  return(dat)
 }

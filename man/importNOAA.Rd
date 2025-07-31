@@ -122,6 +122,30 @@ manual for more details), then the time zone of the met data can be changed
 to be the same. One way of doing this would be \code{attr(met$date, "tzone") <- "Etc/GMT-8"} for a meteorological data frame called \code{met}. The two data sets
 could then be merged based on \code{date}.
 }
+\section{Parallel Processing}{
+
+
+If you are importing a lot of meteorological data, this can take a long
+while. This is because each combination of year and station requires
+downloading a separate data file from NOAA's online data directory, and the
+time each download takes can quickly add up. \code{\link[=importNOAA]{importNOAA()}} and
+\code{\link[=importNOAAlite]{importNOAAlite()}} can use parallel processing to speed downloading up,
+powered by the capable \code{{mirai}} package. If users have any \code{{mirai}}
+"daemons" set, these functions will download files in parallel. The
+greatest benefits will be seen if you spawn as many daemons as you have
+cores on your machine, although one fewer than the available cores is often
+a good rule of thumb. Your mileage may vary, however, and naturally
+spawning more daemons than station-year combinations will lead to
+diminishing returns.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# set workers - once per session
+mirai::daemons(4)
+
+# import lots of data - NB: no change in importNOAA()!
+big_met <- importNOAA(code = "037720-99999", year = 2010:2020)
+}\if{html}{\out{</div>}}
+}
+
 \examples{
 
 \dontrun{

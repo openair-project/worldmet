@@ -1,5 +1,7 @@
 # worldmet (development version)
 
+# worldmet 0.10.1
+
 ## New Features
 
 - `importNOAAlite()` has gained the `path` argument, in line with `importNOAA()`.

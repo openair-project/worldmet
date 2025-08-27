@@ -54,6 +54,11 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="worldmet-development-version">worldmet (development version)<a class="anchor" aria-label="anchor" href="#worldmet-development-version"></a></h2>
 <div class="section level3">
+<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/importNOAA.html">importNOAA()</a></code> now recommends trying the other <code>source</code> if it fails to fetch data (i.e., if <code>source = "delim"</code> fails, the user will be prompted to try <code>source = "fwf"</code>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>Remove present weather condition when <code>source = "fwf"</code>.</li>
 </ul></div>
@@ -148,45 +153,41 @@
 <h2 class="pkg-version" data-toc-text="0.9.1" id="worldmet-091">worldmet 0.9.1<a class="anchor" aria-label="anchor" href="#worldmet-091"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-9-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-1"></a></h3>
-<ul><li>fix bug when lat and lon provided in <code>getMeta</code>
-</li>
-<li>fix bug when several years are selected and columns are different lengths when <code>n.core = 1</code>
-</li>
+<ul><li><p>fix bug when lat and lon provided in <code><a href="../reference/getMeta.html">getMeta()</a></code></p></li>
+<li><p>fix bug when several years are selected and columns are different lengths when <code>n.core = 1</code></p></li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.1" id="worldmet-091-1">worldmet 0.9.1<a class="anchor" aria-label="anchor" href="#worldmet-091-1"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-9-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-1"></a></h3>
-<ul><li>Significant changes due to NOAA storage formats and different storage locations</li>
-<li>Remove options for precipitation and present weather in <code><a href="../reference/importNOAA.html">importNOAA()</a></code>; just return everything</li>
-<li>Return data as <a href="https://tibble.tidyverse.org/" class="external-link">tibble</a>
-</li>
+<ul><li><p>Significant changes due to NOAA storage formats and different storage locations</p></li>
+<li><p>Remove options for precipitation and present weather in <code><a href="../reference/importNOAA.html">importNOAA()</a></code>; just return everything</p></li>
+<li><p>Return data as <a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></p></li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.8" id="worldmet-088">worldmet 0.8.8<a class="anchor" aria-label="anchor" href="#worldmet-088"></a></h2><p class="text-muted">CRAN release: 2020-02-12</p>
 <div class="section level3">
 <h3 id="new-features-0-8-8">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-8-8"></a></h3>
-<ul><li>export <code><a href="../reference/getMetaLive.html">getMetaLive()</a></code> to allow users direct access to all meta data and easy re-use without re-downloading.</li>
-<li>add option <code>path</code> to allow users to save met data as an rds file.</li>
-<li>deprecate <code>fresh</code> option in <code><a href="../reference/getMeta.html">getMeta()</a></code>.</li>
-<li>Assume <code>9999</code> is missing for visibility (was <code>999999</code>)</li>
+<ul><li><p>export <code><a href="../reference/getMetaLive.html">getMetaLive()</a></code> to allow users direct access to all meta data and easy re-use without re-downloading.</p></li>
+<li><p>add option <code>path</code> to allow users to save met data as an rds file.</p></li>
+<li><p>deprecate <code>fresh</code> option in <code><a href="../reference/getMeta.html">getMeta()</a></code>.</p></li>
+<li><p>Assume <code>9999</code> is missing for visibility (was <code>999999</code>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-8-8">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-8-8"></a></h3>
-<ul><li>fix short WBAN codes.</li>
-<li>make sure all meta data are used and not only sites with most recent year</li>
+<ul><li><p>fix short WBAN codes.</p></li>
+<li><p>make sure all meta data are used and not only sites with most recent year</p></li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.4" id="worldmet-084">worldmet 0.8.4<a class="anchor" aria-label="anchor" href="#worldmet-084"></a></h2><p class="text-muted">CRAN release: 2018-02-27</p>
 <div class="section level3">
 <h3 id="new-features-0-8-4">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-8-4"></a></h3>
-<ul><li>query live meta data when using <code><a href="../reference/getMeta.html">getMeta()</a></code>
-</li>
-<li>parallel processing for sites and years</li>
-<li>use <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_csv()</a></code> for meta data (<code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv()</a></code> seems very slow in R 3.4.3)</li>
+<ul><li><p>query live meta data when using <code><a href="../reference/getMeta.html">getMeta()</a></code>.</p></li>
+<li><p>parallel processing for sites and years.</p></li>
+<li><p>use <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_csv()</a></code> for meta data (<code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv()</a></code> seems very slow in R 3.4.3).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-8-4">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-8-4"></a></h3>
@@ -197,46 +198,42 @@
 <h2 class="pkg-version" data-toc-text="0.8.0" id="worldmet-080">worldmet 0.8.0<a class="anchor" aria-label="anchor" href="#worldmet-080"></a></h2><p class="text-muted">CRAN release: 2017-12-18</p>
 <div class="section level3">
 <h3 id="new-features-0-8-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-8-0"></a></h3>
-<ul><li>downloads now from webserver rather than ftp. Should be faster and allow more downloads. Thanks to Stuart Grange.</li>
-<li>add parallel processing using <a href="https://github.com/RevolutionAnalytics/foreach" class="external-link">foreach</a>
-</li>
+<ul><li><p>downloads now from webserver rather than ftp. Should be faster and allow more downloads. Thanks to Stuart Grange.</p></li>
+<li><p>add parallel processing using <a href="https://github.com/RevolutionAnalytics/foreach" class="external-link">foreach</a>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.4" id="worldmet-074">worldmet 0.7.4<a class="anchor" aria-label="anchor" href="#worldmet-074"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-7-4">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-7-4"></a></h3>
-<ul><li>don’t use <code><a href="https://rdrr.io/r/base/showConnections.html" class="external-link">closeAllConnections()</a></code>
-</li>
+<ul><li>don’t use <code><a href="https://rdrr.io/r/base/showConnections.html" class="external-link">closeAllConnections()</a></code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.3" id="worldmet-073">worldmet 0.7.3<a class="anchor" aria-label="anchor" href="#worldmet-073"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-7-3">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-7-3"></a></h3>
-<ul><li>default to downloading fresh meta data each time</li>
-<li>update meta data</li>
+<ul><li><p>default to downloading fresh meta data each time.</p></li>
+<li><p>update meta data.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-7-3">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-7-3"></a></h3>
-<ul><li>fix current year problem (base on meta data available in package)</li>
+<ul><li>fix current year problem (base on meta data available in package).</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.2" id="worldmet-072">worldmet 0.7.2<a class="anchor" aria-label="anchor" href="#worldmet-072"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-7-2">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-7-2"></a></h3>
-<ul><li>make sure data are returned with <code>NA</code> when missing and not <code>NaN</code>
-</li>
+<ul><li>make sure data are returned with <code>NA</code> when missing and not <code>NaN</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6" id="worldmet-06">worldmet 0.6<a class="anchor" aria-label="anchor" href="#worldmet-06"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-6">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-6"></a></h3>
-<ul><li>Add ability to return precipitation measurements, if available.</li>
-<li>Add precipitation to <code><a href="../reference/exportADMS.html">exportADMS()</a></code>
-</li>
+<ul><li><p>Add ability to return precipitation measurements, if available.</p></li>
+<li><p>Add precipitation to <code><a href="../reference/exportADMS.html">exportADMS()</a></code></p></li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

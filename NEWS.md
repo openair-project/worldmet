@@ -1,5 +1,8 @@
 # worldmet (development version)
 
+## Bug Fixes
+- Remove present weather condition when `source = "fwf"`.
+
 # worldmet 0.10.1
 
 ## New Features

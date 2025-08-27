@@ -1052,10 +1052,11 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     dat <- openair::timeAverage(dat, avg.time = "hour")
   }
 
+  # ignore for now as pwc not working properly
   # add pwc back in
-  if (PWC && hourly) {
-    dat <- merge(dat, pwc, by = "date", all = TRUE)
-  }
+  # if (PWC && hourly) {
+  #   dat <- merge(dat, pwc, by = "date", all = TRUE)
+  #}
 
   # add precipitation
   if (precip) {

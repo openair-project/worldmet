@@ -1,6 +1,11 @@
 # worldmet (development version)
 
+## New Features
+
+- `importNOAA()` now recommends trying the other `source` if it fails to fetch data (i.e., if `source = "delim"` fails, the user will be prompted to try `source = "fwf"`).
+
 ## Bug Fixes
+
 - Remove present weather condition when `source = "fwf"`.
 
 # worldmet 0.10.1
@@ -87,15 +92,14 @@
 
 ## New Features
 
-- Exporting `weatherCodes` so that everything works when used by other 
-packages through "explicit namespacing"" (_e.g._ `worldmet::importNOAA()`)
-without having to `library(worldmet)`.
+- Exporting `weatherCodes` so that everything works when used by other packages through "explicit namespacing"" (_e.g._ `worldmet::importNOAA()`) without having to `library(worldmet)`.
 
 # worldmet 0.9.1
 
 ## Bug Fixes
 
-- fix bug when lat and lon provided in `getMeta`
+- fix bug when lat and lon provided in `getMeta()`
+
 - fix bug when several years are selected and columns are different lengths when `n.core = 1`
 
 # worldmet 0.9.1
@@ -103,7 +107,9 @@ without having to `library(worldmet)`.
 ## New Features
 
 - Significant changes due to NOAA storage formats and different storage locations
+
 - Remove options for precipitation and present weather in `importNOAA()`; just return everything
+
 - Return data as `{tibble}`
 
 # worldmet 0.8.8
@@ -111,22 +117,28 @@ without having to `library(worldmet)`.
 ## New Features
 
 - export `getMetaLive()` to allow users direct access to all meta data and easy re-use without re-downloading.
+
 - add option `path` to allow users to save met data as an rds file.
+
 - deprecate `fresh` option in `getMeta()`.
+
 - Assume `9999` is missing for visibility (was `999999`)
 
 ## Bug Fixes
 
 - fix short WBAN codes.
+
 - make sure all meta data are used and not only sites with most recent year
 
 # worldmet 0.8.4
 
 ## New Features
 
-- query live meta data when using `getMeta()`
-- parallel processing for sites and years
-- use `readr::read_csv()` for meta data (`read.csv()` seems very slow in R 3.4.3)
+- query live meta data when using `getMeta()`.
+
+- parallel processing for sites and years.
+
+- use `readr::read_csv()` for meta data (`read.csv()` seems very slow in R 3.4.3).
 
 ## Bug Fixes
 
@@ -137,35 +149,38 @@ without having to `library(worldmet)`.
 ## New Features
 
 - downloads now from webserver rather than ftp. Should be faster and allow more downloads. Thanks to Stuart Grange.
-- add parallel processing using `{foreach}`
+
+- add parallel processing using `{foreach}`.
 
 # worldmet 0.7.4
 
 ## Bug Fixes
 
-- don't use `closeAllConnections()`
+- don't use `closeAllConnections()`.
 
 # worldmet 0.7.3
 
 ## New Features
 
-- default to downloading fresh meta data each time
-- update meta data
+- default to downloading fresh meta data each time.
+
+- update meta data.
 
 ## Bug Fixes
 
-- fix current year problem (base on meta data available in package)
+- fix current year problem (base on meta data available in package).
 
 # worldmet 0.7.2
 
 ## Bug Fixes
 
-- make sure data are returned with `NA` when missing and not `NaN`
+- make sure data are returned with `NA` when missing and not `NaN`.
 
 # worldmet 0.6 
 
 ## New Features
 
 - Add ability to return precipitation measurements, if available.
+
 - Add precipitation to `exportADMS()`
 

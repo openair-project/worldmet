@@ -102,10 +102,11 @@
 #'   2000:2005`.
 #' @param hourly Should hourly means be calculated? The default is `TRUE`. If
 #'   `FALSE` then the raw data are returned.
-#' @param source The NOAA ISD datastore stores files in two formats; as
-#'   delimited CSV files (`"delim"`) and as fixed width files (`"fwf"`).
-#'   [importNOAA()] defaults to `"delim"` but, if the delimited filestore is
-#'   down, users may wish to try `"fwf"` instead.
+#' @param source The NOAA ISD service stores files in two formats; as delimited
+#'   CSV files (`"delim"`) and as fixed width files (`"fwf"`). [importNOAA()]
+#'   defaults to `"delim"` but, if the delimited data store is down, users may
+#'   wish to try `"fwf"` instead. Both data sources should be identical to one
+#'   another.
 #' @param quiet If `FALSE`, print missing sites / years to the screen, and show
 #'   a progress bar if multiple sites are imported.
 #' @param path If a file path is provided, the data are saved as an rds file at
@@ -227,10 +228,16 @@ importNOAA <- function(
   }
 
   if (is.null(dat) || nrow(dat) == 0) {
+    # get source not used
+    trysource <- c("fwf", "delim")
+    trysource <- trysource[trysource != source]
+
+    # message
     cli::cli_inform(
       c(
         "x" = "Specified {.field site}-{.field year} combinations do not exist.",
-        "i" = "Is the ISD service down? Check {.url https://www.ncei.noaa.gov/data/global-hourly/}."
+        "i" = "Is the ISD service down? Check {.url https://www.ncei.noaa.gov/data/global-hourly/}.",
+        "i" = 'Try {.code importNOAA(..., source = "{trysource}")} to access an alternative data store.'
       )
     )
     return()

@@ -1094,7 +1094,7 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
   }
 
   # return other meta data
-  meta <- getMeta(returnMap = FALSE, plot = FALSE)
+  meta <- getMeta(returnMap = FALSE, plot = FALSE, end.year = "all")
   info <- meta[meta$code == code, ]
 
   dat$station <- as.character(info$station)

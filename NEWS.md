@@ -6,7 +6,9 @@
 
 ## Bug Fixes
 
-- Remove present weather condition when `source = "fwf"`.
+- Fixed `source = "fwf"` failing when importing data from closed stations.
+
+- Removed present weather condition when `source = "fwf"`.
 
 # worldmet 0.10.1
 

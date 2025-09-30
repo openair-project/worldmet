@@ -47,9 +47,7 @@ means no parallelism. \code{n.cores = 1L} is equivalent to \code{n.cores = NULL}
 Returns a data frame of surface observations. The data frame is
 consistent for use with the \code{openair} package. Note that the data are
 returned in GMT (UTC) time zone format. Users may wish to express the data
-in other time zones, e.g., to merge with air pollution data. The
-\link[lubridate:lubridate-package]{lubridate} package is useful in this
-respect.
+in other time zones, e.g., to merge with air pollution data.
 }
 \description{
 This is the main function to import data from the NOAA Integrated Surface

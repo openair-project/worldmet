@@ -1,5 +1,9 @@
 # worldmet (development version)
 
+## Dependency Changes
+
+- `worldmet` no longer depends on `openair`.
+
 ## New Features
 
 - `importNOAA()` now recommends trying the other `source` if it fails to fetch data (i.e., if `source = "delim"` fails, the user will be prompted to try `source = "fwf"`).
@@ -7,6 +11,8 @@
 ## Bug Fixes
 
 - Fixed `source = "fwf"` failing when importing data from closed stations.
+
+- Fixed `source = "fwf"` when `hourly = TRUE` and multiple sites are imported.
 
 - Removed present weather condition when `source = "fwf"`.
 

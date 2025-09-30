@@ -121,9 +121,7 @@
 #' @return Returns a data frame of surface observations. The data frame is
 #'   consistent for use with the `openair` package. Note that the data are
 #'   returned in GMT (UTC) time zone format. Users may wish to express the data
-#'   in other time zones, e.g., to merge with air pollution data. The
-#'   [lubridate][lubridate::lubridate-package] package is useful in this
-#'   respect.
+#'   in other time zones, e.g., to merge with air pollution data.
 #'
 #' @family NOAA ISD functions
 #' @author David Carslaw
@@ -289,14 +287,6 @@ importNOAA <- function(
 
 #' @noRd
 getDatDelim <- function(code, year, hourly) {
-  # function to supress timeAverage printing
-  # (can't see option to turn it off)
-  quiet <- function(x) {
-    sink(tempfile())
-    on.exit(sink())
-    invisible(force(x))
-  }
-
   ## location of data
   file.name <- paste0(
     "https://www.ncei.noaa.gov/data/global-hourly/access/",
@@ -654,11 +644,11 @@ getDatDelim <- function(code, year, hourly) {
   ## average to hourly
   if (hourly) {
     met_data <-
-      quiet(openair::timeAverage(
+      worldmet_time_average(
         met_data,
         avg.time = "hour",
         type = c("code", "station")
-      ))
+      )
   }
 
   ## add pwc back in
@@ -1056,7 +1046,11 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
 
   # average to hourly
   if (hourly) {
-    dat <- openair::timeAverage(dat, avg.time = "hour")
+    dat <- worldmet_time_average(
+      dat,
+      avg.time = "hour",
+      type = c("usaf", "wban")
+    )
   }
 
   # ignore for now as pwc not working properly

@@ -765,10 +765,6 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
       })
       cl <- as.numeric(cl)
 
-      #    miss <- which(cl > 8) # missing or obscured in some way
-      #   if (length(miss) > 0) {
-      #     cl[miss] <- NA
-      #   }
       miss <- which(cl == 99) # missing
 
       if (length(miss) > 0) {
@@ -1052,12 +1048,6 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
       type = c("usaf", "wban")
     )
   }
-
-  # ignore for now as pwc not working properly
-  # add pwc back in
-  # if (PWC && hourly) {
-  #   dat <- merge(dat, pwc, by = "date", all = TRUE)
-  #}
 
   # add precipitation
   if (precip) {

@@ -36,7 +36,7 @@ Suggests:
     mirai,
     rmarkdown
 ByteCompile: true
-Config/Needs/website: openair-project/openairpkgdown
+Config/Needs/website: openair-project/openairpkgdown,openair
 Encoding: UTF-8
 Language: en-GB
 LazyData: true

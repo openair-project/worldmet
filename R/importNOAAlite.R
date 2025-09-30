@@ -74,7 +74,7 @@ importNOAAlite <- function(
   quiet = FALSE,
   path = NA
 ) {
-  meta <- getMeta(returnMap = FALSE, plot = FALSE)
+  meta <- getMeta(returnMap = FALSE, plot = FALSE, end.year = "all")
 
   import_lite <- function(code, year) {
     station_name <- meta[meta$code == code, ]$station

@@ -12,3 +12,5 @@ README_cache
 ^LICENSE\.md$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^[.]?air[.]toml$
+^\.vscode$

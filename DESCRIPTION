@@ -25,7 +25,6 @@ Imports:
     cli,
     dplyr,
     leaflet,
-    openair,
     purrr (>= 1.1.0),
     readr,
     rlang,
@@ -37,10 +36,10 @@ Suggests:
     mirai,
     rmarkdown
 ByteCompile: true
-Config/Needs/website: openair-project/openairpkgdown
+Config/Needs/website: openair-project/openairpkgdown,openair
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3

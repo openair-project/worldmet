@@ -57,9 +57,8 @@
 #' @return Returns a data frame of surface observations. The data frame is
 #'   consistent for use with the `openair` package. Note that the data are
 #'   returned in GMT (UTC) time zone format. Users may wish to express the data
-#'   in other time zones, e.g., to merge with air pollution data. The
-#'   [lubridate][lubridate::lubridate-package] package is useful in this
-#'   respect.
+#'   in other time zones, e.g., to merge with air pollution data.
+#'
 #' @family NOAA ISD functions
 #' @seealso [getMeta()] to obtain the codes based on various site search
 #'   approaches.
@@ -75,7 +74,7 @@ importNOAAlite <- function(
   quiet = FALSE,
   path = NA
 ) {
-  meta <- getMeta(returnMap = F, plot = F)
+  meta <- getMeta(returnMap = FALSE, plot = FALSE, end.year = "all")
 
   import_lite <- function(code, year) {
     station_name <- meta[meta$code == code, ]$station

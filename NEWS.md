@@ -1,5 +1,7 @@
 # worldmet (development version)
 
+# worldmet 0.10.2
+
 ## Dependency Changes
 
 - `worldmet` no longer depends on `openair`.

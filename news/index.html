@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">worldmet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.1.001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,18 +53,21 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="worldmet-development-version">worldmet (development version)<a class="anchor" aria-label="anchor" href="#worldmet-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.10.2" id="worldmet-0102">worldmet 0.10.2<a class="anchor" aria-label="anchor" href="#worldmet-0102"></a></h2>
 <div class="section level3">
-<h3 id="dependency-changes-development-version">Dependency Changes<a class="anchor" aria-label="anchor" href="#dependency-changes-development-version"></a></h3>
+<h3 id="dependency-changes-0-10-2">Dependency Changes<a class="anchor" aria-label="anchor" href="#dependency-changes-0-10-2"></a></h3>
 <ul><li>
 <code>worldmet</code> no longer depends on <code>openair</code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-10-2">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-10-2"></a></h3>
 <ul><li>
 <code><a href="../reference/importNOAA.html">importNOAA()</a></code> now recommends trying the other <code>source</code> if it fails to fetch data (i.e., if <code>source = "delim"</code> fails, the user will be prompted to try <code>source = "fwf"</code>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-10-2">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-2"></a></h3>
 <ul><li><p>Fixed <code>source = "fwf"</code> failing when importing data from closed stations.</p></li>
 <li><p>Fixed <code>source = "fwf"</code> when <code>hourly = TRUE</code> and multiple sites are imported.</p></li>
 <li><p>Removed present weather condition when <code>source = "fwf"</code>.</p></li>

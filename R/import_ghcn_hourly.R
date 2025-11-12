@@ -63,7 +63,7 @@ import_ghcn_hourly <-
       "source_code",
       "source_id"
     )
-    codes <- rlang::arg_match(codes, potential_codes, several.ok = TRUE)
+    codes <- rlang::arg_match(codes, potential_codes, multiple = TRUE)
 
     # (temporary?) issue with parquet files not having ids/lats/longs - need to
     # have meta to sort that out

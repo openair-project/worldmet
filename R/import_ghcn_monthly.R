@@ -53,7 +53,7 @@ import_ghcn_monthly_temp <- function(
   table <- rlang::arg_match(table, c("inventory", "data"), multiple = TRUE)
 
   # download file into temporary dir
-  download.file(
+  utils::download.file(
     paste0(
       "https://www.ncei.noaa.gov/pub/data/ghcn/v4/ghcnm.tavg.latest.",
       dataset,
@@ -67,7 +67,10 @@ import_ghcn_monthly_temp <- function(
   )
 
   # untar it
-  untar(file.path(tdir, folder, "out.tar.gz"), exdir = file.path(tdir, folder))
+  utils::untar(
+    file.path(tdir, folder, "out.tar.gz"),
+    exdir = file.path(tdir, folder)
+  )
 
   # get the file that's been extracted
   files <- dir(file.path(tdir, folder), full.names = TRUE)
@@ -100,7 +103,7 @@ import_ghcn_monthly_temp <- function(
         na = "-9999",
         show_col_types = FALSE
       ) |>
-      setNames(
+      stats::setNames(
         c(
           "station_id",
           "year",

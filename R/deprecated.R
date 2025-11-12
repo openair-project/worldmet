@@ -20,6 +20,8 @@
 #'   a range of years e.g. 1990:2016 (which would select any site that had an
 #'   end date in that range. **By default only sites that have some data for the
 #'   current year are returned**.
+#' @param n The number of nearest sites to search based on `latitude` and
+#'   `longitude`.
 #' @param plot If `TRUE` will plot sites on an interactive leaflet map.
 #' @param returnMap Should the leaflet map be returned instead of the meta data?
 #'   Default is `FALSE`.
@@ -86,7 +88,7 @@ getMeta <- function(
 #' @rdname deprecated-isd
 #' @export
 getMetaLive <- function(...) {
-  import_isd_meta_live(...)
+  import_isd_stations_live(...)
 }
 
 #' @param path If a file path is provided, the data are saved as an rds file at

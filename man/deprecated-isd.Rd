@@ -55,6 +55,9 @@ listing see \url{https://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv}.}
 
 \item{state}{The state code. This is a two letter code.}
 
+\item{n}{The number of nearest sites to search based on \code{latitude} and
+\code{longitude}.}
+
 \item{end.year}{To help filter sites based on how recent the available data
 are. \code{end.year} can be "current", "any" or a numeric year such as 2016, or
 a range of years e.g. 1990:2016 (which would select any site that had an

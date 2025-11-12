@@ -81,15 +81,15 @@ import_ghcn_hourly <-
           dplyr::rename_with(tolower) |>
           dplyr::mutate(
             date = paste0(
-              year,
+              .data$year,
               "/",
-              month,
+              .data$month,
               "/",
-              day,
+              .data$day,
               " ",
-              hour,
+              .data$hour,
               ":",
-              minute,
+              .data$minute,
               ":00"
             ) |>
               as.POSIXct(tz = "UTC"),
@@ -140,7 +140,7 @@ import_ghcn_hourly <-
             data |>
             dplyr::select(-"station_id", -"longitude", -"latitude") |>
             dplyr::left_join(
-              dplyr::filter(meta, name %in% data$station_name) |>
+              dplyr::filter(meta, .data$name %in% data$station_name) |>
                 dplyr::transmute(
                   station_name = .data$name,
                   station_id = .data$id,

@@ -104,8 +104,8 @@ import_ghcn_stations <-
     meta <-
       dplyr::mutate(
         meta,
-        country = trimws(substr(id, 1L, 2L)),
-        network = trimws(substr(id, 3L, 3L)),
+        country = trimws(substr(.data$id, 1L, 2L)),
+        network = trimws(substr(.data$id, 3L, 3L)),
         .after = "id"
       ) |>
       dplyr::relocate(dplyr::all_of(c(
@@ -149,7 +149,7 @@ import_ghcn_stations <-
 
       meta <-
         meta_sf |>
-        dplyr::arrange(distance) |>
+        dplyr::arrange(.data$distance) |>
         dplyr::slice_head(n = n_max) |>
         tibble::tibble() |>
         dplyr::select(-"geometry")
@@ -302,12 +302,12 @@ import_ghcn_inventory <-
           progress = progress
         ) |>
         dplyr::mutate(
-          start_year = as.integer(start_year),
-          end_year = as.integer(end_year)
+          start_year = as.integer(.data$start_year),
+          end_year = as.integer(.data$end_year)
         ) |>
         dplyr::mutate(
-          country = trimws(substr(id, 1L, 2L)),
-          network = trimws(substr(id, 3L, 3L)),
+          country = trimws(substr(.data$id, 1L, 2L)),
+          network = trimws(substr(.data$id, 3L, 3L)),
           .after = "id"
         )
     }
@@ -338,7 +338,7 @@ import_ghcn_inventory <-
 
       inventory <-
         inventory |>
-        setNames(as.vector(t(inventory[1, ]))) |>
+        stats::setNames(as.vector(t(inventory[1, ]))) |>
         dplyr::slice_tail(n = -1)
 
       if (pivot == "wide") {
@@ -353,14 +353,14 @@ import_ghcn_inventory <-
         inventory <-
           inventory |>
           tidyr::pivot_longer(
-            JAN:DEC,
+            "JAN":"DEC",
             names_to = "month",
             values_to = "count"
           ) |>
           dplyr::rename_with(tolower) |>
           dplyr::mutate(
             month = factor(
-              month,
+              .data$month,
               levels = c(
                 "JAN",
                 "FEB",
@@ -384,8 +384,8 @@ import_ghcn_inventory <-
       inventory <-
         dplyr::mutate(
           inventory,
-          country = trimws(substr(id, 1L, 2L)),
-          network = trimws(substr(id, 3L, 3L)),
+          country = trimws(substr(.data$id, 1L, 2L)),
+          network = trimws(substr(.data$id, 3L, 3L)),
           .after = "id"
         )
     }

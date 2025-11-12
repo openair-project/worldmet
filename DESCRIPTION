@@ -29,6 +29,7 @@ Imports:
     readr,
     rlang,
     sf,
+    tibble,
     tidyr
 Suggests: 
     arrow,

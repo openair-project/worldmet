@@ -169,7 +169,7 @@ write_adms <- function(
   # write the data file
   utils::write.table(
     adms,
-    file = out,
+    file = file,
     col.names = FALSE,
     row.names = FALSE,
     sep = ",",
@@ -177,7 +177,7 @@ write_adms <- function(
   )
 
   # add the header lines
-  fConn <- file(out, "r+")
+  fConn <- file(file, "r+")
   Lines <- readLines(fConn)
   writeLines(
     c(

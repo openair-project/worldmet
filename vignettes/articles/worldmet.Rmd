@@ -42,7 +42,7 @@ import_ghcn_stations(lat = 51.5, lng = 0, return = "map")
 To obtain the data the user must supply a station ID and year(s) of interest. For example, to download data for Heathrow Airport in 2024 (ID `UKI0000EGLL`):
 
 ```{r import, eval=FALSE, echo=TRUE}
-met_london <- import_ghcn_hourly("UKI0000EGLL", year = 2024)
+met_london <- import_ghcn_hourly("UKI0000EGLL", year = 2025)
 head(met_london)
 ```
 
@@ -66,7 +66,7 @@ Also available in `worldmet` are:
 
 - `import_ghcn_monthly_temp()`, which imports monthly average temperatures for the entire GHCN.
 
-- `import_ghcn_monthly_precip()`, which imports monthly total precipitation for specific stations.
+- `import_ghcn_monthly_prcp()`, which imports monthly total precipitation for specific stations.
 
 Outside of the GHCN, `worldmet` gives access to the historic Integrated Surface Database (ISD), with functions:
 

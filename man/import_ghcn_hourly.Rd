@@ -8,6 +8,7 @@ import_ghcn_hourly(
   station = "UKI0000EGLL",
   year = NULL,
   source = c("psv", "parquet"),
+  hourly = TRUE,
   abbr_names = TRUE,
   append_codes = FALSE,
   codes = c("measurement_code", "quality_code", "report_type", "source_code",
@@ -27,6 +28,9 @@ of data available for the chosen \code{station}s will be imported.}
 format). The latter is typically faster, but requires the \code{arrow} package
 as an additional dependency. Note that this only applies when \code{year} is not
 \code{NULL}; all \code{by-site} files are \code{psv} files.}
+
+\item{hourly}{Should hourly means be calculated? The default is \code{TRUE}. If
+\code{FALSE} then the raw data are returned, which can be sub-hourly.}
 
 \item{abbr_names}{Should column names be abbreviated? When \code{TRUE}, the
 default, columns like \code{"wind_direction"} are shortened to \code{"wd"}. When

@@ -3,7 +3,7 @@
 #' @noRd
 worldmet_time_average <- function(
   mydata,
-  avg.time = "day",
+  avg.time = "hour",
   type = "default"
 ) {
   # extract variables of interest
@@ -137,7 +137,8 @@ worldmet_time_average <- function(
       calc.mean
     ) |>
     purrr::list_rbind() |>
-    dplyr::as_tibble()
+    dplyr::as_tibble() |>
+    dplyr::select(-dplyr::any_of(c("Uu", "Vv")))
 
   # drop default column if it exists
   if ("default" %in% names(mydata)) {

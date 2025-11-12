@@ -18,6 +18,9 @@
 #'   as an additional dependency. Note that this only applies when `year` is not
 #'   `NULL`; all `by-site` files are `psv` files.
 #'
+#' @param hourly Should hourly means be calculated? The default is `TRUE`. If
+#'   `FALSE` then the raw data are returned, which can be sub-hourly.
+#'
 #' @param abbr_names Should column names be abbreviated? When `TRUE`, the
 #'   default, columns like `"wind_direction"` are shortened to `"wd"`. When
 #'   `FALSE`, names will match the raw data, albeit in lower case.
@@ -43,6 +46,7 @@ import_ghcn_hourly <-
     station = "UKI0000EGLL",
     year = NULL,
     source = c("psv", "parquet"),
+    hourly = TRUE,
     abbr_names = TRUE,
     append_codes = FALSE,
     codes = c(
@@ -84,19 +88,15 @@ import_ghcn_hourly <-
           dplyr::slice_head(n = -1L) |>
           dplyr::rename_with(tolower) |>
           dplyr::mutate(
-            date = paste0(
-              .data$year,
-              "/",
-              .data$month,
-              "/",
-              .data$day,
-              " ",
-              .data$hour,
-              ":",
-              .data$minute,
-              ":00"
-            ) |>
-              as.POSIXct(tz = "UTC"),
+            date = ISOdate(
+              year = .data$year,
+              month = .data$month,
+              day = .data$day,
+              hour = .data$hour,
+              min = .data$minute,
+              sec = 0,
+              tz = "UTC"
+            ),
             .before = year,
             .keep = "unused"
           )
@@ -134,7 +134,11 @@ import_ghcn_hourly <-
           data <- data |>
             dplyr::rename_with(tolower) |>
             dplyr::mutate(
-              date = as.POSIXct(.data$date)
+              date = as.POSIXct(
+                .data$date,
+                format = "%Y-%m-%dT%H:%M:%S",
+                tz = "UTC"
+              )
             )
 
           data <-
@@ -282,16 +286,16 @@ import_ghcn_hourly <-
       return(NULL)
     }
 
+    # function to rename columns
+    rn_data <- function(data, from, to) {
+      names(data) <- gsub(from, to, names(data))
+      data
+    }
+
     # if abbreviated names requested, do that
     if (abbr_names) {
-      rn_data <- function(data, from, to) {
-        names(data) <- gsub(from, to, names(data))
-        data
-      }
       data <-
         data |>
-        rn_data("station_id", "id") |>
-        rn_data("station_name", "station") |>
         rn_data("latitude", "lat") |>
         rn_data("longitude", "lng") |>
         rn_data("elevation", "elev") |>
@@ -319,6 +323,32 @@ import_ghcn_hourly <-
         dplyr::rename_with(\(x) gsub("_source_code", "_sc", x)) |>
         dplyr::rename_with(\(x) gsub("_source_id", "_si", x)) |>
         dplyr::rename_with(\(x) gsub("_source_station_id", "_si", x))
+    }
+
+    # time average to hourly concentrations
+    if (hourly) {
+      # if names not abbreviated, switch to ws/wd
+      if (!abbr_names) {
+        data <-
+          data |>
+          rn_data("wind_direction", "wd") |>
+          rn_data("wind_speed", "ws")
+      }
+
+      # time average to hourly
+      data <- worldmet_time_average(
+        data,
+        avg.time = "hour",
+        type = c("station_id", "station_name")
+      )
+
+      # if names not abbreviated, switch back to defaults
+      if (!abbr_names) {
+        data <-
+          data |>
+          rn_data("wd", "wind_direction") |>
+          rn_data("ws", "wind_speed")
+      }
     }
 
     return(data)

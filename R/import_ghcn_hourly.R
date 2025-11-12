@@ -158,6 +158,14 @@ import_ghcn_hourly <-
             dplyr::relocate("latitude", "longitude", .after = "date")
         }
 
+        if ("wind_direction" %in% names(data)) {
+          data$wind_direction <- ifelse(
+            data$wind_direction == 999,
+            NA,
+            data$wind_direction
+          )
+        }
+
         # ensure data type consistency
         data <-
           dplyr::mutate(

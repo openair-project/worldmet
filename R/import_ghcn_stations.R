@@ -280,8 +280,8 @@ import_ghcn_inventory <-
     pivot = c("wide", "long"),
     progress = rlang::is_interactive()
   ) {
-    database <- match.arg(database)
-    pivot <- match.arg(pivot)
+    database <- rlang::arg_match(database)
+    pivot <- rlang::arg_match(pivot)
 
     if (database == "daily") {
       inventory <-
@@ -420,7 +420,7 @@ import_ghcn_countries <-
   ) {
     table <- rlang::arg_match(table)
     if (table == "countries") {
-      database <- match.arg(database)
+      database <- rlang::arg_match(database)
       url <- switch(
         database,
         "hourly" = "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcn-countries.txt",

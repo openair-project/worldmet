@@ -41,45 +41,7 @@ worldmet_time_average <- function(
     # check to see if we need to expand data rather than aggregate it
     # i.e., chosen time interval less than that of data
     if (seconds_avgtime_interval < seconds_data_interval) {
-      # Get time interval from data
-      interval <- find_time_interval(mydata$date)
-
-      # get time interval as days; used for refinement
-      days <- as.numeric(strsplit(interval, split = " ")[[1]][1]) / 24 / 3600
-
-      # refine interval for common situations
-      interval <- if (inherits(mydata$date, "Date")) {
-        paste(days, "day")
-      } else if (days %in% c(30, 31)) {
-        "month"
-      } else if (days %in% c(365, 366)) {
-        "year"
-      } else {
-        interval
-      }
-
-      # calculate full series of dates by the data interval
-      date_range <- range(mydata$date)
-      allDates <- seq(date_range[1], date_range[2], by = interval)
-      allDates <- c(allDates, max(allDates) + seconds_data_interval)
-
-      # recalculate full series of dates by the avg.time interval
-      allData <- data.frame(date = seq(min(allDates), max(allDates), avg.time))
-
-      # merge with original data, which leaves gaps to fill
-      mydata <-
-        mydata |>
-        dplyr::full_join(allData, by = dplyr::join_by("date")) |>
-        dplyr::arrange(date)
-
-      # make sure missing types are inserted
-      mydata <- tidyr::fill(
-        mydata,
-        dplyr::all_of(type),
-        .direction = c("downup")
-      )
-
-      return(mydata)
+      cli::cli_abort("worldmet should not need to pad data.")
     }
 
     # calculate Uu & Vv if "wd" (& "ws") are in mydata
@@ -137,8 +99,17 @@ worldmet_time_average <- function(
       calc.mean
     ) |>
     purrr::list_rbind() |>
-    dplyr::as_tibble() |>
-    dplyr::select(-dplyr::any_of(c("Uu", "Vv")))
+    dplyr::as_tibble()
+
+  if ("Uu" %in% names(mydata) && "Vv" %in% names(mydata)) {
+    mydata <-
+      mydata |>
+      dplyr::mutate(
+        wd = as.vector(atan2(.data$Uu, .data$Vv) * 360 / 2 / pi),
+        ws = (.data$Uu^2 + .data$Vv^2)^0.5
+      ) |>
+      dplyr::select(-dplyr::any_of(c("Uu", "Vv")))
+  }
 
   # drop default column if it exists
   if ("default" %in% names(mydata)) {
@@ -149,38 +120,6 @@ worldmet_time_average <- function(
   return(mydata)
 }
 
-
-#' Pad the data
-#' @noRd
-pad_dates_timeavg <- function(mydata, type = NULL, interval = "month") {
-  # assume by the time we get here the data have been split into types
-  # This means we just need to pad out the missing types based on first
-  # line.
-
-  start.date <- min(mydata$date, na.rm = TRUE)
-  end.date <- max(mydata$date, na.rm = TRUE)
-
-  # interval is in seconds, so convert to days if Date class and not POSIXct
-  if (class(mydata$date)[1] == "Date") {
-    interval <- paste(
-      as.numeric(strsplit(interval, " ")[[1]][1]) / 3600 / 24,
-      "days"
-    )
-  }
-
-  all.dates <- data.frame(date = seq(start.date, end.date, by = interval))
-  mydata <- dplyr::full_join(mydata, all.dates, by = "date")
-
-  # add in missing types if gaps are made
-  if (!is.null(type)) {
-    mydata[type] <- mydata[1, type]
-  }
-
-  # make sure order is correct
-  mydata <- dplyr::arrange(mydata, date)
-
-  return(mydata)
-}
 
 #' Get the intervals in the original data and in the avg.time period
 #' @noRd
@@ -422,27 +361,4 @@ check_prep <- function(
 
   # return data frame
   return(mydata)
-}
-
-#' From openair
-#' @noRd
-find_time_interval <- function(dates) {
-  # could have several sites, dates may be unordered
-  # find the most common time gap in all the data
-  dates <- unique(dates) # make sure they are unique
-
-  # work out the most common time gap of unique, ordered dates
-  id <- which.max(table(diff(as.numeric(unique(dates[order(dates)])))))
-  seconds <- as.numeric(names(id))
-
-  if ("POSIXt" %in% class(dates)) {
-    seconds <- paste(seconds, "sec")
-  }
-
-  if (class(dates)[1] == "Date") {
-    seconds <- seconds * 3600 * 24
-    seconds <- paste(seconds, "sec")
-  }
-
-  seconds
 }

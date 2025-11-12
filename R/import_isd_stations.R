@@ -175,6 +175,8 @@ import_isd_stations <- function(
     )
 
     if (return == "map") {
+      rlang::check_installed("leaflet")
+
       content <- paste(
         paste0("<b>", dat$station, "</b>"),
         paste("<hr><b>Code:</b>", dat$code),

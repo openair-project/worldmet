@@ -164,6 +164,8 @@ import_ghcn_stations <-
       )
 
       if (return == "map") {
+        rlang::check_installed("leaflet")
+
         popup <- paste(
           paste0("<b>", meta$name, "</b>"),
           paste("<hr><b>ID:</b>", meta$id),

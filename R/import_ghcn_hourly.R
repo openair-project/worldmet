@@ -63,7 +63,11 @@ import_ghcn_hourly <-
       "source_code",
       "source_id"
     )
-    codes <- match.arg(codes, potential_codes, several.ok = TRUE)
+    codes <- rlang::arg_match(codes, potential_codes, several.ok = TRUE)
+
+    # (temporary?) issue with parquet files not having ids/lats/longs - need to
+    # have meta to sort that out
+    meta <- import_ghcn_stations(database = "hourly")
 
     import_single_ghcn_site <- function(station, year, append_codes, codes) {
       if (is.null(year)) {
@@ -132,9 +136,6 @@ import_ghcn_hourly <-
             dplyr::mutate(
               date = as.POSIXct(.data$date)
             )
-
-          # (temporary?) issue with parquet files not having ids/lats/longs
-          meta <- import_ghcn_stations(database = "hourly")
 
           data <-
             data |>

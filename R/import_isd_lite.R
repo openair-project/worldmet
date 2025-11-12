@@ -74,6 +74,7 @@ import_isd_lite <- function(
   progress = rlang::is_interactive(),
   quiet = FALSE
 ) {
+  warn_isd()
   meta <- import_isd_stations(return = "table", end_year = "all")
 
   import_lite <- function(code, year) {

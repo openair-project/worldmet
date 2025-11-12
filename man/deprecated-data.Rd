@@ -21,6 +21,8 @@ there are missing data when \code{interp = TRUE.} Data with gaps more than
 \code{maxgap} are left as missing.}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
 This function is part of an old \code{worldmet} API. Please use the following
 alternatives:
 \itemize{

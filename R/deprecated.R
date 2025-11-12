@@ -1,5 +1,8 @@
 #' Deprecated ISD access functions
 #'
+#' @description
+#' `r lifecycle::badge('deprecated')`
+#'
 #' This function is part of an old `worldmet` API. Please use the following
 #' alternatives:
 #' - [getMeta()] -> [import_isd_stations()]
@@ -195,6 +198,9 @@ importNOAAlite <- function(
 
 #' Deprecated data functions
 #'
+#' @description
+#' `r lifecycle::badge('deprecated')`
+#'
 #' This function is part of an old `worldmet` API. Please use the following
 #' alternatives:
 #' - [exportADMS()] -> [write_adms()]
@@ -223,5 +229,18 @@ exportADMS <- function(
     file = out,
     interp = interp,
     max_gap = maxgap
+  )
+}
+
+#' Function to alert that the ISD is going away
+#' @noRd
+warn_isd <- function(fn = cli::cli_warn) {
+  fn(
+    c(
+      "!" = "The integrated surface database has been deprecated by NOAA, and data is now only available until 2025.",
+      "i" = "Please consider using {.fun worldmet::import_ghcn_stations} and {.fun worldmet::import_ghcn_hourly} to access data from the new Global Historical Climatology Network."
+    ),
+    .frequency = "regularly",
+    .frequency_id = "isd-deprecated"
   )
 }

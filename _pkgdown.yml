@@ -3,6 +3,27 @@ template:
   package: openairpkgdown
 
 reference:
+- title: Global Historical Climatology Network (GHCN)
+- subtitle: ~
+  desc: >
+    These functions give access to the NOAA Global Historical Climatology 
+    Network (GHCN), which includes an [hourly](https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly),
+    [daily](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily),
+    and [monthly](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-monthly) 
+    product, all of which can be accessed by `worldmet`. The GHCN includes many 
+    useful parameters such as wind speed and direction, temperature, 
+    atmospheric pressure, precipitation and snowfall.
+- subtitle: Import Metadata
+  contents:
+  - import_ghcn_stations
+  - import_ghcn_inventory
+  - import_ghcn_countries
+- subtitle: Import Measurements
+  contents:
+  - import_ghcn_hourly
+  - import_ghcn_daily
+  - import_ghcn_monthly_temp
+
 - title: Integrated Surface Database (ISD)
 - subtitle: ~
   desc: >
@@ -15,21 +36,30 @@ reference:
     sea level pressure, altimeter setting, station pressure, present weather, 
     visibility, precipitation amounts for various time periods, snow depth, 
     and various other elements as observed by each station.
-- subtitle: Import Met Data
-  desc: Directly import NOAA meteorological data.
+- subtitle: Import Metadata
   contents:
-  - importNOAA
-  - importNOAAlite
-- subtitle: View Metadata
-  desc: Read and visualise meta data relating to meteorological measurement sites.
+  - import_isd_stations
+  - import_isd_stations_live
+  - weatherCodes
+- subtitle: Import Measurements
+  contents:
+  - import_isd_hourly
+  - import_isd_lite
+
+- title: Data Utilities
+- subtitle: ~
+  desc: >
+    These are broadly helpful when working with meteorological data, such as 
+    those accessed via the above import functions.
+- subtitle: Writing Data
+  contents:
+  - write_met
+  - write_adms
+  
+- title: Deprecated Functions
+  desc: >
+    These functions are part of an old API for worldmet. We'd recommend using 
+    their more modern equivalents outlined above.
   contents:
   - getMeta
-  - getMetaLive
-  - weatherCodes
-
-- title: ADMS Data
-  desc: >
-    These functions assist with working with the Atmospheric Dispersion Modelling
-    System (ADMS).
-  contents:
   - exportADMS

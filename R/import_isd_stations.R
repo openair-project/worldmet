@@ -261,7 +261,7 @@ import_isd_stations <- function(
 #' @export
 import_isd_stations_live <- function(...) {
   ## downloads the whole thing fresh
-
+  warn_isd()
   url <- "https://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv"
   meta <- readr::read_csv(
     url,

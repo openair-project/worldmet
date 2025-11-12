@@ -143,6 +143,7 @@ import_isd_hourly <- function(
   progress = rlang::is_interactive(),
   quiet = FALSE
 ) {
+  warn_isd()
   source <- rlang::arg_match(source)
 
   # main web site https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database

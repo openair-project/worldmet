@@ -109,6 +109,8 @@ latitude and longitude searches are made an approximate distance, \code{dist} in
 km is also returned.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
 This function is part of an old \code{worldmet} API. Please use the following
 alternatives:
 \itemize{

@@ -3,7 +3,7 @@
 #' @noRd
 worldmet_time_average <- function(
   mydata,
-  avg.time = "day",
+  avg.time = "hour",
   type = "default"
 ) {
   # extract variables of interest
@@ -32,56 +32,6 @@ worldmet_time_average <- function(
   # need to check whether avg.time is > or < actual time gap of data
   # then data will be expanded or aggregated accordingly
   calc.mean <- function(mydata) {
-    # obtain time parameters; seconds in the avg.time interval and seconds in
-    # the data interval
-    time_params <- get_time_parameters(mydata = mydata, avg.time = avg.time)
-    seconds_data_interval <- time_params$seconds_data_interval
-    seconds_avgtime_interval <- time_params$seconds_avgtime_interval
-
-    # check to see if we need to expand data rather than aggregate it
-    # i.e., chosen time interval less than that of data
-    if (seconds_avgtime_interval < seconds_data_interval) {
-      # Get time interval from data
-      interval <- find_time_interval(mydata$date)
-
-      # get time interval as days; used for refinement
-      days <- as.numeric(strsplit(interval, split = " ")[[1]][1]) / 24 / 3600
-
-      # refine interval for common situations
-      interval <- if (inherits(mydata$date, "Date")) {
-        paste(days, "day")
-      } else if (days %in% c(30, 31)) {
-        "month"
-      } else if (days %in% c(365, 366)) {
-        "year"
-      } else {
-        interval
-      }
-
-      # calculate full series of dates by the data interval
-      date_range <- range(mydata$date)
-      allDates <- seq(date_range[1], date_range[2], by = interval)
-      allDates <- c(allDates, max(allDates) + seconds_data_interval)
-
-      # recalculate full series of dates by the avg.time interval
-      allData <- data.frame(date = seq(min(allDates), max(allDates), avg.time))
-
-      # merge with original data, which leaves gaps to fill
-      mydata <-
-        mydata |>
-        dplyr::full_join(allData, by = dplyr::join_by("date")) |>
-        dplyr::arrange(date)
-
-      # make sure missing types are inserted
-      mydata <- tidyr::fill(
-        mydata,
-        dplyr::all_of(type),
-        .direction = c("downup")
-      )
-
-      return(mydata)
-    }
-
     # calculate Uu & Vv if "wd" (& "ws") are in mydata
     mydata <- calculate_wind_components(mydata = mydata)
 
@@ -139,6 +89,17 @@ worldmet_time_average <- function(
     purrr::list_rbind() |>
     dplyr::as_tibble()
 
+  if ("Uu" %in% names(mydata) && "Vv" %in% names(mydata)) {
+    mydata <-
+      mydata |>
+      dplyr::mutate(
+        wd = as.vector(atan2(.data$Uu, .data$Vv) * 360 / 2 / pi),
+        wd = ifelse(.data$wd < 0, .data$wd + 360, .data$wd),
+        ws = (.data$Uu^2 + .data$Vv^2)^0.5
+      ) |>
+      dplyr::select(-dplyr::any_of(c("Uu", "Vv")))
+  }
+
   # drop default column if it exists
   if ("default" %in% names(mydata)) {
     mydata$default <- NULL
@@ -146,103 +107,6 @@ worldmet_time_average <- function(
 
   # return
   return(mydata)
-}
-
-
-#' Pad the data
-#' @noRd
-pad_dates_timeavg <- function(mydata, type = NULL, interval = "month") {
-  # assume by the time we get here the data have been split into types
-  # This means we just need to pad out the missing types based on first
-  # line.
-
-  start.date <- min(mydata$date, na.rm = TRUE)
-  end.date <- max(mydata$date, na.rm = TRUE)
-
-  # interval is in seconds, so convert to days if Date class and not POSIXct
-  if (class(mydata$date)[1] == "Date") {
-    interval <- paste(
-      as.numeric(strsplit(interval, " ")[[1]][1]) / 3600 / 24,
-      "days"
-    )
-  }
-
-  all.dates <- data.frame(date = seq(start.date, end.date, by = interval))
-  mydata <- dplyr::full_join(mydata, all.dates, by = "date")
-
-  # add in missing types if gaps are made
-  if (!is.null(type)) {
-    mydata[type] <- mydata[1, type]
-  }
-
-  # make sure order is correct
-  mydata <- dplyr::arrange(mydata, date)
-
-  return(mydata)
-}
-
-#' Get the intervals in the original data and in the avg.time period
-#' @noRd
-get_time_parameters <- function(mydata, avg.time) {
-  # Time diff in seconds of original data
-  seconds_data_interval <- as.numeric(strsplit(
-    find_time_interval(mydata$date),
-    " "
-  )[[1]][1])
-
-  # Parse time diff of new interval
-  by2 <- strsplit(avg.time, " ", fixed = TRUE)[[1]]
-
-  seconds_avgtime_interval <- 1
-  if (length(by2) > 1) {
-    seconds_avgtime_interval <- as.numeric(by2[1])
-  }
-  units <- by2[length(by2)]
-
-  # Convert units to seconds
-  int <- switch(
-    units,
-    "sec" = 1,
-    "min" = 60,
-    "hour" = 3600,
-    "day" = 3600 * 24,
-    "week" = 3600 * 24 * 7,
-    "month" = 3600 * 24 * 31,
-    "quarter" = 3600 * 24 * 31 * 3,
-    "season" = 3600 * 24 * 31 * 3,
-    "year" = 3600 * 8784
-  )
-
-  if (length(int) == 0L) {
-    opts <-
-      c(
-        "sec",
-        "min",
-        "hour",
-        "day",
-        "week",
-        "month",
-        "quarter",
-        "season",
-        "year"
-      )
-    cli::cli_abort(c(
-      "x" = "Date unit '{units}' not recognised.",
-      "i" = "Possible options: {.code {opts}}."
-    ))
-  }
-
-  seconds_avgtime_interval <- seconds_avgtime_interval * int # interval in seconds
-  if (is.na(seconds_data_interval)) {
-    seconds_data_interval <- seconds_avgtime_interval # when only one row
-  }
-
-  return(
-    list(
-      seconds_data_interval = seconds_data_interval,
-      seconds_avgtime_interval = seconds_avgtime_interval
-    )
-  )
 }
 
 #' Calculate Uu and Vv if wd & ws are in the data
@@ -421,27 +285,4 @@ check_prep <- function(
 
   # return data frame
   return(mydata)
-}
-
-#' From openair
-#' @noRd
-find_time_interval <- function(dates) {
-  # could have several sites, dates may be unordered
-  # find the most common time gap in all the data
-  dates <- unique(dates) # make sure they are unique
-
-  # work out the most common time gap of unique, ordered dates
-  id <- which.max(table(diff(as.numeric(unique(dates[order(dates)])))))
-  seconds <- as.numeric(names(id))
-
-  if ("POSIXt" %in% class(dates)) {
-    seconds <- paste(seconds, "sec")
-  }
-
-  if (class(dates)[1] == "Date") {
-    seconds <- seconds * 3600 * 24
-    seconds <- paste(seconds, "sec")
-  }
-
-  seconds
 }

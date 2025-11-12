@@ -77,8 +77,8 @@
 #'   If you are importing a lot of meteorological data, this can take a long
 #'   while. This is because each combination of year and station requires
 #'   downloading a separate data file from NOAA's online data directory, and the
-#'   time each download takes can quickly add up. [importNOAA()] and
-#'   [importNOAAlite()] can use parallel processing to speed downloading up,
+#'   time each download takes can quickly add up. [import_isd_hourly()] and
+#'   [import_isd_lite()] can use parallel processing to speed downloading up,
 #'   powered by the capable `{mirai}` package. If users have any `{mirai}`
 #'   "daemons" set, these functions will download files in parallel. The
 #'   greatest benefits will be seen if you spawn as many daemons as you have
@@ -91,32 +91,32 @@
 #'   # set workers - once per session
 #'   mirai::daemons(4)
 #'
-#'   # import lots of data - NB: no change in importNOAA()!
-#'   big_met <- importNOAA(code = "037720-99999", year = 2010:2020)
+#'   # import lots of data - NB: no change in import_isd_hourly()!
+#'   big_met <- import_isd_hourly(code = "037720-99999", year = 2010:2020)
 #'   ```
 #'
 #' @param code The identifying code as a character string. The code is a
 #'   combination of the USAF and the WBAN unique identifiers. The codes are
 #'   separated by a \dQuote{-} e.g. `code = "037720-99999"`.
+#'
 #' @param year The year to import. This can be a vector of years e.g. `year =
 #'   2000:2005`.
+#'
 #' @param hourly Should hourly means be calculated? The default is `TRUE`. If
 #'   `FALSE` then the raw data are returned.
+#'
 #' @param source The NOAA ISD service stores files in two formats; as delimited
-#'   CSV files (`"delim"`) and as fixed width files (`"fwf"`). [importNOAA()]
-#'   defaults to `"delim"` but, if the delimited data store is down, users may
-#'   wish to try `"fwf"` instead. Both data sources should be identical to one
-#'   another.
-#' @param quiet If `FALSE`, print missing sites / years to the screen, and show
-#'   a progress bar if multiple sites are imported.
-#' @param path If a file path is provided, the data are saved as an rds file at
-#'   the chosen location e.g.  `path = "C:/Users/David"`. Files are saved by
-#'   year and site.
-#' @param n.cores No longer recommended; please set [mirai::daemons()] in your R
-#'   session. This argument is provided for back compatibility, and is passed to
-#'   the `n` argument of [mirai::daemons()] on behalf of the user. Any set
-#'   daemons will be reset once the function completes. Default is `NULL`, which
-#'   means no parallelism. `n.cores = 1L` is equivalent to `n.cores = NULL`.
+#'   CSV files (`"delim"`) and as fixed width files (`"fwf"`).
+#'   [import_isd_hourly()] defaults to `"delim"` but, if the delimited data
+#'   store is down, users may wish to try `"fwf"` instead. Both data sources
+#'   should be identical to one another.
+#'
+#' @param progress Show a progress bar when importing many stations/years?
+#'   Defaults to `TRUE` in interactive R sessions. Passed to `.progress` in
+#'   [purrr::map()] and/or [purrr::pmap()].
+#'
+#' @param quiet Print missing sites/years to the screen? Defaults to `FALSE`.
+#'
 #' @export
 #' @return Returns a data frame of surface observations. The data frame is
 #'   consistent for use with the `openair` package. Note that the data are
@@ -129,50 +129,21 @@
 #'
 #' \dontrun{
 #' # import some data
-#' beijing_met <- importNOAA(code = "545110-99999", year = 2010:2011)
+#' beijing_met <- import_isd_hourly(code = "545110-99999", year = 2010:2011)
 #'
 #' # importing lots of data? use mirai for parallel processing
 #' mirai::daemons(4)
-#' beijing_met2 <- importNOAA(code = "545110-99999", year = 2010:2025)
+#' beijing_met2 <- import_isd_hourly(code = "545110-99999", year = 2010:2025)
 #' }
-importNOAA <- function(
+import_isd_hourly <- function(
   code = "037720-99999",
   year = 2014,
   hourly = TRUE,
   source = c("delim", "fwf"),
-  quiet = FALSE,
-  path = NA,
-  n.cores = NULL
+  progress = rlang::is_interactive(),
+  quiet = FALSE
 ) {
   source <- rlang::arg_match(source)
-
-  if (!is.null(n.cores)) {
-    if (!rlang::is_integerish(n.cores)) {
-      cli::cli_abort(
-        "{.field n.cores} should be an integer. You have provided {.type {n.cores}}."
-      )
-    }
-    if (n.cores > 1L) {
-      rlang::check_installed(c("mirai", "carrier"))
-      if (mirai::daemons_set()) {
-        cli::cli_warn(
-          "{.fun mirai::daemons} have already been set. Ignoring {.field n.cores}."
-        )
-      } else {
-        on.exit(mirai::daemons(0))
-        cli::cli_warn(
-          c(
-            "!" = "Using {.fun mirai::daemons} to set multiple workers. These will be reset at the end of the function call.",
-            "i" = "It is now preferred that users use {.fun mirai::daemons} directly over the use of {.field n.cores}.",
-            "i" = "See {.url https://openair-project.github.io/worldmet/articles/worldmet.html} for an example."
-          ),
-          .frequency = "regularly",
-          .frequency_id = "worldmet_mirai"
-        )
-        mirai::daemons(n.cores)
-      }
-    }
-  }
 
   # main web site https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database
   # formats document https://www.ncei.noaa.gov/data/global-hourly/doc/isd-format-document.pdf
@@ -198,7 +169,7 @@ importNOAA <- function(
           getDatDelim = getDatDelim,
           hourly = hourly
         ),
-        .progress = !quiet
+        .progress = progress
       ) |>
       purrr::list_rbind()
   }
@@ -220,7 +191,7 @@ importNOAA <- function(
           getDatFwf = getDatFwf,
           hourly = hourly
         ),
-        .progress = !quiet
+        .progress = progress
       ) |>
       purrr::list_rbind()
   }
@@ -235,7 +206,7 @@ importNOAA <- function(
       c(
         "x" = "Specified {.field site}-{.field year} combinations do not exist.",
         "i" = "Is the ISD service down? Check {.url https://www.ncei.noaa.gov/data/global-hourly/}.",
-        "i" = 'Try {.code importNOAA(..., source = "{trysource}")} to access an alternative data store.'
+        "i" = 'Try {.code import_isd_hourly(..., source = "{trysource}")} to access an alternative data store.'
       )
     )
     return()
@@ -259,27 +230,6 @@ importNOAA <- function(
       )
     }
     cli::cli_end(id = "worldmetmissing")
-  }
-
-  if (!is.na(path)) {
-    if (!dir.exists(path)) {
-      cli::cli_warn("Directory does not exist; file not saved.", call. = FALSE)
-      return()
-    }
-
-    # save as year / site files
-    writeMet <- function(dat) {
-      saveRDS(
-        dat,
-        paste0(path, "/", unique(dat$code), "_", unique(dat$year), ".rds")
-      )
-      return(dat)
-    }
-
-    dat |>
-      dplyr::mutate(year = format(.data$date, "%Y")) |>
-      (\(x) split(x, x[c("code", "year")]))() |>
-      purrr::map(writeMet)
   }
 
   return(dat)

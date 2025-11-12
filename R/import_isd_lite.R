@@ -50,9 +50,9 @@
 #' "Etc/GMT-8"` for a meteorological data frame called `met`. The two data sets
 #' could then be merged based on `date`.
 #'
-#' @inheritSection importNOAA Parallel Processing
+#' @inheritSection import_isd_hourly Parallel Processing
 #'
-#' @inheritParams importNOAA
+#' @inheritParams import_isd_hourly
 #' @export
 #' @return Returns a data frame of surface observations. The data frame is
 #'   consistent for use with the `openair` package. Note that the data are
@@ -66,15 +66,15 @@
 #' @examples
 #'
 #' \dontrun{
-#' heathrow_lite <- importNOAAlite(code = "037720-99999", year = 2025)
+#' heathrow_lite <- import_isd_lite(code = "037720-99999", year = 2025)
 #' }
-importNOAAlite <- function(
+import_isd_lite <- function(
   code = "037720-99999",
   year = 2025,
-  quiet = FALSE,
-  path = NA
+  progress = rlang::is_interactive(),
+  quiet = FALSE
 ) {
-  meta <- getMeta(returnMap = FALSE, plot = FALSE, end.year = "all")
+  meta <- import_isd_stations(return = "table", end_year = "all")
 
   import_lite <- function(code, year) {
     station_name <- meta[meta$code == code, ]$station
@@ -200,28 +200,7 @@ importNOAAlite <- function(
         "i" = "Is the ISD service down? Check {.url https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/}."
       )
     )
-    return()
-  }
-
-  if (!is.na(path)) {
-    if (!dir.exists(path)) {
-      cli::cli_warn("Directory does not exist; file not saved.", call. = FALSE)
-      return()
-    }
-
-    # save as year / site files
-    writeMet <- function(dat) {
-      saveRDS(
-        dat,
-        paste0(path, "/", unique(dat$code), "_", unique(dat$year), "_lite.rds")
-      )
-      return(dat)
-    }
-
-    dat |>
-      dplyr::mutate(year = format(.data$date, "%Y")) |>
-      (\(x) split(x, x[c("code", "year")]))() |>
-      purrr::map(writeMet)
+    return(NULL)
   }
 
   return(dat)

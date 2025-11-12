@@ -122,6 +122,7 @@ import_ghcn_hourly <-
 
           data <- dplyr::rename(data, station_id = "station")
         } else if (source == "parquet") {
+          rlang::check_installed("arrow")
           suppressWarnings({
             data <- arrow::read_parquet(url)
           })

@@ -1,5 +1,39 @@
 # worldmet (development version)
 
+## Dependency Changes
+
+- `arrow` has been added as a suggested dependency.
+
+- `leaflet` has been downgraded to a suggested dependency. When a user requests a met station map they will be prompted to install `leaflet` if it is not already installed.
+
+## New Features
+
+The Global Historical Climate Network (GHCN) has officially superseded NOAA's Integrated Surface Database (ISD). Many changes in this release are related to this external change.
+
+- Added `import_ghcn_stations()`, `import_ghcn_inventory()`, and `import_ghcn_countries()` to grant access to metadata for the GHCN.
+
+- Added `import_ghcn_hourly()`, `import_ghcn_daily()` and `import_ghcn_monthly()` to grant access to the GHCNh, GHCNd and CHCNm services.
+
+- Added `import_isd_stations()`, `import_isd_hourly()` and `import_isd_lite()` to provide a consistent API with the newly added GHCN functions.
+
+- Added `write_met()`, which allows for hourly ISD and GHCN and daily GHCN data to be easily split into years and sites and written to file. This is a more flexible alternative to using `importNOAA(path=)`.
+
+## Deprecations
+
+Several functions have been deprecated and replaced due to the updated `worldmet` API:
+
+- `getMeta()` -> `import_isd_stations()`
+
+- `getMetaLive()` -> `import_isd_stations_live()`
+
+- `importNOAA()` -> `import_isd_hourly()`
+
+- `importNOAAlite()` -> `import_isd_lite()`
+
+- `exportADMS()` -> `write_adms()`
+
+- the `path` argument -> `write_met()`
+
 # worldmet 0.10.2
 
 ## Dependency Changes

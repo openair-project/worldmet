@@ -4,7 +4,7 @@
 <img src="man/figures/logo.png" height="200"/>
 
 ## **worldmet**
-### open source tools to access NOAA Integrated Surface Database (ISD) meteorological observations
+### open source tools to access NOAA meteorological observations
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/openair-project/worldmet/workflows/R-CMD-check/badge.svg)](https://github.com/openair-project/worldmet/actions)
@@ -19,7 +19,7 @@ status](https://www.r-pkg.org/badges/version/worldmet)](https://CRAN.R-project.o
 
 </div>
 
-**worldmet** provides an easy way to access data from the [NOAA Integrated Surface Database](https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database) (ISD). The ISD contains detailed surface meteorological data from around the world for over 35,000 locations. See also the [map](https://gis.ncdc.noaa.gov/maps/ncei). The package outputs (typically hourly meteorological data) work very well with the [**openair**](https://github.com/openair-project/openair) package.
+**worldmet** provides an easy way to access data from the [NOAA Global Historical Climate Network](https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly) and the [NOAA Integrated Surface Database](https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database) (ISD). The ISD contains detailed surface meteorological data from around the world for over 35,000 locations. See also the [map](https://gis.ncdc.noaa.gov/maps/ncei). The package outputs (typically hourly meteorological data) work very well with the [**openair**](https://github.com/openair-project/openair) package.
 
 <div align="center">
 
@@ -38,11 +38,11 @@ status](https://www.r-pkg.org/badges/version/worldmet)](https://CRAN.R-project.o
 
 **worldmet** has a small handful of core functionality.
 
-- **Access ISD metadata** using `getMeta()`.
+- **Access metadata** using `import_ghcn_stations()`.
 
-- **Import ISD monitoring data** using `importNOAA()`, with options to improve performance with parallel processing. Data is in a format ready to use with, for example, `openair::windRose()`.
+- **Import monitoring data** using `import_ghcn_hourly()`. Data is in a format ready to use with, for example, `openair::windRose()`.
 
-- **Write files in ADMS format** using `exportADMS()`.
+- **Write files in ADMS format** using `write_adms()`.
 
 <div align="center">
 <img src="man/figures/feature-banner.png" width="800">
@@ -55,7 +55,7 @@ status](https://www.r-pkg.org/badges/version/worldmet)](https://CRAN.R-project.o
 All **worldmet** functions are fully documented; access documentation using R in your IDE of choice.
 
 ```r
-?worldmet::importNOAA
+?worldmet::import_ghcn_stations
 ```
 
 Documentation is also hosted online on the **package website**.

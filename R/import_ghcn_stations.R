@@ -231,7 +231,7 @@ import_ghcn_stations <-
                 "<b>TARGET</b><hr>",
                 paste0("<b>Latitude/Y</b>: ", lat, "<br>"),
                 paste0("<b>Longitude/X</b>: ", lng, "<br>"),
-                paste0("CRS: ", crs)
+                paste0("<b>CRS:</b> ", crs)
               ),
               group = "Target",
               icon = leaflet::makeAwesomeIcon(

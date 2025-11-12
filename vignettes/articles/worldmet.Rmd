@@ -13,44 +13,36 @@ knitr::opts_chunk$set(
 library(worldmet)
 ```
 
-# Show all sites
+# Importing Hourly Meteorological Data
 
-The function to use to find which sites are available is `getMeta()`. While this function can be run using different options, it can be easiest to run it without any options. This produces a map of all the available sites, which can be quickly accessed.
+## Show all sites
 
-Click to expand the markers until you find the site of interest (shown by a blue marker). This reveals some site information including the site name and the start and end date of available data. The most important information revealed in the marker is the code, which is used to access the data.
+The function to use to find which sites are available is `import_ghcn_stations()`.
 
 ```{r getmeta}
-getMeta()
+import_ghcn_stations()
 ```
 
-```{r getmetai, echo=FALSE, out.width="100%"}
-worldmet::getMeta(returnMap = TRUE)
+A better way to explore available stations is by using `return = "map"`, which shows each station on an interactive map. Click to expand the markers until you find the site of interest (shown by a blue marker), which can then be clicked for further information. The most important information revealed in the marker is the station ID, which is used to access the data.
+
+```{r getmeta_map, out.width="100%"}
+import_ghcn_stations(return = "map")
 ```
 
-When using `getMeta()` it will probably be useful to read the information into a data frame. Note that `plot = FALSE` stops the function from providing the map.
+## Search based on latitude and longitude
 
-```r
-met_info <- getMeta(plot = FALSE)
+Often, one has an idea of the region in which a site is of interest. For example, if the interest was in sites close to London, the latitude and longitude can be supplied and a search is carried out of the 10 nearest sites to that location. There is also an option n that can be used in change the number of nearest sites shown. If a lat/lng is provided, clicking on the blue marker will show the approximate distance between the site and the search coordinates.
+
+```{r searchmeta, out.width="100%"}
+import_ghcn_stations(lat = 51.5, lng = 0, return = "map")
 ```
 
-# Search based on latitude and longitude
+## Importing Data
 
-Often, one has an idea of the region in which a site is of interest. For example, if the interest was in sites close to London, the latitude and longitude can be supplied and a search is carried out of the 10 nearest sites to that location. There is also an option n that can be used in change the number of nearest sites shown. If a lat/lon is provided, clicking on the blue marker will show the approximate distance between the site and the search coordinates.
-
-```{r getmeta2}
-getMeta(lat = 51.5, lon = 0)
-```
-
-```{r getmeta2i, echo=FALSE, out.width="100%"}
-worldmet::getMeta(lat = 51.5, lon = 0, returnMap = TRUE)
-```
-
-# Importing Data
-
-To obtain the data the user must supply a `code` (see above) and year(s) of interest. For example, to download data for Heathrow Airport in 2010 (code 037720-99999):
+To obtain the data the user must supply a station ID and year(s) of interest. For example, to download data for Heathrow Airport in 2024 (ID `UKI0000EGLL`):
 
 ```{r import, eval=FALSE, echo=TRUE}
-met_london <- importNOAA(code = "037720-99999", year = 2010)
+met_london <- import_ghcn_hourly("UKI0000EGLL", year = 2024)
 head(met_london)
 ```
 
@@ -61,21 +53,32 @@ head(met_london)
 
 A wind rose (for example) can easily be plotted using `openair`:
 
-```{r}
-# load openair
+```{r windrose}
+# use function from openair
 openair::windRose(met_london)
 ```
 
-# Parallel Processing
+# Other Data Types
 
-If you are importing a lot of meteorological data, this can take a long while. This is because each combination of year and station requires downloading a separate data file from NOAA's online data directory, and the time each download takes can quickly add up. `importNOAA()` can use parallel processing to speed downloading up, powered by the capable `{mirai}` package. If users have any `{mirai}` "daemons" set, `importNOAA()` will download files in parallel. The greatest benefits will be seen if you spawn as many daemons as you have cores on your machine, although one fewer than the available cores is often a good rule of thumb. Your mileage may vary, however, and naturally spawning more daemons than station-year combinations will lead to diminishing returns.
+Also available in `worldmet` are:
 
-```r
-# set workers - once per session
-mirai::daemons(4)
+- `import_ghcn_daily()`, which imports daily average data. Users may select specific stations, but all available years for that station will be downloaded.
 
-# import lots of data - NB: no change in importNOAA()!
-big_met <- importNOAA(code = "037720-99999", year = 2010:2020)
-```
+- `import_ghcn_monthly_temp()`, which imports monthly average temperatures for the entire GHCN.
 
-Historically, parallelism in `{worldmet}` was achieved with `{doParallel}`, `{foreach}` and `{parallel}` and was activated using the `n.cores` argument. While this will still work, it is recommended users set their own daemons before using `importNOAA()`. This should avoid any issues with mistakenly spawning too many daemons, or accidentally spawning daemons within other daemons.
+- `import_ghcn_monthly_precip()`, which imports monthly total precipitation for specific stations.
+
+Outside of the GHCN, `worldmet` gives access to the historic Integrated Surface Database (ISD), with functions:
+
+- `import_isd_stations()` to obtain metadata, and
+
+- `import_isd_hourly()` and `import_isd_lite()` to obtain measurement data.
+
+# Writing Data 
+
+Two functions are made available for writing out the imported data for other uses.
+
+- `write_met()` will write short-term data imported from the GHCN or ISD as individual files (either delimited, RDS, or parquet files) split by the year and monitoring station.
+
+- `write_adms()` will write out (at present) ISD data in a format compatible with the Atmospheric Dispersion Modelling System (ADMS).
+

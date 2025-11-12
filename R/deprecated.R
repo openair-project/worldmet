@@ -2,17 +2,15 @@
 #'
 #' This function is part of an old `worldmet` API. Please use the following
 #' alternatives:
-#'
 #' - [getMeta()] -> [import_isd_stations()]
-#'
 #' - [getMetaLive()] -> [import_isd_stations_live()]
-#'
 #' - [importNOAA()] -> [import_isd_hourly()]
-#'
 #' - [importNOAAlite()] -> [import_isd_lite()]
+#' - the `path` argument -> [write_met()]
 #'
 #' @inheritParams import_isd_stations
 #' @inheritParams import_isd_stations_live
+#' @inheritParams import_isd_hourly
 #'
 #' @param end.year To help filter sites based on how recent the available data
 #'   are. `end.year` can be "current", "any" or a numeric year such as 2016, or
@@ -150,24 +148,13 @@ importNOAA <- function(
   }
 
   if (!is.na(path)) {
-    if (!dir.exists(path)) {
-      cli::cli_warn("Directory does not exist; file not saved.", call. = FALSE)
-      return()
-    }
-
-    # save as year / site files
-    writeMet <- function(dat) {
-      saveRDS(
-        dat,
-        paste0(path, "/", unique(dat$code), "_", unique(dat$year), ".rds")
-      )
-      return(dat)
-    }
-
-    dat |>
-      dplyr::mutate(year = format(.data$date, "%Y")) |>
-      (\(x) split(x, x[c("code", "year")]))() |>
-      purrr::map(writeMet)
+    write_met(
+      x = dat,
+      path = path,
+      ext = "rds",
+      suffix = "",
+      progress = FALSE
+    )
   }
 
   return(dat)
@@ -194,25 +181,47 @@ importNOAAlite <- function(
   }
 
   if (!is.na(path)) {
-    if (!dir.exists(path)) {
-      cli::cli_warn("Directory does not exist; file not saved.", call. = FALSE)
-      return()
-    }
-
-    # save as year / site files
-    writeMet <- function(dat) {
-      saveRDS(
-        dat,
-        paste0(path, "/", unique(dat$code), "_", unique(dat$year), "_lite.rds")
-      )
-      return(dat)
-    }
-
-    dat |>
-      dplyr::mutate(year = format(.data$date, "%Y")) |>
-      (\(x) split(x, x[c("code", "year")]))() |>
-      purrr::map(writeMet)
+    write_met(
+      x = dat,
+      path = path,
+      ext = "rds",
+      suffix = "_lite",
+      progress = FALSE
+    )
   }
 
   return(dat)
+}
+
+#' Deprecated data functions
+#'
+#' This function is part of an old `worldmet` API. Please use the following
+#' alternatives:
+#' - [exportADMS()] -> [write_adms()]
+#' - the `path` argument -> [write_met()]
+#'
+#' @param dat A data frame imported by [importNOAA()].
+#' @param out A file name for the ADMS file. The file is written to the working
+#'   directory by default.
+#' @param interp Should interpolation of missing values be undertaken? If `TRUE`
+#'   linear interpolation is carried out for gaps of up to and including
+#'   `maxgap`.
+#' @param maxgap The maximum gap in hours that should be interpolated where
+#'   there are missing data when `interp = TRUE.` Data with gaps more than
+#'   `maxgap` are left as missing.
+#'
+#' @rdname deprecated-data
+#' @export
+exportADMS <- function(
+  dat,
+  out = "./ADMS_met.MET",
+  interp = FALSE,
+  maxgap = 2
+) {
+  write_adms(
+    x = dat,
+    file = out,
+    interp = interp,
+    max_gap = maxgap
+  )
 }

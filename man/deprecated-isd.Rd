@@ -75,6 +75,23 @@ Default is \code{FALSE}.}
 
 \item{...}{Currently unused.}
 
+\item{code}{The identifying code as a character string. The code is a
+combination of the USAF and the WBAN unique identifiers. The codes are
+separated by a \dQuote{-} e.g. \code{code = "037720-99999"}.}
+
+\item{year}{The year to import. This can be a vector of years e.g. \code{year = 2000:2005}.}
+
+\item{hourly}{Should hourly means be calculated? The default is \code{TRUE}. If
+\code{FALSE} then the raw data are returned.}
+
+\item{source}{The NOAA ISD service stores files in two formats; as delimited
+CSV files (\code{"delim"}) and as fixed width files (\code{"fwf"}).
+\code{\link[=import_isd_hourly]{import_isd_hourly()}} defaults to \code{"delim"} but, if the delimited data
+store is down, users may wish to try \code{"fwf"} instead. Both data sources
+should be identical to one another.}
+
+\item{quiet}{Print missing sites/years to the screen? Defaults to \code{FALSE}.}
+
 \item{path}{If a file path is provided, the data are saved as an rds file at
 the chosen location e.g.  \code{path = "C:/Users/David"}. Files are saved by
 year and site.}
@@ -94,12 +111,11 @@ km is also returned.
 \description{
 This function is part of an old \code{worldmet} API. Please use the following
 alternatives:
-}
-\details{
 \itemize{
 \item \code{\link[=getMeta]{getMeta()}} -> \code{\link[=import_isd_stations]{import_isd_stations()}}
 \item \code{\link[=getMetaLive]{getMetaLive()}} -> \code{\link[=import_isd_stations_live]{import_isd_stations_live()}}
 \item \code{\link[=importNOAA]{importNOAA()}} -> \code{\link[=import_isd_hourly]{import_isd_hourly()}}
 \item \code{\link[=importNOAAlite]{importNOAAlite()}} -> \code{\link[=import_isd_lite]{import_isd_lite()}}
+\item the \code{path} argument -> \code{\link[=write_met]{write_met()}}
 }
 }

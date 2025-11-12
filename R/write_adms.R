@@ -1,34 +1,40 @@
 #' Export a meteorological data frame in ADMS format
 #'
 #' Writes a text file in the ADMS format to a location of the user's choosing,
-#' with optional interpolation of missing values.
+#' with optional interpolation of missing values. At present this function only
+#' works with data from [import_isd_hourly()]; it will later be expanded to work
+#' with [import_ghcn_hourly()] also.
 #'
-#' @param dat A data frame imported by [importNOAA()].
-#' @param out A file name for the ADMS file. The file is written to the working
+#' @param x A data frame imported by [import_isd_hourly()].
+#'
+#' @param file A file name for the ADMS file. The file is written to the working
 #'   directory by default.
+#'
 #' @param interp Should interpolation of missing values be undertaken? If `TRUE`
 #'   linear interpolation is carried out for gaps of up to and including
-#'   `maxgap`.
-#' @param maxgap The maximum gap in hours that should be interpolated where
-#'   there are missing data when `interp = TRUE.` Data with gaps more than
-#'   `maxgap` are left as missing.
+#'   `max_gap`.
 #'
-#' @return `exportADMS()` returns the input `dat` invisibly.
+#' @param max_gap The maximum gap in hours that should be interpolated where
+#'   there are missing data when `interp = TRUE.` Data with gaps more than
+#'   `max_gap` are left as missing.
+#'
+#' @return `write_adms()` returns the input `dat` invisibly.
+#' @family Met writing functions
 #' @export
 #' @examples
 #' \dontrun{
 #' # import some data then export it
-#' dat <- importNOAA(year = 2012)
-#' exportADMS(dat, out = "~/adms_met.MET")
+#' dat <- import_isd_hourly(year = 2012)
+#' write_adms(dat, file = "~/adms_met.MET")
 #' }
-exportADMS <- function(
-  dat,
-  out = "./ADMS_met.MET",
+write_adms <- function(
+  x,
+  file = "./ADMS_met.MET",
   interp = FALSE,
-  maxgap = 2
+  max_gap = 2
 ) {
   # save input for later
-  input <- dat
+  input <- dat <- x
 
   # make sure the data do not have gaps
   all.dates <- data.frame(
@@ -96,7 +102,7 @@ exportADMS <- function(
         times = is_missing$lengths
       )
 
-      id <- which(is_missing > maxgap)
+      id <- which(is_missing > max_gap)
 
       # update data frame
       dat[[variable]] <- filled

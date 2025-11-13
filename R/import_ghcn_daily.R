@@ -115,8 +115,8 @@
 #'
 #' @param year One or more years of interest. If `NULL`, the default, all years
 #'   of data available for the chosen `station`s will be imported. Note that, in
-#'   the GHCNd, files are split by station but not year, so setting a `year`
-#'   will not speed up the download.
+#'   the GHCNd and GHCNm, files are split by station but not year, so setting a
+#'   `year` will not speed up the download.
 #'
 #' @param codes When `append_codes` is `TRUE`, which codes should be appended to
 #'   the dataframe? Any combination of `"measurement_flag"`, `"quality_flag"`,

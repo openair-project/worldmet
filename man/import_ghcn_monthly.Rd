@@ -12,6 +12,7 @@ import_ghcn_monthly_temp(
 
 import_ghcn_monthly_prcp(
   station = NULL,
+  year = NULL,
   table = c("inventory", "data"),
   progress = rlang::is_interactive()
 )
@@ -34,6 +35,11 @@ help maximize station coverage when calculating normals.
 
 \item{station}{For \code{\link[=import_ghcn_monthly_prcp]{import_ghcn_monthly_prcp()}}. The specific stations to
 import monthly precipitation data for.}
+
+\item{year}{One or more years of interest. If \code{NULL}, the default, all years
+of data available for the chosen \code{station}s will be imported. Note that, in
+the GHCNd and GHCNm, files are split by station but not year, so setting a
+\code{year} will not speed up the download.}
 
 \item{progress}{For \code{\link[=import_ghcn_monthly_prcp]{import_ghcn_monthly_prcp()}}. Show a progress bar when
 importing many stations? Defaults to \code{TRUE} in interactive R sessions.

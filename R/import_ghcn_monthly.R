@@ -4,7 +4,9 @@
 #' GHCN. Monthly average temperature is available via
 #' [import_ghcn_monthly_temp()] and monthly precipitation via
 #' [import_ghcn_monthly_prcp()]. Note that these functions can take a few
-#' minutes to run.
+#' minutes to run, and parallelism is only enabled for precipitation data.
+#'
+#' @inheritSection import_ghcn_hourly Parallel Processing
 #'
 #' @param table Either `"inventory"`, `"data"`, or both. The tables to read and
 #'   return in the output list.
@@ -156,32 +158,41 @@ import_ghcn_monthly_prcp <- function(
     data <-
       purrr::map(
         .x = station,
-        .f = purrr::possibly(
-          \(x) {
-            suppressWarnings({
-              readr::read_csv(
-                paste0(
-                  "https://www.ncei.noaa.gov/data/ghcnm/v4/precipitation/access/",
-                  station,
-                  ".csv"
-                ),
-                col_names = c(
-                  "station_id",
-                  "station_name",
-                  "lat",
-                  "lng",
-                  "elev",
-                  "yearmon",
-                  "precip",
-                  "meas_flag",
-                  "qc_flag",
-                  "src_flag",
-                  "src_index"
-                ),
-                show_col_types = FALSE,
-                progress = FALSE
-              )
-            })
+        .f = purrr::in_parallel(
+          .f = \(x) {
+            data <- try(
+              suppressWarnings(
+                readr::read_csv(
+                  paste0(
+                    "https://www.ncei.noaa.gov/data/ghcnm/v4/precipitation/access/",
+                    x,
+                    ".csv"
+                  ),
+                  col_names = c(
+                    "station_id",
+                    "station_name",
+                    "lat",
+                    "lng",
+                    "elev",
+                    "yearmon",
+                    "precip",
+                    "meas_flag",
+                    "qc_flag",
+                    "src_flag",
+                    "src_index"
+                  ),
+                  show_col_types = FALSE,
+                  progress = FALSE
+                )
+              ),
+              silent = TRUE
+            )
+
+            if (class(data)[1] == "try-error") {
+              return(NULL)
+            }
+
+            return(data)
           }
         ),
         .progress = progress

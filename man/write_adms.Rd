@@ -8,7 +8,8 @@ write_adms(x, file = "./ADMS_met.MET", interp = FALSE, max_gap = 2)
 }
 \arguments{
 \item{x}{A data frame imported by \code{\link[=import_ghcn_hourly]{import_ghcn_hourly()}} or
-\code{\link[=import_isd_hourly]{import_isd_hourly()}}.}
+\code{\link[=import_isd_hourly]{import_isd_hourly()}}. Note that this function only works for hourly GHCN
+data when \code{abbr_names = TRUE}.}
 
 \item{file}{A file name for the ADMS file. The file is written to the working
 directory by default.}

@@ -5,7 +5,8 @@
 #' from both [import_ghcn_hourly()] and [import_isd_hourly()].
 #'
 #' @param x A data frame imported by [import_ghcn_hourly()] or
-#'   [import_isd_hourly()].
+#'   [import_isd_hourly()]. Note that this function only works for hourly GHCN
+#'   data when `abbr_names = TRUE`.
 #'
 #' @param file A file name for the ADMS file. The file is written to the working
 #'   directory by default.

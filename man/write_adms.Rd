@@ -7,7 +7,8 @@
 write_adms(x, file = "./ADMS_met.MET", interp = FALSE, max_gap = 2)
 }
 \arguments{
-\item{x}{A data frame imported by \code{\link[=import_isd_hourly]{import_isd_hourly()}}.}
+\item{x}{A data frame imported by \code{\link[=import_ghcn_hourly]{import_ghcn_hourly()}} or
+\code{\link[=import_isd_hourly]{import_isd_hourly()}}.}
 
 \item{file}{A file name for the ADMS file. The file is written to the working
 directory by default.}
@@ -25,9 +26,8 @@ there are missing data when \code{interp = TRUE.} Data with gaps more than
 }
 \description{
 Writes a text file in the ADMS format to a location of the user's choosing,
-with optional interpolation of missing values. At present this function only
-works with data from \code{\link[=import_isd_hourly]{import_isd_hourly()}}; it will later be expanded to work
-with \code{\link[=import_ghcn_hourly]{import_ghcn_hourly()}} also.
+with optional interpolation of missing values. This function works with data
+from both \code{\link[=import_ghcn_hourly]{import_ghcn_hourly()}} and \code{\link[=import_isd_hourly]{import_isd_hourly()}}.
 }
 \examples{
 \dontrun{
@@ -39,5 +39,9 @@ write_adms(dat, file = "~/adms_met.MET")
 \seealso{
 Other Met writing functions: 
 \code{\link{write_met}()}
+
+Other ADMS functions: 
+\code{\link{read_adms}()}
 }
+\concept{ADMS functions}
 \concept{Met writing functions}

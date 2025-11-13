@@ -1,11 +1,11 @@
 #' Export a meteorological data frame in ADMS format
 #'
 #' Writes a text file in the ADMS format to a location of the user's choosing,
-#' with optional interpolation of missing values. At present this function only
-#' works with data from [import_isd_hourly()]; it will later be expanded to work
-#' with [import_ghcn_hourly()] also.
+#' with optional interpolation of missing values. This function works with data
+#' from both [import_ghcn_hourly()] and [import_isd_hourly()].
 #'
-#' @param x A data frame imported by [import_isd_hourly()].
+#' @param x A data frame imported by [import_ghcn_hourly()] or
+#'   [import_isd_hourly()].
 #'
 #' @param file A file name for the ADMS file. The file is written to the working
 #'   directory by default.
@@ -20,6 +20,7 @@
 #'
 #' @return `write_adms()` returns the input `dat` invisibly.
 #' @family Met writing functions
+#' @family ADMS functions
 #' @export
 #' @examples
 #' \dontrun{
@@ -34,10 +35,13 @@ write_adms <- function(
   max_gap = 2
 ) {
   # save input for later
-  input <- dat <- x
+  input <- x
+
+  # ensure all data is lowercase - difference between ISD & GHCN
+  dat <- dplyr::rename_with(x, .fn = tolower)
 
   # make sure the data do not have gaps
-  all.dates <- data.frame(
+  all_dates <- dplyr::tibble(
     date = seq(
       ISOdatetime(
         year = as.numeric(format(dat$date[1], "%Y")),
@@ -61,15 +65,12 @@ write_adms <- function(
     )
   )
 
-  dat <- merge(dat, all.dates, all = TRUE)
+  # complete dataset
+  dat <- dplyr::left_join(all_dates, dat, by = dplyr::join_by("date"))
 
-  # make sure precipitation is available
-  if (!"precip" %in% names(dat)) {
-    dat$precip <- NA
-  }
-
+  # interpolate if requested
   if (interp) {
-    varInterp <- c("ws", "u", "v", "air_temp", "RH", "cl")
+    var_interp <- c("ws", "u", "v", "air_temp", "rh", "cl")
 
     # transform wd
     dat <- dplyr::mutate(
@@ -78,7 +79,7 @@ write_adms <- function(
       v = cos(pi * .data$wd / 180)
     )
 
-    for (variable in varInterp) {
+    for (variable in var_interp) {
       # if all missing, then don't interpolate
       if (all(is.na(dat[[variable]]))) {
         return()
@@ -121,12 +122,6 @@ write_adms <- function(
     dat <- dplyr::select(dat, -"v", -"u")
   }
 
-  # exports met data to ADMS format file
-  year <- as.numeric(format(dat$date, "%Y"))
-  day <- as.numeric(format(dat$date, "%j"))
-  hour <- as.numeric(format(dat$date, "%H"))
-  station <- "0000"
-
   # check if present
   if (!"cl" %in% names(dat)) {
     dat$cl <- NA
@@ -135,36 +130,42 @@ write_adms <- function(
     dat$precip <- NA
   }
 
-  # data frame of met data needed
-  adms <- data.frame(
-    station,
-    year,
-    day,
-    hour,
-    round(dat$air_temp, 1),
-    round(dat$ws, 1),
-    round(dat$wd, 1),
-    round(dat$RH, 1),
-    round(dat$cl),
-    round(dat$precip, 1),
-    stringsAsFactors = FALSE
-  )
+  # reformat for ADMS output
+  adms <-
+    dat |>
+    # select needed variables
+    dplyr::transmute(
+      station = "0000",
+      year = as.numeric(format(.data$date, "%Y")),
+      day = as.numeric(format(.data$date, "%j")),
+      hour = as.numeric(format(.data$date, "%H")),
+      air_temp = round(.data$air_temp, 1),
+      ws = round(.data$ws, 1),
+      wd = round(.data$wd, 1),
+      rh = round(.data$rh, 1),
+      cl = round(.data$cl, 0),
+      precip = round(.data$precip, 1)
+    ) |>
+    # replace NA with -999
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::where(is.numeric),
+        \(x) tidyr::replace_na(x, -999)
+      )
+    )
 
   # message key data capture rates
   calc_dc <- function(x) {
-    round(100 * mean(!is.na(x)), 1)
+    round(100 * mean(x != -999), 1)
   }
   cli::cli_inform(
     c(
-      "i" = "Data capture for {.strong wind speed}: {calc_dc(dat$ws)}%",
-      "i" = "Data capture for {.strong wind direction}: {calc_dc(dat$wd)}%",
-      "i" = "Data capture for {.strong temperature}: {calc_dc(dat$air_temp)}%",
-      "i" = "Data capture for {.strong cloud cover}: {calc_dc(dat$cl)}%"
+      "i" = "Data capture for {.strong wind speed}: {calc_dc(adms$ws)}%",
+      "i" = "Data capture for {.strong wind direction}: {calc_dc(adms$wd)}%",
+      "i" = "Data capture for {.strong temperature}: {calc_dc(adms$air_temp)}%",
+      "i" = "Data capture for {.strong cloud cover}: {calc_dc(adms$cl)}%"
     )
   )
-
-  # replace NA with -999
-  adms[] <- lapply(adms, function(x) replace(x, is.na(x), -999))
 
   # write the data file
   utils::write.table(
@@ -190,4 +191,46 @@ write_adms <- function(
 
   # return input invisibly
   invisible(input)
+}
+
+#' Read a file in ADMS format
+#'
+#' This function reads a file in ADMS format (e.g., a file written by
+#' [write_adms()]) as an R `data.frame`. This could be useful to check or
+#' analyse ADMS files before they are used.
+#'
+#' @param file One or more file paths to ADMS `.MET` files. If multiple files
+#'   are specified, they will be bound together into a single `data.frame`.
+#'
+#' @param progress Show a progress bar when reading many files? Defaults to
+#'   `TRUE` in interactive R sessions. Passed to `.progress` in [purrr::map()].
+#'
+#' @author Jack Davison
+#' @family ADMS functions
+#'
+#' @export
+read_adms <- function(file, progress = rlang::is_interactive()) {
+  read_adms_helper <- function(x) {
+    lines <- readr::read_lines(x)
+
+    var_line <- which(lines == "VARIABLES:")
+    dat_line <- which(lines == "DATA:")
+
+    headers <- lines[(var_line + 2):(dat_line - 1)]
+    headers <- gsub(" ", "_", tolower(headers))
+
+    readr::read_csv(
+      I(lines[(dat_line + 1):length(lines)]),
+      col_names = headers,
+      na = "-999",
+      show_col_types = FALSE
+    )
+  }
+
+  purrr::map(
+    .x = file,
+    .f = read_adms_helper,
+    .progress = progress
+  ) |>
+    dplyr::bind_rows()
 }

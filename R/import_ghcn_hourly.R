@@ -21,6 +21,10 @@
 #' @param hourly Should hourly means be calculated? The default is `TRUE`. If
 #'   `FALSE` then the raw data are returned, which can be sub-hourly.
 #'
+#' @param extra Should additional columns be returned? The default, `FALSE`,
+#'   returns an opinionated selection of elements that'll be of most interest to
+#'   most users. `TRUE` will return everything available from the GHCNh.
+#'
 #' @param abbr_names Should column names be abbreviated? When `TRUE`, the
 #'   default, columns like `"wind_direction"` are shortened to `"wd"`. When
 #'   `FALSE`, names will match the raw data, albeit in lower case.
@@ -47,6 +51,7 @@ import_ghcn_hourly <-
     year = NULL,
     source = c("psv", "parquet"),
     hourly = TRUE,
+    extra = FALSE,
     abbr_names = TRUE,
     append_codes = FALSE,
     codes = c(
@@ -158,12 +163,66 @@ import_ghcn_hourly <-
             dplyr::relocate("latitude", "longitude", .after = "date")
         }
 
+        # missing wind directions
         if ("wind_direction" %in% names(data)) {
           data$wind_direction <- ifelse(
             data$wind_direction == 999,
             NA,
             data$wind_direction
           )
+        }
+
+        # coalesce sky covers
+        if ("sky_cover_1" %in% names(data)) {
+          data <- data |>
+            # split the code name away from the okta
+            tidyr::separate_wider_delim(
+              cols = dplyr::matches("sky_cover_[123456789]\\b"),
+              delim = ":",
+              names_sep = "",
+              names = c("code", ""),
+              too_few = "align_start"
+            ) |>
+            # drop the code
+            dplyr::select(
+              -dplyr::matches("sky_cover_[123456789]code")
+            ) |>
+            # coerce okta to numeric
+            dplyr::mutate(
+              dplyr::across(
+                dplyr::matches("sky_cover_[123456789]\\b"),
+                as.numeric
+              )
+            )
+
+          # get pmax of sky cover columns - for ADMS
+          data$sky_cover <- pmax(
+            data$sky_cover_1,
+            data$sky_cover_2,
+            data$sky_cover_3,
+            na.rm = TRUE
+          )
+
+          # get ceiling height
+          data <-
+            dplyr::mutate(
+              data,
+              sky_cover_baseht = dplyr::case_when(
+                .data$sky_cover_1 >= 5 ~ .data$sky_cover_baseht_1,
+                .data$sky_cover_2 >= 5 ~ .data$sky_cover_baseht_2,
+                .data$sky_cover_3 >= 5 ~ .data$sky_cover_baseht_3,
+                .default = NA
+              )
+            )
+
+          # move columns
+          data <-
+            dplyr::relocate(
+              data,
+              "sky_cover",
+              "sky_cover_baseht",
+              .before = "sky_cover_1"
+            )
         }
 
         # ensure data type consistency
@@ -189,9 +248,6 @@ import_ghcn_hourly <-
                 "pres_wx_aw1",
                 "pres_wx_aw2",
                 "pres_wx_aw3",
-                "sky_cover_1",
-                "sky_cover_2",
-                "sky_cover_3",
                 "remarks"
               ),
               as.character
@@ -294,6 +350,29 @@ import_ghcn_hourly <-
       return(NULL)
     }
 
+    # scrub columns if not `extra`
+    if (!extra) {
+      data <-
+        dplyr::select(
+          data,
+          "station_id",
+          "station_name",
+          "date",
+          "latitude",
+          "longitude",
+          "elevation",
+          dplyr::starts_with("wind_direction"),
+          dplyr::starts_with("wind_speed"),
+          dplyr::starts_with("temperature"),
+          dplyr::starts_with("station_level_pressure"),
+          dplyr::starts_with("visibility"),
+          dplyr::starts_with("dew_point_temperature"),
+          dplyr::starts_with("relative_humidity"),
+          dplyr::starts_with("sky_cover"),
+          dplyr::starts_with("precip")
+        )
+    }
+
     # function to rename columns
     rn_data <- function(data, from, to) {
       names(data) <- gsub(from, to, names(data))
@@ -308,7 +387,7 @@ import_ghcn_hourly <-
         rn_data("longitude", "lng") |>
         rn_data("elevation", "elev") |>
         rn_data("\\btemperature", "air_temp") |>
-        rn_data("dew_point_temperature", "dew_temp") |>
+        rn_data("dew_point_temperature", "dew_point") |>
         rn_data("station_level_pressure", "atmos_pres") |>
         rn_data("sea_level_pressure", "sea_pres") |>
         rn_data("wind_direction", "wd") |>
@@ -321,7 +400,7 @@ import_ghcn_hourly <-
         dplyr::rename_with(\(x) gsub("precipitation", "precip", x)) |>
         dplyr::rename_with(\(x) gsub("pres_wx_", "wx_", x)) |>
         dplyr::rename_with(\(x) gsub("_hour", "", x)) |>
-        dplyr::rename_with(\(x) gsub("sky_cover_", "sc_", x)) |>
+        dplyr::rename_with(\(x) gsub("sky_cover", "cl", x)) |>
         rn_data("precip_3", "precip_03") |>
         rn_data("precip_6", "precip_06") |>
         rn_data("precip_9", "precip_09") |>
@@ -331,11 +410,13 @@ import_ghcn_hourly <-
         dplyr::rename_with(\(x) gsub("_source_code", "_sc", x)) |>
         dplyr::rename_with(\(x) gsub("_source_id", "_si", x)) |>
         dplyr::rename_with(\(x) gsub("_source_station_id", "_si", x))
+
+      names(data)
     }
 
     # time average to hourly concentrations
     if (hourly) {
-      # if names not abbreviated, switch to ws/wd
+      # if names not abbreviated, switch to ws/wd (needed for timeAverage)
       if (!abbr_names) {
         data <-
           data |>

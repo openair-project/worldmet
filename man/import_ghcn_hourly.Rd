@@ -9,6 +9,7 @@ import_ghcn_hourly(
   year = NULL,
   source = c("psv", "parquet"),
   hourly = TRUE,
+  extra = FALSE,
   abbr_names = TRUE,
   append_codes = FALSE,
   codes = c("measurement_code", "quality_code", "report_type", "source_code",
@@ -31,6 +32,10 @@ as an additional dependency. Note that this only applies when \code{year} is not
 
 \item{hourly}{Should hourly means be calculated? The default is \code{TRUE}. If
 \code{FALSE} then the raw data are returned, which can be sub-hourly.}
+
+\item{extra}{Should additional columns be returned? The default, \code{FALSE},
+returns an opinionated selection of elements that'll be of most interest to
+most users. \code{TRUE} will return everything available from the GHCNh.}
 
 \item{abbr_names}{Should column names be abbreviated? When \code{TRUE}, the
 default, columns like \code{"wind_direction"} are shortened to \code{"wd"}. When

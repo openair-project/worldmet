@@ -24,13 +24,16 @@ Depends:
 Imports:
     cli,
     dplyr,
-    leaflet,
+    lifecycle,
     purrr (>= 1.1.0),
     readr,
     rlang,
     sf,
+    tibble,
     tidyr
 Suggests: 
+    arrow,
+    leaflet,
     carrier,
     knitr,
     mirai,

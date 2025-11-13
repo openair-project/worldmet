@@ -62,6 +62,45 @@ sorts of data flag codes that are returned with the data. By default, column
 names are shortened for easier use in R, but longer, more descriptive names
 can be requested.
 }
+\section{Data Definition}{
+
+
+The following core elements are in the GHCNh:
+\itemize{
+\item \strong{wind_direction:} (\code{wd}) Wind direction from true north (degrees). 360 = north, 180 = south, 270 = west; 000 indicates calm winds.
+\item \strong{wind_speed:} (\code{ws}) Average wind speed (m/s).
+\item \strong{temperature:} (\code{air_temp}) Air (dry bulb) temperature at approximately 2 meters above ground level, in degrees Celsius (to tenths).
+\item \strong{station_level_pressure:} (\code{atmos_pres}) Pressure observed at station elevation; true barometric pressure at the location (hPa).
+\item \strong{visibility:} (\code{visibility}) Horizontal visibility distance (km).
+\item \strong{dew_point_temperature:} (\code{dew_point}) Dew point temperature in degrees Celsius (to tenths).
+\item \strong{relative_humidity:} (\code{rh}) Relative humidity in whole percent, measured or calculated from temperature and dew point.
+\item \strong{sky_cover:} (\code{cl}) Maximum of all \strong{sky_cover_X} elements (oktas).
+\item \strong{sky_cover_baseht:} (\code{cl_baseht}) The height above ground level (AGL) of the lowest cloud or obscuring phenomena layer aloft with 5/8 or more summation total sky cover, which may be predominantly opaque, or the vertical visibility into a surface-based obstruction.
+\item \strong{sky_cover_X:} (\code{cl_X}) Fraction of sky covered by clouds (oktas). Up to 3 layers reported.
+\item \strong{sky_cover_baseht_X:} (\code{cl_baseht_X}) Cloud base height for lowest layer (m). Up to 3 layers reported.
+\item \strong{precipitation:} (\code{precip}) Total liquid precipitation (rain or melted snow) for the hour (mm). "T" indicates trace amounts.
+\item \strong{precipitation_XX_hour:} (\code{precip_XX}) 3-hour total liquid precipitation (mm). "T" indicates trace amounts.
+}
+
+When \code{extra = TRUE}, the following additional columns are included:
+\itemize{
+\item \strong{sea_level_pressure:} (\code{sea_pres}) Estimated pressure at sea level directly below the station using actual temperature profile (hPa).
+\item \strong{wind_gust:} (\code{wg}) Peak short-duration wind speed (m/s) exceeding the average wind speed.
+\item \strong{wet_bulb_temperature:} (\code{wet_bulb}) Wet bulb temperature in degrees Celsius (to tenths), measured or calculated from temperature, dew point, and station pressure.
+\item \strong{snow_depth:} (\code{snow_depth}) Depth of snowpack on the ground (mm).
+\item \strong{altimeter:} (\code{altimeter}) Pressure reduced to mean sea level using standard atmosphere profile (hPa).
+\item \strong{pressure_3hr_change:} (\code{pres_03}) Change in atmospheric pressure over a 3-hour period (hPa), with tendency code.
+}
+
+If \code{hourly = FALSE}, the following character columns may also be present.
+\itemize{
+\item \strong{pres_wx_MWX:} (\code{wx_mwX}) Present weather observation from manual reports (code). Up to 3 observations per report.
+\item \strong{pres_wx_AUX:} (\code{wx_auX}) Present weather observation from automated ASOS/AWOS sensors (code). Up to 3 observations per report.
+\item \strong{pres_wx_AWX:} (\code{wx_aqX}) Present weather observation from automated sensors (code). Up to 3 observations per report.
+\item \strong{remarks:} (\code{remarks}) Raw observation remarks encoded in ICAO-standard METAR/SYNOP format.
+}
+}
+
 \seealso{
 Other GHCN functions: 
 \code{\link{import_ghcn_countries}()},

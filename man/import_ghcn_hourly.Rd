@@ -35,14 +35,14 @@ as an additional dependency. Note that this only applies when \code{year} is not
 
 \item{extra}{Should additional columns be returned? The default, \code{FALSE},
 returns an opinionated selection of elements that'll be of most interest to
-most users. \code{TRUE} will return everything available from the GHCNh.}
+most users. \code{TRUE} will return everything available.}
 
 \item{abbr_names}{Should column names be abbreviated? When \code{TRUE}, the
 default, columns like \code{"wind_direction"} are shortened to \code{"wd"}. When
 \code{FALSE}, names will match the raw data, albeit in lower case.}
 
-\item{append_codes}{Logical. Should various codes (e.g., measurement coeds,
-qualiy codes, etc.) be appended to the output dataframe?}
+\item{append_codes}{Logical. Should various codes and flags be appended to
+the output dataframe?}
 
 \item{codes}{When \code{append_codes} is \code{TRUE}, which codes should be appended to
 the dataframe? Any combination of \code{"measurement_code"}, \code{"quality_code"},

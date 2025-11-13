@@ -77,14 +77,14 @@
 #'
 #' @param extra Should additional columns be returned? The default, `FALSE`,
 #'   returns an opinionated selection of elements that'll be of most interest to
-#'   most users. `TRUE` will return everything available from the GHCNh.
+#'   most users. `TRUE` will return everything available.
 #'
 #' @param abbr_names Should column names be abbreviated? When `TRUE`, the
 #'   default, columns like `"wind_direction"` are shortened to `"wd"`. When
 #'   `FALSE`, names will match the raw data, albeit in lower case.
 #'
-#' @param append_codes Logical. Should various codes (e.g., measurement coeds,
-#'   qualiy codes, etc.) be appended to the output dataframe?
+#' @param append_codes Logical. Should various codes and flags be appended to
+#'   the output dataframe?
 #'
 #' @param codes When `append_codes` is `TRUE`, which codes should be appended to
 #'   the dataframe? Any combination of `"measurement_code"`, `"quality_code"`,

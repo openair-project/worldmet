@@ -9,13 +9,22 @@
 <url><loc>https://openair-project.github.io/worldmet/authors.html</loc></url>
 <url><loc>https://openair-project.github.io/worldmet/index.html</loc></url>
 <url><loc>https://openair-project.github.io/worldmet/news/index.html</loc></url>
-<url><loc>https://openair-project.github.io/worldmet/reference/exportADMS.html</loc></url>
-<url><loc>https://openair-project.github.io/worldmet/reference/getMeta.html</loc></url>
-<url><loc>https://openair-project.github.io/worldmet/reference/getMetaLive.html</loc></url>
-<url><loc>https://openair-project.github.io/worldmet/reference/importNOAA.html</loc></url>
-<url><loc>https://openair-project.github.io/worldmet/reference/importNOAAlite.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/deprecated-data.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/deprecated-isd.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/import_ghcn_countries.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/import_ghcn_daily.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/import_ghcn_hourly.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/import_ghcn_inventory.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/import_ghcn_monthly.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/import_ghcn_stations.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/import_isd_hourly.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/import_isd_lite.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/import_isd_stations.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/import_isd_stations_live.html</loc></url>
 <url><loc>https://openair-project.github.io/worldmet/reference/index.html</loc></url>
 <url><loc>https://openair-project.github.io/worldmet/reference/weatherCodes.html</loc></url>
 <url><loc>https://openair-project.github.io/worldmet/reference/worldmet-package.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/write_adms.html</loc></url>
+<url><loc>https://openair-project.github.io/worldmet/reference/write_met.html</loc></url>
 </urlset>
 

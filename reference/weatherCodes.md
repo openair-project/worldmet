@@ -19,7 +19,7 @@ rows and 2 columns.
 - pwc:
 
   Weather code, which can be merged with the `pwc` column in
-  [`importNOAA()`](https://openair-project.github.io/worldmet/reference/importNOAA.md)
+  [`importNOAA()`](https://openair-project.github.io/worldmet/reference/deprecated-isd.md)
   datasets.
 
 - description:

@@ -51,6 +51,76 @@
     </div>
 
     <div class="section level2">
+      <h2 id="global-historical-climatology-network-ghcn-">Global Historical Climatology Network (GHCN)<a class="anchor" aria-label="anchor" href="#global-historical-climatology-network-ghcn-"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+      <div class="section-desc"><p>These functions give access to the NOAA Global Historical Climatology Network (GHCN), which includes an <a href="https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly" class="external-link">hourly</a>, <a href="https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily" class="external-link">daily</a>, and <a href="https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-monthly" class="external-link">monthly</a> product, all of which can be accessed by <code>worldmet</code>. The GHCN includes many useful parameters such as wind speed and direction, temperature, atmospheric pressure, precipitation and snowfall.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="import-metadata">Import Metadata<a class="anchor" aria-label="anchor" href="#import-metadata"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="import_ghcn_stations.html">import_ghcn_stations()</a></code>
+
+        </dt>
+        <dd>Import station metadata for the Global Historical Climatology Network</dd>
+
+        <dt>
+
+          <code><a href="import_ghcn_inventory.html">import_ghcn_inventory()</a></code>
+
+        </dt>
+        <dd>Import station inventory for the Global Historical Climatology Network</dd>
+
+        <dt>
+
+          <code><a href="import_ghcn_countries.html">import_ghcn_countries()</a></code>
+
+        </dt>
+        <dd>Import FIPS country codes and State/Province/Territory codes used by the Global Historical Climatology Network</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="import-measurements">Import Measurements<a class="anchor" aria-label="anchor" href="#import-measurements"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="import_ghcn_hourly.html">import_ghcn_hourly()</a></code>
+
+        </dt>
+        <dd>Import data from the Global Historical Climatology hourly (GHCNh) database</dd>
+
+        <dt>
+
+          <code><a href="import_ghcn_daily.html">import_ghcn_daily()</a></code>
+
+        </dt>
+        <dd>Import data from the Global Historical Climatology daily (GHCNd) database</dd>
+
+        <dt>
+
+          <code><a href="import_ghcn_monthly.html">import_ghcn_monthly_temp()</a></code> <code><a href="import_ghcn_monthly.html">import_ghcn_monthly_prcp()</a></code>
+
+        </dt>
+        <dd>Import data from the Global Historical Climatology monthly (GHCNm) database</dd>
+      </dl></div><div class="section level2">
       <h2 id="integrated-surface-database-isd-">Integrated Surface Database (ISD)<a class="anchor" aria-label="anchor" href="#integrated-surface-database-isd-"></a></h2>
 
 
@@ -62,8 +132,8 @@
 
       <dl></dl></div><div class="section level2">
 
-      <h3 id="import-met-data">Import Met Data<a class="anchor" aria-label="anchor" href="#import-met-data"></a></h3>
-      <div class="section-desc"><p>Directly import NOAA meteorological data.</p></div>
+      <h3 id="import-metadata-1">Import Metadata<a class="anchor" aria-label="anchor" href="#import-metadata-1"></a></h3>
+
 
       <dl></dl></div><div class="section level2">
 
@@ -72,37 +142,14 @@
 
       <dl><dt>
 
-          <code><a href="importNOAA.html">importNOAA()</a></code>
+          <code><a href="import_isd_stations.html">import_isd_stations()</a></code>
 
         </dt>
-        <dd>Import Meteorological data from the NOAA Integrated Surface Database (ISD)</dd>
+        <dd>Import station metadata for the Integrated Surface Databse</dd>
 
         <dt>
 
-          <code><a href="importNOAAlite.html">importNOAAlite()</a></code>
-
-        </dt>
-        <dd>Import "Lite" Meteorological data from the NOAA Integrated Surface Database (ISD)</dd>
-      </dl></div><div class="section level2">
-
-      <h3 id="view-metadata">View Metadata<a class="anchor" aria-label="anchor" href="#view-metadata"></a></h3>
-      <div class="section-desc"><p>Read and visualise meta data relating to meteorological measurement sites.</p></div>
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="getMeta.html">getMeta()</a></code>
-
-        </dt>
-        <dd>Find a ISD site code and other meta data</dd>
-
-        <dt>
-
-          <code><a href="getMetaLive.html">getMetaLive()</a></code>
+          <code><a href="import_isd_stations_live.html">import_isd_stations_live()</a></code>
 
         </dt>
         <dd>Obtain site meta data from NOAA server</dd>
@@ -114,9 +161,9 @@
         </dt>
         <dd>Codes for weather types</dd>
       </dl></div><div class="section level2">
-      <h2 id="adms-data">ADMS Data<a class="anchor" aria-label="anchor" href="#adms-data"></a></h2>
 
-      <div class="section-desc"><p>These functions assist with working with the Atmospheric Dispersion Modelling System (ADMS).</p></div>
+      <h3 id="import-measurements-1">Import Measurements<a class="anchor" aria-label="anchor" href="#import-measurements-1"></a></h3>
+
 
       <dl></dl></div><div class="section level2">
 
@@ -125,10 +172,73 @@
 
       <dl><dt>
 
-          <code><a href="exportADMS.html">exportADMS()</a></code>
+          <code><a href="import_isd_hourly.html">import_isd_hourly()</a></code>
+
+        </dt>
+        <dd>Import Meteorological data from the NOAA Integrated Surface Database (ISD)</dd>
+
+        <dt>
+
+          <code><a href="import_isd_lite.html">import_isd_lite()</a></code>
+
+        </dt>
+        <dd>Import "Lite" Meteorological data from the NOAA Integrated Surface Database (ISD)</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-utilities">Data Utilities<a class="anchor" aria-label="anchor" href="#data-utilities"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+      <div class="section-desc"><p>These are broadly helpful when working with meteorological data, such as those accessed via the above import functions.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="writing-data">Writing Data<a class="anchor" aria-label="anchor" href="#writing-data"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="write_met.html">write_met()</a></code>
+
+        </dt>
+        <dd>Export a meteorological data frame in files, chunked by site and year</dd>
+
+        <dt>
+
+          <code><a href="write_adms.html">write_adms()</a></code>
 
         </dt>
         <dd>Export a meteorological data frame in ADMS format</dd>
+      </dl></div><div class="section level2">
+      <h2 id="deprecated-functions">Deprecated Functions<a class="anchor" aria-label="anchor" href="#deprecated-functions"></a></h2>
+
+      <div class="section-desc"><p>These functions are part of an old API for worldmet. We’d recommend using their more modern equivalents outlined above.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="deprecated-isd.html">getMeta()</a></code> <code><a href="deprecated-isd.html">getMetaLive()</a></code> <code><a href="deprecated-isd.html">importNOAA()</a></code> <code><a href="deprecated-isd.html">importNOAAlite()</a></code>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
+        </dt>
+        <dd>Deprecated ISD access functions</dd>
+
+        <dt>
+
+          <code><a href="deprecated-data.html">exportADMS()</a></code>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
+        </dt>
+        <dd>Deprecated data functions</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

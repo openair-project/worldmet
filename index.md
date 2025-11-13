@@ -2,10 +2,12 @@
 
 ## **worldmet**
 
-### open source tools to access NOAA Integrated Surface Database (ISD) meteorological observations
+### open source tools to access NOAA meteorological observations
 
-**worldmet** provides an easy way to access data from the [NOAA
-Integrated Surface
+**worldmet** provides an easy way to access data from the [NOAA Global
+Historical Climate
+Network](https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly)
+and the [NOAA Integrated Surface
 Database](https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database)
 (ISD). The ISD contains detailed surface meteorological data from around
 the world for over 35,000 locations. See also the
@@ -29,17 +31,16 @@ the world for over 35,000 locations. See also the
 
 **worldmet** has a small handful of core functionality.
 
-- **Access ISD metadata** using
-  [`getMeta()`](https://openair-project.github.io/worldmet/reference/getMeta.md).
+- **Access metadata** using
+  [`import_ghcn_stations()`](https://openair-project.github.io/worldmet/reference/import_ghcn_stations.md).
 
-- **Import ISD monitoring data** using
-  [`importNOAA()`](https://openair-project.github.io/worldmet/reference/importNOAA.md),
-  with options to improve performance with parallel processing. Data is
-  in a format ready to use with, for example,
+- **Import monitoring data** using
+  [`import_ghcn_hourly()`](https://openair-project.github.io/worldmet/reference/import_ghcn_hourly.md).
+  Data is in a format ready to use with, for example,
   [`openair::windRose()`](https://openair-project.github.io/openair/reference/windRose.html).
 
 - **Write files in ADMS format** using
-  [`exportADMS()`](https://openair-project.github.io/worldmet/reference/exportADMS.md).
+  [`write_adms()`](https://openair-project.github.io/worldmet/reference/write_adms.md).
 
 ![](reference/figures/feature-banner.png)
 
@@ -51,7 +52,7 @@ All **worldmet** functions are fully documented; access documentation
 using R in your IDE of choice.
 
 ``` r
-?worldmet::importNOAA
+?worldmet::import_ghcn_stations
 ```
 
 Documentation is also hosted online on the **package website**.

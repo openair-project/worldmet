@@ -85,14 +85,14 @@
 <strong>worldmet</strong><a class="anchor" aria-label="anchor" href="#worldmet"></a>
 </h2>
 <div class="section level3">
-<h3 id="open-source-tools-to-access-noaa-integrated-surface-database-isd-meteorological-observations">open source tools to access NOAA Integrated Surface Database (ISD) meteorological observations<a class="anchor" aria-label="anchor" href="#open-source-tools-to-access-noaa-integrated-surface-database-isd-meteorological-observations"></a>
+<h3 id="open-source-tools-to-access-noaa-meteorological-observations">open source tools to access NOAA meteorological observations<a class="anchor" aria-label="anchor" href="#open-source-tools-to-access-noaa-meteorological-observations"></a>
 </h3>
 <!-- badges: start -->
 
 </div>
 </div>
 </div>
-<p><strong>worldmet</strong> provides an easy way to access data from the <a href="https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database" class="external-link">NOAA Integrated Surface Database</a> (ISD). The ISD contains detailed surface meteorological data from around the world for over 35,000 locations. See also the <a href="https://gis.ncdc.noaa.gov/maps/ncei" class="external-link">map</a>. The package outputs (typically hourly meteorological data) work very well with the <a href="https://github.com/openair-project/openair" class="external-link"><strong>openair</strong></a> package.</p>
+<p><strong>worldmet</strong> provides an easy way to access data from the <a href="https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly" class="external-link">NOAA Global Historical Climate Network</a> and the <a href="https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database" class="external-link">NOAA Integrated Surface Database</a> (ISD). The ISD contains detailed surface meteorological data from around the world for over 35,000 locations. See also the <a href="https://gis.ncdc.noaa.gov/maps/ncei" class="external-link">map</a>. The package outputs (typically hourly meteorological data) work very well with the <a href="https://github.com/openair-project/openair" class="external-link"><strong>openair</strong></a> package.</p>
 <div align="center">
 <p><em>Part of the openair toolkit</em></p>
 <p><a href="https://openair-project.github.io/openair/" class="external-link"><img src="https://img.shields.io/badge/openair_core-06D6A0?style=flat-square" alt="openair"></a> | <a href="https://openair-project.github.io/worldmet/"><img src="https://img.shields.io/badge/worldmet-26547C?style=flat-square" alt="worldmet"></a> | <a href="https://openair-project.github.io/openairmaps/" class="external-link"><img src="https://img.shields.io/badge/openairmaps-FFD166?style=flat-square" alt="openairmaps"></a> | <a href="https://openair-project.github.io/deweather/" class="external-link"><img src="https://img.shields.io/badge/deweather-EF476F?style=flat-square" alt="deweather"></a></p>
@@ -103,9 +103,9 @@
 </h2>
 <p><strong>worldmet</strong> has a small handful of core functionality.</p>
 <ul>
-<li><p><strong>Access ISD metadata</strong> using <code><a href="reference/getMeta.html">getMeta()</a></code>.</p></li>
-<li><p><strong>Import ISD monitoring data</strong> using <code><a href="reference/importNOAA.html">importNOAA()</a></code>, with options to improve performance with parallel processing. Data is in a format ready to use with, for example, <code><a href="https://openair-project.github.io/openair/reference/windRose.html" class="external-link">openair::windRose()</a></code>.</p></li>
-<li><p><strong>Write files in ADMS format</strong> using <code><a href="reference/exportADMS.html">exportADMS()</a></code>.</p></li>
+<li><p><strong>Access metadata</strong> using <code><a href="reference/import_ghcn_stations.html">import_ghcn_stations()</a></code>.</p></li>
+<li><p><strong>Import monitoring data</strong> using <code><a href="reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code>. Data is in a format ready to use with, for example, <code><a href="https://openair-project.github.io/openair/reference/windRose.html" class="external-link">openair::windRose()</a></code>.</p></li>
+<li><p><strong>Write files in ADMS format</strong> using <code><a href="reference/write_adms.html">write_adms()</a></code>.</p></li>
 </ul>
 <div align="center">
 <p><img src="reference/figures/feature-banner.png" width="800"></p>
@@ -117,7 +117,7 @@
 </h2>
 <p>All <strong>worldmet</strong> functions are fully documented; access documentation using R in your IDE of choice.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">?</span><span class="fu">worldmet</span><span class="fu">::</span><span class="va"><a href="reference/importNOAA.html">importNOAA</a></span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">?</span><span class="fu">worldmet</span><span class="fu">::</span><span class="va"><a href="reference/import_ghcn_stations.html">import_ghcn_stations</a></span></span></code></pre></div>
 <p>Documentation is also hosted online on the <strong>package website</strong>.</p>
 <p><a href="https://openair-project.github.io/worldmet/"><img src="https://img.shields.io/badge/website-documentation-blue" alt="website"></a></p>
 <p>A guide to the openair toolkit can be found in the <strong>online book</strong>, which contains lots of code snippets, demonstrations of functionality, and ideas for the application of <strong>openair</strong>’s various functions.</p>

@@ -53,6 +53,29 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="worldmet-development-version">worldmet (development version)<a class="anchor" aria-label="anchor" href="#worldmet-development-version"></a></h2>
+<div class="section level3">
+<h3 id="dependency-changes-development-version">Dependency Changes<a class="anchor" aria-label="anchor" href="#dependency-changes-development-version"></a></h3>
+<ul><li><p><code>arrow</code> has been added as a suggested dependency.</p></li>
+<li><p><code>leaflet</code> has been downgraded to a suggested dependency. When a user requests a met station map they will be prompted to install <code>leaflet</code> if it is not already installed.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<p>The Global Historical Climate Network (GHCN) has officially superseded NOAA’s Integrated Surface Database (ISD). Many changes in this release are related to this external change.</p>
+<ul><li><p>Added <code><a href="../reference/import_ghcn_stations.html">import_ghcn_stations()</a></code>, <code><a href="../reference/import_ghcn_inventory.html">import_ghcn_inventory()</a></code>, and <code><a href="../reference/import_ghcn_countries.html">import_ghcn_countries()</a></code> to grant access to metadata for the GHCN.</p></li>
+<li><p>Added <code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code>, <code><a href="../reference/import_ghcn_daily.html">import_ghcn_daily()</a></code> and <code>import_ghcn_monthly()</code> to grant access to the GHCNh, GHCNd and CHCNm services.</p></li>
+<li><p>Added <code><a href="../reference/import_isd_stations.html">import_isd_stations()</a></code>, <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code> and <code><a href="../reference/import_isd_lite.html">import_isd_lite()</a></code> to provide a consistent API with the newly added GHCN functions.</p></li>
+<li><p>Added <code><a href="../reference/write_met.html">write_met()</a></code>, which allows for hourly ISD and GHCN and daily GHCN data to be easily split into years and sites and written to file. This is a more flexible alternative to using <code>importNOAA(path=)</code>.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="deprecations-development-version">Deprecations<a class="anchor" aria-label="anchor" href="#deprecations-development-version"></a></h3>
+<p>Several functions have been deprecated and replaced due to the updated <code>worldmet</code> API:</p>
+<ul><li><p><code><a href="../reference/deprecated-isd.html">getMeta()</a></code> -&gt; <code><a href="../reference/import_isd_stations.html">import_isd_stations()</a></code></p></li>
+<li><p><code><a href="../reference/deprecated-isd.html">getMetaLive()</a></code> -&gt; <code><a href="../reference/import_isd_stations_live.html">import_isd_stations_live()</a></code></p></li>
+<li><p><code><a href="../reference/deprecated-isd.html">importNOAA()</a></code> -&gt; <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code></p></li>
+<li><p><code><a href="../reference/deprecated-isd.html">importNOAAlite()</a></code> -&gt; <code><a href="../reference/import_isd_lite.html">import_isd_lite()</a></code></p></li>
+<li><p><code><a href="../reference/deprecated-data.html">exportADMS()</a></code> -&gt; <code><a href="../reference/write_adms.html">write_adms()</a></code></p></li>
+<li><p>the <code>path</code> argument -&gt; <code><a href="../reference/write_met.html">write_met()</a></code></p></li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.2" id="worldmet-0102">worldmet 0.10.2<a class="anchor" aria-label="anchor" href="#worldmet-0102"></a></h2><p class="text-muted">CRAN release: 2025-11-07</p>
@@ -64,7 +87,7 @@
 <div class="section level3">
 <h3 id="new-features-0-10-2">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-10-2"></a></h3>
 <ul><li>
-<code><a href="../reference/importNOAA.html">importNOAA()</a></code> now recommends trying the other <code>source</code> if it fails to fetch data (i.e., if <code>source = "delim"</code> fails, the user will be prompted to try <code>source = "fwf"</code>).</li>
+<code><a href="../reference/deprecated-isd.html">importNOAA()</a></code> now recommends trying the other <code>source</code> if it fails to fetch data (i.e., if <code>source = "delim"</code> fails, the user will be prompted to try <code>source = "fwf"</code>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-10-2">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-2"></a></h3>
@@ -77,13 +100,13 @@
 <h2 class="pkg-version" data-toc-text="0.10.1" id="worldmet-0101">worldmet 0.10.1<a class="anchor" aria-label="anchor" href="#worldmet-0101"></a></h2><p class="text-muted">CRAN release: 2025-08-20</p>
 <div class="section level3">
 <h3 id="new-features-0-10-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-10-1"></a></h3>
-<ul><li><p><code><a href="../reference/importNOAAlite.html">importNOAAlite()</a></code> has gained the <code>path</code> argument, in line with <code><a href="../reference/importNOAA.html">importNOAA()</a></code>.</p></li>
-<li><p><code><a href="../reference/importNOAAlite.html">importNOAAlite()</a></code> now supports parallel processing using the <a href="https://mirai.r-lib.org" class="external-link">mirai</a> package, in line with <code><a href="../reference/importNOAA.html">importNOAA()</a></code>.</p></li>
+<ul><li><p><code><a href="../reference/deprecated-isd.html">importNOAAlite()</a></code> has gained the <code>path</code> argument, in line with <code><a href="../reference/deprecated-isd.html">importNOAA()</a></code>.</p></li>
+<li><p><code><a href="../reference/deprecated-isd.html">importNOAAlite()</a></code> now supports parallel processing using the <a href="https://mirai.r-lib.org" class="external-link">mirai</a> package, in line with <code><a href="../reference/deprecated-isd.html">importNOAA()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-10-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1"></a></h3>
 <ul><li>
-<code><a href="../reference/importNOAAlite.html">importNOAAlite()</a></code> can now import data from years other than 2025.</li>
+<code><a href="../reference/deprecated-isd.html">importNOAAlite()</a></code> can now import data from years other than 2025.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -94,7 +117,7 @@
 <p>Parallel importing of NOAA data is now powered by <a href="https://mirai.r-lib.org" class="external-link">mirai</a>. This reduces the number of dependencies of <a href="https://openair-project.github.io/worldmet/">worldmet</a>, and also allows users to be more flexible with how parallel processing is achieved.</p>
 <ul><li>Due to this change, users are recommended to set <code><a href="https://mirai.r-lib.org/reference/daemons.html" class="external-link">mirai::daemons()</a></code> themselves. <code>n.core</code> will stil work for back-compatibility, but will give a once-per-session warning.</li>
 </ul></li>
-<li><p><code><a href="../reference/getMeta.html">getMeta()</a></code> has gained the <code>crs</code> argument to search NOAA ISD stations by coordinates other than latitude and longitude.</p></li>
+<li><p><code><a href="../reference/deprecated-isd.html">getMeta()</a></code> has gained the <code>crs</code> argument to search NOAA ISD stations by coordinates other than latitude and longitude.</p></li>
 <li><p>Added <code>importNOAALite()</code> to access the ISDLite filestore.</p></li>
 <li><p>Added the <code>importNOAA(source=)</code> argument to import ISD data from different file stores. This option can be useful if one of the file stores is not available for whatever reason.</p></li>
 <li><p>All error and warning messages are now powered by <a href="https://cli.r-lib.org" class="external-link">cli</a> and are more informative.</p></li>
@@ -104,12 +127,12 @@
 <h2 class="pkg-version" data-toc-text="0.9.9" id="worldmet-099">worldmet 0.9.9<a class="anchor" aria-label="anchor" href="#worldmet-099"></a></h2><p class="text-muted">CRAN release: 2025-01-14</p>
 <div class="section level3">
 <h3 id="new-features-0-9-9">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-9"></a></h3>
-<ul><li>The <code>quiet</code> argument of <code><a href="../reference/importNOAA.html">importNOAA()</a></code> now also toggles the progress bar.</li>
+<ul><li>The <code>quiet</code> argument of <code><a href="../reference/deprecated-isd.html">importNOAA()</a></code> now also toggles the progress bar.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-0-9-9-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-9-1"></a></h3>
 <ul><li>
-<code><a href="../reference/getMeta.html">getMeta()</a></code> has gained the <code>crs</code> argument, which allows <code>getMeta(lat =, lon =)</code> to be defined using other coordinate systems.</li>
+<code><a href="../reference/deprecated-isd.html">getMeta()</a></code> has gained the <code>crs</code> argument, which allows <code>getMeta(lat =, lon =)</code> to be defined using other coordinate systems.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-9-9">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-9"></a></h3>
@@ -122,17 +145,17 @@
 <h2 class="pkg-version" data-toc-text="0.9.6" id="worldmet-096">worldmet 0.9.6<a class="anchor" aria-label="anchor" href="#worldmet-096"></a></h2><p class="text-muted">CRAN release: 2022-10-05</p>
 <div class="section level3">
 <h3 id="new-features-0-9-6">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-6"></a></h3>
-<ul><li><p><code><a href="../reference/importNOAA.html">importNOAA()</a></code> will now display a progress bar when multiple years of met data are to be imported.</p></li>
-<li><p>Improved the formatting of the popups in <code><a href="../reference/getMeta.html">getMeta()</a></code> in line with <code>openairmaps::networkMap()</code>.</p></li>
-<li><p>Added the <code>provider</code> argument to <code><a href="../reference/getMeta.html">getMeta()</a></code>, allowing for users to define one or more <code>leaflet</code> basemaps. Uses the same default as <code>openairmaps::networkMap()</code>.</p></li>
-<li><p><code><a href="../reference/exportADMS.html">exportADMS()</a></code> now invisibly returns the input data, in line with, e.g., <code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">readr::write_csv()</a></code>.</p></li>
+<ul><li><p><code><a href="../reference/deprecated-isd.html">importNOAA()</a></code> will now display a progress bar when multiple years of met data are to be imported.</p></li>
+<li><p>Improved the formatting of the popups in <code><a href="../reference/deprecated-isd.html">getMeta()</a></code> in line with <code>openairmaps::networkMap()</code>.</p></li>
+<li><p>Added the <code>provider</code> argument to <code><a href="../reference/deprecated-isd.html">getMeta()</a></code>, allowing for users to define one or more <code>leaflet</code> basemaps. Uses the same default as <code>openairmaps::networkMap()</code>.</p></li>
+<li><p><code><a href="../reference/deprecated-data.html">exportADMS()</a></code> now invisibly returns the input data, in line with, e.g., <code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">readr::write_csv()</a></code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.5" id="worldmet-095">worldmet 0.9.5<a class="anchor" aria-label="anchor" href="#worldmet-095"></a></h2><p class="text-muted">CRAN release: 2021-04-20</p>
 <div class="section level3">
 <h3 id="bug-fixes-0-9-5">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-5"></a></h3>
-<ul><li><p>do not add precip to <code><a href="../reference/exportADMS.html">exportADMS()</a></code></p></li>
+<ul><li><p>do not add precip to <code><a href="../reference/deprecated-data.html">exportADMS()</a></code></p></li>
 <li><p>Cloud cover data mostly spans 1 to 8 Oktas and no zero (clear sky); use <code>ceil_hgt = 220000</code> (unlimited) to indicate clear sky when cloud cover is reported as missing.</p></li>
 <li><p>Do not use ftp for site information.</p></li>
 </ul></div>
@@ -148,7 +171,7 @@
 <h2 class="pkg-version" data-toc-text="0.9.3" id="worldmet-093">worldmet 0.9.3<a class="anchor" aria-label="anchor" href="#worldmet-093"></a></h2><p class="text-muted">CRAN release: 2021-03-29</p>
 <div class="section level3">
 <h3 id="bug-fixes-0-9-3">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-3"></a></h3>
-<ul><li>Catch missing data error and report missing when importing data using <code><a href="../reference/importNOAA.html">importNOAA()</a></code>
+<ul><li>Catch missing data error and report missing when importing data using <code><a href="../reference/deprecated-isd.html">importNOAA()</a></code>
 </li>
 </ul></div>
 </div>
@@ -156,14 +179,14 @@
 <h2 class="pkg-version" data-toc-text="0.9.2" id="worldmet-092">worldmet 0.9.2<a class="anchor" aria-label="anchor" href="#worldmet-092"></a></h2><p class="text-muted">CRAN release: 2020-09-17</p>
 <div class="section level3">
 <h3 id="new-features-0-9-2">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-2"></a></h3>
-<ul><li>Exporting <code>weatherCodes</code> so that everything works when used by other packages through “explicit namespacing”” (<em>e.g.</em> <code><a href="../reference/importNOAA.html">worldmet::importNOAA()</a></code>) without having to <code><a href="https://openair-project.github.io/worldmet/">library(worldmet)</a></code>.</li>
+<ul><li>Exporting <code>weatherCodes</code> so that everything works when used by other packages through “explicit namespacing”” (<em>e.g.</em> <code><a href="../reference/deprecated-isd.html">worldmet::importNOAA()</a></code>) without having to <code><a href="https://openair-project.github.io/worldmet/">library(worldmet)</a></code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.1" id="worldmet-091">worldmet 0.9.1<a class="anchor" aria-label="anchor" href="#worldmet-091"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-9-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-1"></a></h3>
-<ul><li><p>fix bug when lat and lon provided in <code><a href="../reference/getMeta.html">getMeta()</a></code></p></li>
+<ul><li><p>fix bug when lat and lon provided in <code><a href="../reference/deprecated-isd.html">getMeta()</a></code></p></li>
 <li><p>fix bug when several years are selected and columns are different lengths when <code>n.core = 1</code></p></li>
 </ul></div>
 </div>
@@ -172,7 +195,7 @@
 <div class="section level3">
 <h3 id="new-features-0-9-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-9-1"></a></h3>
 <ul><li><p>Significant changes due to NOAA storage formats and different storage locations</p></li>
-<li><p>Remove options for precipitation and present weather in <code><a href="../reference/importNOAA.html">importNOAA()</a></code>; just return everything</p></li>
+<li><p>Remove options for precipitation and present weather in <code><a href="../reference/deprecated-isd.html">importNOAA()</a></code>; just return everything</p></li>
 <li><p>Return data as <a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></p></li>
 </ul></div>
 </div>
@@ -180,9 +203,9 @@
 <h2 class="pkg-version" data-toc-text="0.8.8" id="worldmet-088">worldmet 0.8.8<a class="anchor" aria-label="anchor" href="#worldmet-088"></a></h2><p class="text-muted">CRAN release: 2020-02-12</p>
 <div class="section level3">
 <h3 id="new-features-0-8-8">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-8-8"></a></h3>
-<ul><li><p>export <code><a href="../reference/getMetaLive.html">getMetaLive()</a></code> to allow users direct access to all meta data and easy re-use without re-downloading.</p></li>
+<ul><li><p>export <code><a href="../reference/deprecated-isd.html">getMetaLive()</a></code> to allow users direct access to all meta data and easy re-use without re-downloading.</p></li>
 <li><p>add option <code>path</code> to allow users to save met data as an rds file.</p></li>
-<li><p>deprecate <code>fresh</code> option in <code><a href="../reference/getMeta.html">getMeta()</a></code>.</p></li>
+<li><p>deprecate <code>fresh</code> option in <code><a href="../reference/deprecated-isd.html">getMeta()</a></code>.</p></li>
 <li><p>Assume <code>9999</code> is missing for visibility (was <code>999999</code>)</p></li>
 </ul></div>
 <div class="section level3">
@@ -195,7 +218,7 @@
 <h2 class="pkg-version" data-toc-text="0.8.4" id="worldmet-084">worldmet 0.8.4<a class="anchor" aria-label="anchor" href="#worldmet-084"></a></h2><p class="text-muted">CRAN release: 2018-02-27</p>
 <div class="section level3">
 <h3 id="new-features-0-8-4">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-8-4"></a></h3>
-<ul><li><p>query live meta data when using <code><a href="../reference/getMeta.html">getMeta()</a></code>.</p></li>
+<ul><li><p>query live meta data when using <code><a href="../reference/deprecated-isd.html">getMeta()</a></code>.</p></li>
 <li><p>parallel processing for sites and years.</p></li>
 <li><p>use <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_csv()</a></code> for meta data (<code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv()</a></code> seems very slow in R 3.4.3).</p></li>
 </ul></div>
@@ -243,7 +266,7 @@
 <div class="section level3">
 <h3 id="new-features-0-6">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-6"></a></h3>
 <ul><li><p>Add ability to return precipitation measurements, if available.</p></li>
-<li><p>Add precipitation to <code><a href="../reference/exportADMS.html">exportADMS()</a></code></p></li>
+<li><p>Add precipitation to <code><a href="../reference/deprecated-data.html">exportADMS()</a></code></p></li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

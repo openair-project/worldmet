@@ -58,9 +58,15 @@ A wind rose (for example) can easily be plotted using `openair`:
 openair::windRose(met_london)
 ```
 
-# Other Data Types
+# Data Types
 
-Also available in `worldmet` are:
+`worldmet` can access data from the newer Global Historic Climate Network (GHCN) and the legacy Integrated Surface Database (ISD). The ISD can be accessed using:
+
+- `import_isd_stations()` to obtain metadata, and
+
+- `import_isd_hourly()` and `import_isd_lite()` to obtain measurement data.
+
+The GHCN contains other products outside of hourly data. Also available in `worldmet` are:
 
 - `import_ghcn_daily()`, which imports daily average data. Users may select specific stations, but all available years for that station will be downloaded.
 
@@ -68,17 +74,28 @@ Also available in `worldmet` are:
 
 - `import_ghcn_monthly_prcp()`, which imports monthly total precipitation for specific stations.
 
-Outside of the GHCN, `worldmet` gives access to the historic Integrated Surface Database (ISD), with functions:
+# Parallel Processing
 
-- `import_isd_stations()` to obtain metadata, and
+If you are importing a lot of meteorological data, this can take a long while. This is because each combination of year and station (for hourly data) requires downloading a separate data file from NOAA's online data directory, and the time each download takes can quickly add up. Many functions in `worldmet` can use parallel processing to speed downloading up, powered by the capable `{mirai}` package. If users have any `{mirai}` "daemons" set, certain files will be downloaded in parallel. The greatest benefits will be seen if you spawn as many daemons as you have cores on your machine, although one fewer than the available cores is often a good rule of thumb. Your mileage may vary, however, and naturally spawning more daemons than station-year combinations will lead to diminishing returns.
 
-- `import_isd_hourly()` and `import_isd_lite()` to obtain measurement data.
+```r
+# set workers - once per session
+mirai::daemons(4)
 
-# Writing Data 
+# import lots of data - NB: no change in import_ghcn_hourly()!
+big_met <- import_ghcn_hourly(code = "UKI0000EGLL", year = 2010:2025)
+```
 
-Two functions are made available for writing out the imported data for other uses.
+The following functions support `{mirai}`-powered parallelism.
 
-- `write_met()` will write short-term data imported from the GHCN or ISD as individual files (either delimited, RDS, or parquet files) split by the year and monitoring station.
+- `import_ghcn_hourly()`
 
-- `write_adms()` will write out (at present) ISD data in a format compatible with the Atmospheric Dispersion Modelling System (ADMS).
+- `import_ghcn_daily()`
 
+- `import_ghcn_monthly_prcp()` (but **not** `import_ghcn_monthly_temp()`)
+
+- `import_isd_hourly()`
+
+- `import_isd_lite()`
+
+> Historically, parallelism in `{worldmet}` was achieved with `{doParallel}`, `{foreach}` and `{parallel}` and was activated using the `n.cores` argument of the legacy `importNOAA()` function. While this will still work, it is recommended users set their own daemons before using `importNOAA()`. This should avoid any issues with mistakenly spawning too many daemons, or accidentally spawning daemons within other daemons.

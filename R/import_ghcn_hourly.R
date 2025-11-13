@@ -275,7 +275,7 @@ import_single_ghcn_site <- function(
 
     data <- try(
       suppressWarnings(
-        readr::read_delim(url, delim = "|", progress = TRUE)
+        readr::read_delim(url, delim = "|", progress = FALSE)
       ),
       silent = TRUE
     )

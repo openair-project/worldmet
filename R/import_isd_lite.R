@@ -50,7 +50,7 @@
 #' "Etc/GMT-8"` for a meteorological data frame called `met`. The two data sets
 #' could then be merged based on `date`.
 #'
-#' @inheritSection import_isd_hourly Parallel Processing
+#' @inheritSection import_ghcn_hourly Parallel Processing
 #'
 #' @inheritParams import_isd_hourly
 #' @export

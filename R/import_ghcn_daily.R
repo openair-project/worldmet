@@ -108,6 +108,7 @@
 #'   - **WV18**: Snow or ice crystals
 #'   - **WV20**: Rain or snow shower
 #'
+#' @inheritSection import_ghcn_hourly Parallel Processing
 #' @inheritParams import_ghcn_hourly
 #'
 #' @param source The data format for the GHCNd. Currently only `"csv"` is
@@ -151,16 +152,28 @@ import_ghcn_daily <- function(
   data <-
     purrr::map(
       .x = station,
-      .f = purrr::possibly(\(x) {
-        readr::read_csv(
-          paste0(
-            "https://www.ncei.noaa.gov/data/global-historical-climatology-network-daily/access/",
-            x,
-            ".csv"
+      .f = purrr::in_parallel(\(x) {
+        data <- try(
+          suppressWarnings(
+            readr::read_csv(
+              paste0(
+                "https://www.ncei.noaa.gov/data/global-historical-climatology-network-daily/access/",
+                x,
+                ".csv"
+              ),
+              name_repair = tolower,
+              show_col_types = FALSE,
+              progress = FALSE
+            )
           ),
-          name_repair = tolower,
-          show_col_types = FALSE
+          silent = TRUE
         )
+
+        if (class(data)[1] == "try-error") {
+          return(NULL)
+        }
+
+        return(data)
       }),
       .progress = progress
     ) |>

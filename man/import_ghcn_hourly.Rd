@@ -22,7 +22,10 @@ import_ghcn_hourly(
 obtained using \code{\link[=import_ghcn_stations]{import_ghcn_stations()}}.}
 
 \item{year}{One or more years of interest. If \code{NULL}, the default, all years
-of data available for the chosen \code{station}s will be imported.}
+of data available for the chosen \code{station}s will be imported. Note that, in
+the GHCNd and GHCNm, files are split by station but not year, so setting a
+\code{year} will not speed up the download. Specifying fewer years will improve
+the speed of a GHCNh download, however.}
 
 \item{source}{There are two identical data formats to read from - \code{"psv"}
 (flat, pipe-delimited files) and \code{"parquet"} (a newer, faster, columnar
@@ -35,14 +38,14 @@ as an additional dependency. Note that this only applies when \code{year} is not
 
 \item{extra}{Should additional columns be returned? The default, \code{FALSE},
 returns an opinionated selection of elements that'll be of most interest to
-most users. \code{TRUE} will return everything available from the GHCNh.}
+most users. \code{TRUE} will return everything available.}
 
 \item{abbr_names}{Should column names be abbreviated? When \code{TRUE}, the
 default, columns like \code{"wind_direction"} are shortened to \code{"wd"}. When
 \code{FALSE}, names will match the raw data, albeit in lower case.}
 
-\item{append_codes}{Logical. Should various codes (e.g., measurement coeds,
-qualiy codes, etc.) be appended to the output dataframe?}
+\item{append_codes}{Logical. Should various codes and flags be appended to
+the output dataframe?}
 
 \item{codes}{When \code{append_codes} is \code{TRUE}, which codes should be appended to
 the dataframe? Any combination of \code{"measurement_code"}, \code{"quality_code"},
@@ -83,6 +86,43 @@ mirai::daemons(4)
 # import lots of data - NB: no change in the import function!
 big_met <- import_ghcn_hourly(code = "UKI0000EGLL", year = 2010:2025)
 }\if{html}{\out{</div>}}
+\section{Data Definition}{
+
+
+The following core elements are in the GHCNh:
+\itemize{
+\item \strong{wind_direction:} (\code{wd}) Wind direction from true north (degrees). 360 = north, 180 = south, 270 = west; 000 indicates calm winds.
+\item \strong{wind_speed:} (\code{ws}) Average wind speed (m/s).
+\item \strong{temperature:} (\code{air_temp}) Air (dry bulb) temperature at approximately 2 meters above ground level, in degrees Celsius (to tenths).
+\item \strong{station_level_pressure:} (\code{atmos_pres}) Pressure observed at station elevation; true barometric pressure at the location (hPa).
+\item \strong{visibility:} (\code{visibility}) Horizontal visibility distance (km).
+\item \strong{dew_point_temperature:} (\code{dew_point}) Dew point temperature in degrees Celsius (to tenths).
+\item \strong{relative_humidity:} (\code{rh}) Relative humidity in whole percent, measured or calculated from temperature and dew point.
+\item \strong{sky_cover:} (\code{cl}) Maximum of all \strong{sky_cover_X} elements (oktas).
+\item \strong{sky_cover_baseht:} (\code{cl_baseht}) The height above ground level (AGL) of the lowest cloud or obscuring phenomena layer aloft with 5/8 or more summation total sky cover, which may be predominantly opaque, or the vertical visibility into a surface-based obstruction.
+\item \strong{sky_cover_X:} (\code{cl_X}) Fraction of sky covered by clouds (oktas). Up to 3 layers reported.
+\item \strong{sky_cover_baseht_X:} (\code{cl_baseht_X}) Cloud base height for lowest layer (m). Up to 3 layers reported.
+\item \strong{precipitation:} (\code{precip}) Total liquid precipitation (rain or melted snow) for the hour (mm). "T" indicates trace amounts.
+\item \strong{precipitation_XX_hour:} (\code{precip_XX}) 3-hour total liquid precipitation (mm). "T" indicates trace amounts.
+}
+
+When \code{extra = TRUE}, the following additional columns are included:
+\itemize{
+\item \strong{sea_level_pressure:} (\code{sea_pres}) Estimated pressure at sea level directly below the station using actual temperature profile (hPa).
+\item \strong{wind_gust:} (\code{wg}) Peak short-duration wind speed (m/s) exceeding the average wind speed.
+\item \strong{wet_bulb_temperature:} (\code{wet_bulb}) Wet bulb temperature in degrees Celsius (to tenths), measured or calculated from temperature, dew point, and station pressure.
+\item \strong{snow_depth:} (\code{snow_depth}) Depth of snowpack on the ground (mm).
+\item \strong{altimeter:} (\code{altimeter}) Pressure reduced to mean sea level using standard atmosphere profile (hPa).
+\item \strong{pressure_3hr_change:} (\code{pres_03}) Change in atmospheric pressure over a 3-hour period (hPa), with tendency code.
+}
+
+If \code{hourly = FALSE}, the following character columns may also be present.
+\itemize{
+\item \strong{pres_wx_MWX:} (\code{wx_mwX}) Present weather observation from manual reports (code). Up to 3 observations per report.
+\item \strong{pres_wx_AUX:} (\code{wx_auX}) Present weather observation from automated ASOS/AWOS sensors (code). Up to 3 observations per report.
+\item \strong{pres_wx_AWX:} (\code{wx_aqX}) Present weather observation from automated sensors (code). Up to 3 observations per report.
+\item \strong{remarks:} (\code{remarks}) Raw observation remarks encoded in ICAO-standard METAR/SYNOP format.
+}
 }
 
 \seealso{

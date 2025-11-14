@@ -6,7 +6,11 @@
 \usage{
 import_ghcn_daily(
   station,
+  year = NULL,
+  source = c("csv"),
+  extra = FALSE,
   append_codes = FALSE,
+  codes = c("measurement_flag", "quality_flag", "source_flag"),
   progress = rlang::is_interactive()
 )
 }
@@ -14,8 +18,25 @@ import_ghcn_daily(
 \item{station}{One or more site codes for the station(s) of interest,
 obtained using \code{\link[=import_ghcn_stations]{import_ghcn_stations()}}.}
 
-\item{append_codes}{Logical. Should attribute codes be appended to the output
-dataframe?}
+\item{year}{One or more years of interest. If \code{NULL}, the default, all years
+of data available for the chosen \code{station}s will be imported. Note that, in
+the GHCNd and GHCNm, files are split by station but not year, so setting a
+\code{year} will not speed up the download. Specifying fewer years will improve
+the speed of a GHCNh download, however.}
+
+\item{source}{The data format for the GHCNd. Currently only \code{"csv"} is
+supported. This argument is included for future use.}
+
+\item{extra}{Should additional columns be returned? The default, \code{FALSE},
+returns an opinionated selection of elements that'll be of most interest to
+most users. \code{TRUE} will return everything available.}
+
+\item{append_codes}{Logical. Should various codes and flags be appended to
+the output dataframe?}
+
+\item{codes}{When \code{append_codes} is \code{TRUE}, which codes should be appended to
+the dataframe? Any combination of \code{"measurement_flag"}, \code{"quality_flag"},
+and/or \code{"source_flag"}.}
 
 \item{progress}{Show a progress bar when importing many stations/years?
 Defaults to \code{TRUE} in interactive R sessions. Passed to \code{.progress} in
@@ -50,6 +71,115 @@ mirai::daemons(4)
 # import lots of data - NB: no change in the import function!
 big_met <- import_ghcn_hourly(code = "UKI0000EGLL", year = 2010:2025)
 }\if{html}{\out{</div>}}
+
+\section{Data Definition}{
+
+
+The core elements in the GHCNd are:
+\itemize{
+\item \strong{PRCP}: Precipitation (mm)
+\item \strong{SNOW}: Snowfall (mm)
+\item \strong{SNWD}: Snow depth (mm)
+\item \strong{TMAX}: Maximum temperature (degrees C)
+\item \strong{TMIN}: Minimum temperature (degrees C)
+}
+
+Other elements which may appear are:
+\itemize{
+\item \strong{ACMC}: Average cloudiness midnight to midnight from 30-second ceilometer data (percent)
+\item \strong{ACMH}: Average cloudiness midnight to midnight from manual observations (percent)
+\item \strong{ACSC}: Average cloudiness sunrise to sunset from 30-second ceilometer data (percent)
+\item \strong{ACSH}: Average cloudiness sunrise to sunset from manual observations (percent)
+\item \strong{ADPT}: Average Dew Point Temperature for the day (degrees C)
+\item \strong{ASLP}: Average Sea Level Pressure for the day (hPa)
+\item \strong{ASTP}: Average Station Level Pressure for the day (hPa)
+\item \strong{AWBT}: Average Wet Bulb Temperature for the day (degrees C)
+\item \strong{AWDR}: Average daily wind direction (degrees)
+\item \strong{AWND}: Average daily wind speed (meters per second)
+\item \strong{DAEV}: Number of days included in the multiday evaporation total (MDEV)
+\item \strong{DAPR}: Number of days included in the multiday precipitation total (MDPR)
+\item \strong{DASF}: Number of days included in the multiday snowfall total (MDSF)
+\item \strong{DATN}: Number of days included in the multiday minimum temperature (MDTN)
+\item \strong{DATX}: Number of days included in the multiday maximum temperature (MDTX)
+\item \strong{DAWM}: Number of days included in the multiday wind movement (MDWM)
+\item \strong{DWPR}: Number of days with non-zero precipitation included in multiday precipitation total (MDPR)
+\item \strong{EVAP}: Evaporation of water from evaporation pan (mm)
+\item \strong{FMTM}: Time of fastest mile or fastest 1-minute wind (hours and minutes, i.e., HHMM)
+\item \strong{FRGB}: Base of frozen ground layer (cm)
+\item \strong{FRGT}: Top of frozen ground layer (cm)
+\item \strong{FRTH}: Thickness of frozen ground layer (cm)
+\item \strong{GAHT}: Difference between river and gauge height (cm)
+\item \strong{MDEV}: Multiday evaporation total (mm; use with \strong{DAEV})
+\item \strong{MDPR}: Multiday precipitation total (mm; use with \strong{DAPR} and \strong{DWPR}, if available)
+\item \strong{MDSF}: Multiday snowfall total
+\item \strong{MDTN}: Multiday minimum temperature (degrees C; use with \strong{DATN})
+\item \strong{MDTX}: Multiday maximum temperature (degrees C; use with \strong{DATX})
+\item \strong{MDWM}: Multiday wind movement (km)
+\item \strong{MNPN}: Daily minimum temperature of water in an evaporation pan (degrees C)
+\item \strong{MXPN}: Daily maximum temperature of water in an evaporation pan (degrees C)
+\item \strong{PGTM}: Peak gust time (hours and minutes, i.e., HHMM)
+\item \strong{PSUN}: Daily percent of possible sunshine (percent)
+\item \strong{RHAV}: Average relative humidity for the day (percent)
+\item \strong{RHMN}: Minimum relative humidity for the day (percent)
+\item \strong{RHMX}: Maximum relative humidity for the day (percent)
+\item \strong{SN$#}: Minimum soil temperature (degrees C) where $ corresponds to a code for ground cover and # corresponds to a code for soil depth. Ground cover codes: 0=unknown, 1=grass, 2=fallow, 3=bare ground, 4=brome grass, 5=sod, 6=straw mulch, 7=grass muck, 8=bare muck. Depth codes: 1=5cm, 2=10cm, 3=20cm, 4=50cm, 5=100cm, 6=150cm, 7=180cm
+\item \strong{SX$#}: Maximum soil temperature (degrees C) where $ corresponds to a code for ground cover and # corresponds to a code for soil depth. See \strong{SN$#} for ground cover and depth codes
+\item \strong{TAXN}: Average daily temperature computed as \code{(TMAX+TMIN)/2.0} (degrees C)
+\item \strong{TAVG}: Average daily temperature (degrees C). Note that TAVG from source 'S' corresponds to an average of hourly readings for the period ending at 2400 UTC rather than local midnight or other Local Standard Time according to a specific Met Service's protocol. For sources other than 'S' TAVG is computed in a variety of ways including traditional fixed hours of the day whereas TAXN is solely computed as (TMAX+TMIN)/2.0
+\item \strong{THIC}: Thickness of ice on water (mm)
+\item \strong{TOBS}: Temperature at the time of observation (degrees C)
+\item \strong{TSUN}: Daily total sunshine (minutes)
+\item \strong{WDF1}: Direction of fastest 1-minute wind (degrees)
+\item \strong{WDF2}: Direction of fastest 2-minute wind (degrees)
+\item \strong{WDF5}: Direction of fastest 5-second wind (degrees)
+\item \strong{WDFG}: Direction of peak wind gust (degrees)
+\item \strong{WDFI}: Direction of highest instantaneous wind (degrees)
+\item \strong{WDFM}: Fastest mile wind direction (degrees)
+\item \strong{WDMV}: 24-hour wind movement (km)
+\item \strong{WESD}: Water equivalent of snow on the ground (mm)
+\item \strong{WESF}: Water equivalent of snowfall (mm)
+\item \strong{WSF1}: Fastest 1-minute wind speed (meters per second)
+\item \strong{WSF2}: Fastest 2-minute wind speed (meters per second)
+\item \strong{WSF5}: Fastest 5-second wind speed (meters per second)
+\item \strong{WSFG}: Peak gust wind speed (meters per second)
+\item \strong{WSFI}: Highest instantaneous wind speed (meters per second)
+\item \strong{WSFM}: Fastest mile wind speed (meters per second)
+}
+
+There can be any number of weather types (\strong{WT$$})
+\itemize{
+\item \strong{WT01}: Fog, ice fog, or freezing fog (may include heavy fog)
+\item \strong{WT02}: Heavy fog or heaving freezing fog (not always distinguished from fog)
+\item \strong{WT03}: Thunder
+\item \strong{WT04}: Ice pellets, sleet, snow pellets, or small hail
+\item \strong{WT05}: Hail (may include small hail)
+\item \strong{WT06}: Glaze or rime
+\item \strong{WT07}: Dust, volcanic ash, blowing dust, blowing sand, or blowing obstruction
+\item \strong{WT08}: Smoke or haze
+\item \strong{WT09}: Blowing or drifting snow
+\item \strong{WT10}: Tornado, waterspout, or funnel cloud
+\item \strong{WT11}: High or damaging winds
+\item \strong{WT12}: Blowing spray
+\item \strong{WT13}: Mist
+\item \strong{WT14}: Drizzle
+\item \strong{WT15}: Freezing drizzle
+\item \strong{WT16}: Rain (may include freezing rain, drizzle, and freezing drizzle)
+\item \strong{WT17}: Freezing rain
+\item \strong{WT18}: Snow, snow pellets, snow grains, or ice crystals
+\item \strong{WT19}: Unknown source of precipitation
+\item \strong{WT21}: Ground fog
+\item \strong{WT22}: Ice fog or freezing fog
+}
+
+There can also be any number of 'weather in the vicinity' columns
+(\strong{WV$$})
+\itemize{
+\item \strong{WV01}: Fog, ice fog, or freezing fog (may include heavy fog)
+\item \strong{WV03}: Thunder
+\item \strong{WV07}: Ash, dust, sand, or other blowing obstruction
+\item \strong{WV18}: Snow or ice crystals
+\item \strong{WV20}: Rain or snow shower
+}
 }
 
 \seealso{

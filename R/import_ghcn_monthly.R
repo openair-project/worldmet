@@ -8,6 +8,8 @@
 #'
 #' @inheritSection import_ghcn_hourly Parallel Processing
 #'
+#' @inheritParams import_ghcn_hourly
+#'
 #' @param table Either `"inventory"`, `"data"`, or both. The tables to read and
 #'   return in the output list.
 #'
@@ -51,7 +53,6 @@ import_ghcn_monthly_temp <- function(
 
   # ensure dataset is correct
   dataset <- rlang::arg_match(dataset, c("qcu", "qcf", "qfe"))
-  pivot <- rlang::arg_match(pivot, c("wide", "long"))
   table <- rlang::arg_match(table, c("inventory", "data"), multiple = TRUE)
 
   # download file into temporary dir
@@ -146,6 +147,7 @@ import_ghcn_monthly_temp <- function(
 #' @export
 import_ghcn_monthly_prcp <- function(
   station = NULL,
+  year = NULL,
   table = c("inventory", "data"),
   progress = rlang::is_interactive()
 ) {
@@ -242,6 +244,18 @@ import_ghcn_monthly_prcp <- function(
       )
 
     out <- append(out, list(inventory = inv))
+  }
+
+  if (!is.null(year)) {
+    data <- dplyr::filter(
+      data,
+      as.numeric(format(.data$date, "%Y")) %in% year
+    )
+
+    if (nrow(data) == 0L) {
+      cli::cli_warn("No data has been returned. Check {.arg year}.")
+      return(NULL)
+    }
   }
 
   return(out)

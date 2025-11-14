@@ -86,6 +86,7 @@ import_isd_stations <- function(
 
   ## download the file, else use the package version
   meta <- import_isd_stations_live()
+  return <- rlang::arg_match(return, c("table", "sf", "map"))
 
   # check year
   if (!any(end_year %in% c("current", "all"))) {

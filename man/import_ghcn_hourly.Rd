@@ -65,27 +65,6 @@ sorts of data flag codes that are returned with the data. By default, column
 names are shortened for easier use in R, but longer, more descriptive names
 can be requested.
 }
-\section{Parallel Processing}{
-
-
-If you are importing a lot of meteorological data, this can take a long
-while. This is because each combination of year and station requires
-downloading a separate data file from NOAA's online data directory, and the
-time each download takes can quickly add up. Many data import functions in
-\code{{worldmet}} can use parallel processing to speed downloading up, powered
-by the capable \code{{mirai}} package. If users have any \code{{mirai}} "daemons"
-set, these functions will download files in parallel. The greatest benefits
-will be seen if you spawn as many daemons as you have cores on your
-machine, although one fewer than the available cores is often a good rule
-of thumb. Your mileage may vary, however, and naturally spawning more
-daemons than station-year combinations will lead to diminishing returns.
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{# set workers - once per session
-mirai::daemons(4)
-
-# import lots of data - NB: no change in the import function!
-big_met <- import_ghcn_hourly(code = "UKI0000EGLL", year = 2010:2025)
-}\if{html}{\out{</div>}}
 \section{Data Definition}{
 
 
@@ -123,6 +102,29 @@ If \code{hourly = FALSE}, the following character columns may also be present.
 \item \strong{pres_wx_AWX:} (\code{wx_aqX}) Present weather observation from automated sensors (code). Up to 3 observations per report.
 \item \strong{remarks:} (\code{remarks}) Raw observation remarks encoded in ICAO-standard METAR/SYNOP format.
 }
+}
+
+\section{Parallel Processing}{
+
+
+If you are importing a lot of meteorological data, this can take a long
+while. This is because each combination of year and station requires
+downloading a separate data file from NOAA's online data directory, and the
+time each download takes can quickly add up. Many data import functions in
+\code{{worldmet}} can use parallel processing to speed downloading up, powered
+by the capable \code{{mirai}} package. If users have any \code{{mirai}} "daemons"
+set, these functions will download files in parallel. The greatest benefits
+will be seen if you spawn as many daemons as you have cores on your
+machine, although one fewer than the available cores is often a good rule
+of thumb. Your mileage may vary, however, and naturally spawning more
+daemons than station-year combinations will lead to diminishing returns.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# set workers - once per session
+mirai::daemons(4)
+
+# import lots of data - NB: no change in the import function!
+big_met <- import_ghcn_hourly(code = "UKI0000EGLL", year = 2010:2025)
+}\if{html}{\out{</div>}}
 }
 
 \seealso{

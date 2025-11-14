@@ -95,7 +95,10 @@ obtained using <code><a href="import_ghcn_stations.html">import_ghcn_stations()<
 
 <dt id="arg-year">year<a class="anchor" aria-label="anchor" href="#arg-year"></a></dt>
 <dd><p>One or more years of interest. If <code>NULL</code>, the default, all years
-of data available for the chosen <code>station</code>s will be imported.</p></dd>
+of data available for the chosen <code>station</code>s will be imported. Note that, in
+the GHCNd and GHCNm, files are split by station but not year, so setting a
+<code>year</code> will not speed up the download. Specifying fewer years will improve
+the speed of a GHCNh download, however.</p></dd>
 
 
 <dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
@@ -114,7 +117,7 @@ as an additional dependency. Note that this only applies when <code>year</code> 
 <dt id="arg-extra">extra<a class="anchor" aria-label="anchor" href="#arg-extra"></a></dt>
 <dd><p>Should additional columns be returned? The default, <code>FALSE</code>,
 returns an opinionated selection of elements that'll be of most interest to
-most users. <code>TRUE</code> will return everything available from the GHCNh.</p></dd>
+most users. <code>TRUE</code> will return everything available.</p></dd>
 
 
 <dt id="arg-abbr-names">abbr_names<a class="anchor" aria-label="anchor" href="#arg-abbr-names"></a></dt>
@@ -124,8 +127,8 @@ default, columns like <code>"wind_direction"</code> are shortened to <code>"wd"<
 
 
 <dt id="arg-append-codes">append_codes<a class="anchor" aria-label="anchor" href="#arg-append-codes"></a></dt>
-<dd><p>Logical. Should various codes (e.g., measurement coeds,
-qualiy codes, etc.) be appended to the output dataframe?</p></dd>
+<dd><p>Logical. Should various codes and flags be appended to
+the output dataframe?</p></dd>
 
 
 <dt id="arg-codes">codes<a class="anchor" aria-label="anchor" href="#arg-codes"></a></dt>
@@ -144,6 +147,35 @@ Defaults to <code>TRUE</code> in interactive R sessions. Passed to <code>.progre
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a <a href="https://tibble.tidyverse.org/reference/tibble-package.html" class="external-link">tibble</a></p>
     </div>
+    <div class="section level2">
+    <h2 id="data-definition">Data Definition<a class="anchor" aria-label="anchor" href="#data-definition"></a></h2>
+
+
+
+<p>The following core elements are in the GHCNh:</p><ul><li><p><strong>wind_direction:</strong> (<code>wd</code>) Wind direction from true north (degrees). 360 = north, 180 = south, 270 = west; 000 indicates calm winds.</p></li>
+<li><p><strong>wind_speed:</strong> (<code>ws</code>) Average wind speed (m/s).</p></li>
+<li><p><strong>temperature:</strong> (<code>air_temp</code>) Air (dry bulb) temperature at approximately 2 meters above ground level, in degrees Celsius (to tenths).</p></li>
+<li><p><strong>station_level_pressure:</strong> (<code>atmos_pres</code>) Pressure observed at station elevation; true barometric pressure at the location (hPa).</p></li>
+<li><p><strong>visibility:</strong> (<code>visibility</code>) Horizontal visibility distance (km).</p></li>
+<li><p><strong>dew_point_temperature:</strong> (<code>dew_point</code>) Dew point temperature in degrees Celsius (to tenths).</p></li>
+<li><p><strong>relative_humidity:</strong> (<code>rh</code>) Relative humidity in whole percent, measured or calculated from temperature and dew point.</p></li>
+<li><p><strong>sky_cover:</strong> (<code>cl</code>) Maximum of all <strong>sky_cover_X</strong> elements (oktas).</p></li>
+<li><p><strong>sky_cover_baseht:</strong> (<code>cl_baseht</code>) The height above ground level (AGL) of the lowest cloud or obscuring phenomena layer aloft with 5/8 or more summation total sky cover, which may be predominantly opaque, or the vertical visibility into a surface-based obstruction.</p></li>
+<li><p><strong>sky_cover_X:</strong> (<code>cl_X</code>) Fraction of sky covered by clouds (oktas). Up to 3 layers reported.</p></li>
+<li><p><strong>sky_cover_baseht_X:</strong> (<code>cl_baseht_X</code>) Cloud base height for lowest layer (m). Up to 3 layers reported.</p></li>
+<li><p><strong>precipitation:</strong> (<code>precip</code>) Total liquid precipitation (rain or melted snow) for the hour (mm). "T" indicates trace amounts.</p></li>
+<li><p><strong>precipitation_XX_hour:</strong> (<code>precip_XX</code>) 3-hour total liquid precipitation (mm). "T" indicates trace amounts.</p></li>
+</ul><p>When <code>extra = TRUE</code>, the following additional columns are included:</p><ul><li><p><strong>sea_level_pressure:</strong> (<code>sea_pres</code>) Estimated pressure at sea level directly below the station using actual temperature profile (hPa).</p></li>
+<li><p><strong>wind_gust:</strong> (<code>wg</code>) Peak short-duration wind speed (m/s) exceeding the average wind speed.</p></li>
+<li><p><strong>wet_bulb_temperature:</strong> (<code>wet_bulb</code>) Wet bulb temperature in degrees Celsius (to tenths), measured or calculated from temperature, dew point, and station pressure.</p></li>
+<li><p><strong>snow_depth:</strong> (<code>snow_depth</code>) Depth of snowpack on the ground (mm).</p></li>
+<li><p><strong>altimeter:</strong> (<code>altimeter</code>) Pressure reduced to mean sea level using standard atmosphere profile (hPa).</p></li>
+<li><p><strong>pressure_3hr_change:</strong> (<code>pres_03</code>) Change in atmospheric pressure over a 3-hour period (hPa), with tendency code.</p></li>
+</ul><p>If <code>hourly = FALSE</code>, the following character columns may also be present.</p><ul><li><p><strong>pres_wx_MWX:</strong> (<code>wx_mwX</code>) Present weather observation from manual reports (code). Up to 3 observations per report.</p></li>
+<li><p><strong>pres_wx_AUX:</strong> (<code>wx_auX</code>) Present weather observation from automated ASOS/AWOS sensors (code). Up to 3 observations per report.</p></li>
+<li><p><strong>pres_wx_AWX:</strong> (<code>wx_aqX</code>) Present weather observation from automated sensors (code). Up to 3 observations per report.</p></li>
+<li><p><strong>remarks:</strong> (<code>remarks</code>) Raw observation remarks encoded in ICAO-standard METAR/SYNOP format.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other GHCN functions:

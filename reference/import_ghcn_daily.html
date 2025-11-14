@@ -66,7 +66,11 @@ returned with the data.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">import_ghcn_daily</span><span class="op">(</span></span>
 <span>  <span class="va">station</span>,</span>
+<span>  year <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"csv"</span><span class="op">)</span>,</span>
+<span>  extra <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  append_codes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  codes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"measurement_flag"</span>, <span class="st">"quality_flag"</span>, <span class="st">"source_flag"</span><span class="op">)</span>,</span>
 <span>  progress <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/is_interactive.html" class="external-link">is_interactive</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -80,9 +84,34 @@ returned with the data.</p>
 obtained using <code><a href="import_ghcn_stations.html">import_ghcn_stations()</a></code>.</p></dd>
 
 
+<dt id="arg-year">year<a class="anchor" aria-label="anchor" href="#arg-year"></a></dt>
+<dd><p>One or more years of interest. If <code>NULL</code>, the default, all years
+of data available for the chosen <code>station</code>s will be imported. Note that, in
+the GHCNd and GHCNm, files are split by station but not year, so setting a
+<code>year</code> will not speed up the download. Specifying fewer years will improve
+the speed of a GHCNh download, however.</p></dd>
+
+
+<dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
+<dd><p>The data format for the GHCNd. Currently only <code>"csv"</code> is
+supported. This argument is included for future use.</p></dd>
+
+
+<dt id="arg-extra">extra<a class="anchor" aria-label="anchor" href="#arg-extra"></a></dt>
+<dd><p>Should additional columns be returned? The default, <code>FALSE</code>,
+returns an opinionated selection of elements that'll be of most interest to
+most users. <code>TRUE</code> will return everything available.</p></dd>
+
+
 <dt id="arg-append-codes">append_codes<a class="anchor" aria-label="anchor" href="#arg-append-codes"></a></dt>
-<dd><p>Logical. Should attribute codes be appended to the output
-dataframe?</p></dd>
+<dd><p>Logical. Should various codes and flags be appended to
+the output dataframe?</p></dd>
+
+
+<dt id="arg-codes">codes<a class="anchor" aria-label="anchor" href="#arg-codes"></a></dt>
+<dd><p>When <code>append_codes</code> is <code>TRUE</code>, which codes should be appended to
+the dataframe? Any combination of <code>"measurement_flag"</code>, <code>"quality_flag"</code>,
+and/or <code>"source_flag"</code>.</p></dd>
 
 
 <dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>
@@ -95,6 +124,102 @@ Defaults to <code>TRUE</code> in interactive R sessions. Passed to <code>.progre
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a <a href="https://tibble.tidyverse.org/reference/tibble-package.html" class="external-link">tibble</a></p>
     </div>
+    <div class="section level2">
+    <h2 id="data-definition">Data Definition<a class="anchor" aria-label="anchor" href="#data-definition"></a></h2>
+
+
+
+<p>The core elements in the GHCNd are:</p><ul><li><p><strong>PRCP</strong>: Precipitation (mm)</p></li>
+<li><p><strong>SNOW</strong>: Snowfall (mm)</p></li>
+<li><p><strong>SNWD</strong>: Snow depth (mm)</p></li>
+<li><p><strong>TMAX</strong>: Maximum temperature (degrees C)</p></li>
+<li><p><strong>TMIN</strong>: Minimum temperature (degrees C)</p></li>
+</ul><p>Other elements which may appear are:</p><ul><li><p><strong>ACMC</strong>: Average cloudiness midnight to midnight from 30-second ceilometer data (percent)</p></li>
+<li><p><strong>ACMH</strong>: Average cloudiness midnight to midnight from manual observations (percent)</p></li>
+<li><p><strong>ACSC</strong>: Average cloudiness sunrise to sunset from 30-second ceilometer data (percent)</p></li>
+<li><p><strong>ACSH</strong>: Average cloudiness sunrise to sunset from manual observations (percent)</p></li>
+<li><p><strong>ADPT</strong>: Average Dew Point Temperature for the day (degrees C)</p></li>
+<li><p><strong>ASLP</strong>: Average Sea Level Pressure for the day (hPa)</p></li>
+<li><p><strong>ASTP</strong>: Average Station Level Pressure for the day (hPa)</p></li>
+<li><p><strong>AWBT</strong>: Average Wet Bulb Temperature for the day (degrees C)</p></li>
+<li><p><strong>AWDR</strong>: Average daily wind direction (degrees)</p></li>
+<li><p><strong>AWND</strong>: Average daily wind speed (meters per second)</p></li>
+<li><p><strong>DAEV</strong>: Number of days included in the multiday evaporation total (MDEV)</p></li>
+<li><p><strong>DAPR</strong>: Number of days included in the multiday precipitation total (MDPR)</p></li>
+<li><p><strong>DASF</strong>: Number of days included in the multiday snowfall total (MDSF)</p></li>
+<li><p><strong>DATN</strong>: Number of days included in the multiday minimum temperature (MDTN)</p></li>
+<li><p><strong>DATX</strong>: Number of days included in the multiday maximum temperature (MDTX)</p></li>
+<li><p><strong>DAWM</strong>: Number of days included in the multiday wind movement (MDWM)</p></li>
+<li><p><strong>DWPR</strong>: Number of days with non-zero precipitation included in multiday precipitation total (MDPR)</p></li>
+<li><p><strong>EVAP</strong>: Evaporation of water from evaporation pan (mm)</p></li>
+<li><p><strong>FMTM</strong>: Time of fastest mile or fastest 1-minute wind (hours and minutes, i.e., HHMM)</p></li>
+<li><p><strong>FRGB</strong>: Base of frozen ground layer (cm)</p></li>
+<li><p><strong>FRGT</strong>: Top of frozen ground layer (cm)</p></li>
+<li><p><strong>FRTH</strong>: Thickness of frozen ground layer (cm)</p></li>
+<li><p><strong>GAHT</strong>: Difference between river and gauge height (cm)</p></li>
+<li><p><strong>MDEV</strong>: Multiday evaporation total (mm; use with <strong>DAEV</strong>)</p></li>
+<li><p><strong>MDPR</strong>: Multiday precipitation total (mm; use with <strong>DAPR</strong> and <strong>DWPR</strong>, if available)</p></li>
+<li><p><strong>MDSF</strong>: Multiday snowfall total</p></li>
+<li><p><strong>MDTN</strong>: Multiday minimum temperature (degrees C; use with <strong>DATN</strong>)</p></li>
+<li><p><strong>MDTX</strong>: Multiday maximum temperature (degrees C; use with <strong>DATX</strong>)</p></li>
+<li><p><strong>MDWM</strong>: Multiday wind movement (km)</p></li>
+<li><p><strong>MNPN</strong>: Daily minimum temperature of water in an evaporation pan (degrees C)</p></li>
+<li><p><strong>MXPN</strong>: Daily maximum temperature of water in an evaporation pan (degrees C)</p></li>
+<li><p><strong>PGTM</strong>: Peak gust time (hours and minutes, i.e., HHMM)</p></li>
+<li><p><strong>PSUN</strong>: Daily percent of possible sunshine (percent)</p></li>
+<li><p><strong>RHAV</strong>: Average relative humidity for the day (percent)</p></li>
+<li><p><strong>RHMN</strong>: Minimum relative humidity for the day (percent)</p></li>
+<li><p><strong>RHMX</strong>: Maximum relative humidity for the day (percent)</p></li>
+<li><p><strong>SN$#</strong>: Minimum soil temperature (degrees C) where $ corresponds to a code for ground cover and # corresponds to a code for soil depth. Ground cover codes: 0=unknown, 1=grass, 2=fallow, 3=bare ground, 4=brome grass, 5=sod, 6=straw mulch, 7=grass muck, 8=bare muck. Depth codes: 1=5cm, 2=10cm, 3=20cm, 4=50cm, 5=100cm, 6=150cm, 7=180cm</p></li>
+<li><p><strong>SX$#</strong>: Maximum soil temperature (degrees C) where $ corresponds to a code for ground cover and # corresponds to a code for soil depth. See <strong>SN$#</strong> for ground cover and depth codes</p></li>
+<li><p><strong>TAXN</strong>: Average daily temperature computed as <code>(TMAX+TMIN)/2.0</code> (degrees C)</p></li>
+<li><p><strong>TAVG</strong>: Average daily temperature (degrees C). Note that TAVG from source 'S' corresponds to an average of hourly readings for the period ending at 2400 UTC rather than local midnight or other Local Standard Time according to a specific Met Service's protocol. For sources other than 'S' TAVG is computed in a variety of ways including traditional fixed hours of the day whereas TAXN is solely computed as (TMAX+TMIN)/2.0</p></li>
+<li><p><strong>THIC</strong>: Thickness of ice on water (mm)</p></li>
+<li><p><strong>TOBS</strong>: Temperature at the time of observation (degrees C)</p></li>
+<li><p><strong>TSUN</strong>: Daily total sunshine (minutes)</p></li>
+<li><p><strong>WDF1</strong>: Direction of fastest 1-minute wind (degrees)</p></li>
+<li><p><strong>WDF2</strong>: Direction of fastest 2-minute wind (degrees)</p></li>
+<li><p><strong>WDF5</strong>: Direction of fastest 5-second wind (degrees)</p></li>
+<li><p><strong>WDFG</strong>: Direction of peak wind gust (degrees)</p></li>
+<li><p><strong>WDFI</strong>: Direction of highest instantaneous wind (degrees)</p></li>
+<li><p><strong>WDFM</strong>: Fastest mile wind direction (degrees)</p></li>
+<li><p><strong>WDMV</strong>: 24-hour wind movement (km)</p></li>
+<li><p><strong>WESD</strong>: Water equivalent of snow on the ground (mm)</p></li>
+<li><p><strong>WESF</strong>: Water equivalent of snowfall (mm)</p></li>
+<li><p><strong>WSF1</strong>: Fastest 1-minute wind speed (meters per second)</p></li>
+<li><p><strong>WSF2</strong>: Fastest 2-minute wind speed (meters per second)</p></li>
+<li><p><strong>WSF5</strong>: Fastest 5-second wind speed (meters per second)</p></li>
+<li><p><strong>WSFG</strong>: Peak gust wind speed (meters per second)</p></li>
+<li><p><strong>WSFI</strong>: Highest instantaneous wind speed (meters per second)</p></li>
+<li><p><strong>WSFM</strong>: Fastest mile wind speed (meters per second)</p></li>
+</ul><p>There can be any number of weather types (<strong>WT$$</strong>)</p><ul><li><p><strong>WT01</strong>: Fog, ice fog, or freezing fog (may include heavy fog)</p></li>
+<li><p><strong>WT02</strong>: Heavy fog or heaving freezing fog (not always distinguished from fog)</p></li>
+<li><p><strong>WT03</strong>: Thunder</p></li>
+<li><p><strong>WT04</strong>: Ice pellets, sleet, snow pellets, or small hail</p></li>
+<li><p><strong>WT05</strong>: Hail (may include small hail)</p></li>
+<li><p><strong>WT06</strong>: Glaze or rime</p></li>
+<li><p><strong>WT07</strong>: Dust, volcanic ash, blowing dust, blowing sand, or blowing obstruction</p></li>
+<li><p><strong>WT08</strong>: Smoke or haze</p></li>
+<li><p><strong>WT09</strong>: Blowing or drifting snow</p></li>
+<li><p><strong>WT10</strong>: Tornado, waterspout, or funnel cloud</p></li>
+<li><p><strong>WT11</strong>: High or damaging winds</p></li>
+<li><p><strong>WT12</strong>: Blowing spray</p></li>
+<li><p><strong>WT13</strong>: Mist</p></li>
+<li><p><strong>WT14</strong>: Drizzle</p></li>
+<li><p><strong>WT15</strong>: Freezing drizzle</p></li>
+<li><p><strong>WT16</strong>: Rain (may include freezing rain, drizzle, and freezing drizzle)</p></li>
+<li><p><strong>WT17</strong>: Freezing rain</p></li>
+<li><p><strong>WT18</strong>: Snow, snow pellets, snow grains, or ice crystals</p></li>
+<li><p><strong>WT19</strong>: Unknown source of precipitation</p></li>
+<li><p><strong>WT21</strong>: Ground fog</p></li>
+<li><p><strong>WT22</strong>: Ice fog or freezing fog</p></li>
+</ul><p>There can also be any number of 'weather in the vicinity' columns
+(<strong>WV$$</strong>)</p><ul><li><p><strong>WV01</strong>: Fog, ice fog, or freezing fog (may include heavy fog)</p></li>
+<li><p><strong>WV03</strong>: Thunder</p></li>
+<li><p><strong>WV07</strong>: Ash, dust, sand, or other blowing obstruction</p></li>
+<li><p><strong>WV18</strong>: Snow or ice crystals</p></li>
+<li><p><strong>WV20</strong>: Rain or snow shower</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other GHCN functions:

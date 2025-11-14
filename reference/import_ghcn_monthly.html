@@ -77,6 +77,7 @@ minutes to run.</p>
 <span></span>
 <span><span class="fu">import_ghcn_monthly_prcp</span><span class="op">(</span></span>
 <span>  station <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  year <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  table <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"inventory"</span>, <span class="st">"data"</span><span class="op">)</span>,</span>
 <span>  progress <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/is_interactive.html" class="external-link">is_interactive</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -106,6 +107,14 @@ help maximize station coverage when calculating normals.</p></li>
 <dt id="arg-station">station<a class="anchor" aria-label="anchor" href="#arg-station"></a></dt>
 <dd><p>For <code>import_ghcn_monthly_prcp()</code>. The specific stations to
 import monthly precipitation data for.</p></dd>
+
+
+<dt id="arg-year">year<a class="anchor" aria-label="anchor" href="#arg-year"></a></dt>
+<dd><p>One or more years of interest. If <code>NULL</code>, the default, all years
+of data available for the chosen <code>station</code>s will be imported. Note that, in
+the GHCNd and GHCNm, files are split by station but not year, so setting a
+<code>year</code> will not speed up the download. Specifying fewer years will improve
+the speed of a GHCNh download, however.</p></dd>
 
 
 <dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>

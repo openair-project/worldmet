@@ -16,6 +16,7 @@ import_ghcn_monthly_temp(
 
 import_ghcn_monthly_prcp(
   station = NULL,
+  year = NULL,
   table = c("inventory", "data"),
   progress = rlang::is_interactive()
 )
@@ -47,6 +48,14 @@ import_ghcn_monthly_prcp(
 
   For `import_ghcn_monthly_prcp()`. The specific stations to import
   monthly precipitation data for.
+
+- year:
+
+  One or more years of interest. If `NULL`, the default, all years of
+  data available for the chosen `station`s will be imported. Note that,
+  in the GHCNd and GHCNm, files are split by station but not year, so
+  setting a `year` will not speed up the download. Specifying fewer
+  years will improve the speed of a GHCNh download, however.
 
 - progress:
 

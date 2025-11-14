@@ -4,7 +4,7 @@ This function is a convenient way to access the monthly summaries of the
 GHCN. Monthly average temperature is available via
 `import_ghcn_monthly_temp()` and monthly precipitation via
 `import_ghcn_monthly_prcp()`. Note that these functions can take a few
-minutes to run.
+minutes to run, and parallelism is only enabled for precipitation data.
 
 ## Usage
 
@@ -68,6 +68,27 @@ import_ghcn_monthly_prcp(
 
 a list of
 [tibbles](https://tibble.tidyverse.org/reference/tibble-package.html)
+
+## Parallel Processing
+
+If you are importing a lot of meteorological data, this can take a long
+while. This is because each combination of year and station requires
+downloading a separate data file from NOAA's online data directory, and
+the time each download takes can quickly add up. Many data import
+functions in `{worldmet}` can use parallel processing to speed
+downloading up, powered by the capable `{mirai}` package. If users have
+any `{mirai}` "daemons" set, these functions will download files in
+parallel. The greatest benefits will be seen if you spawn as many
+daemons as you have cores on your machine, although one fewer than the
+available cores is often a good rule of thumb. Your mileage may vary,
+however, and naturally spawning more daemons than station-year
+combinations will lead to diminishing returns.
+
+    # set workers - once per session
+    mirai::daemons(4)
+
+    # import lots of data - NB: no change in the import function!
+    big_met <- import_ghcn_hourly(code = "UKI0000EGLL", year = 2010:2025)
 
 ## See also
 

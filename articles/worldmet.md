@@ -92,9 +92,22 @@ openair::windRose(met_london)
 
 ![](worldmet_files/figure-html/windrose-1.png)
 
-## Other Data Types
+## Data Types
 
-Also available in `worldmet` are:
+`worldmet` can access data from the newer Global Historic Climate
+Network (GHCN) and the legacy Integrated Surface Database (ISD). The ISD
+can be accessed using:
+
+- [`import_isd_stations()`](https://openair-project.github.io/worldmet/reference/import_isd_stations.md)
+  to obtain metadata, and
+
+- [`import_isd_hourly()`](https://openair-project.github.io/worldmet/reference/import_isd_hourly.md)
+  and
+  [`import_isd_lite()`](https://openair-project.github.io/worldmet/reference/import_isd_lite.md)
+  to obtain measurement data.
+
+The GHCN contains other products outside of hourly data. Also available
+in `worldmet` are:
 
 - [`import_ghcn_daily()`](https://openair-project.github.io/worldmet/reference/import_ghcn_daily.md),
   which imports daily average data. Users may select specific stations,
@@ -106,27 +119,53 @@ Also available in `worldmet` are:
 - [`import_ghcn_monthly_prcp()`](https://openair-project.github.io/worldmet/reference/import_ghcn_monthly.md),
   which imports monthly total precipitation for specific stations.
 
-Outside of the GHCN, `worldmet` gives access to the historic Integrated
-Surface Database (ISD), with functions:
+## Parallel Processing
 
-- [`import_isd_stations()`](https://openair-project.github.io/worldmet/reference/import_isd_stations.md)
-  to obtain metadata, and
+If you are importing a lot of meteorological data, this can take a long
+while. This is because each combination of year and station (for hourly
+data) requires downloading a separate data file from NOAA’s online data
+directory, and the time each download takes can quickly add up. Many
+functions in `worldmet` can use parallel processing to speed downloading
+up, powered by the capable [mirai](https://mirai.r-lib.org) package. If
+users have any [mirai](https://mirai.r-lib.org) “daemons” set, certain
+files will be downloaded in parallel. The greatest benefits will be seen
+if you spawn as many daemons as you have cores on your machine, although
+one fewer than the available cores is often a good rule of thumb. Your
+mileage may vary, however, and naturally spawning more daemons than
+station-year combinations will lead to diminishing returns.
+
+``` r
+# set workers - once per session
+mirai::daemons(4)
+
+# import lots of data - NB: no change in import_ghcn_hourly()!
+big_met <- import_ghcn_hourly(code = "UKI0000EGLL", year = 2010:2025)
+```
+
+The following functions support [mirai](https://mirai.r-lib.org)-powered
+parallelism.
+
+- [`import_ghcn_hourly()`](https://openair-project.github.io/worldmet/reference/import_ghcn_hourly.md)
+
+- [`import_ghcn_daily()`](https://openair-project.github.io/worldmet/reference/import_ghcn_daily.md)
+
+- [`import_ghcn_monthly_prcp()`](https://openair-project.github.io/worldmet/reference/import_ghcn_monthly.md)
+  (but **not**
+  [`import_ghcn_monthly_temp()`](https://openair-project.github.io/worldmet/reference/import_ghcn_monthly.md))
 
 - [`import_isd_hourly()`](https://openair-project.github.io/worldmet/reference/import_isd_hourly.md)
-  and
-  [`import_isd_lite()`](https://openair-project.github.io/worldmet/reference/import_isd_lite.md)
-  to obtain measurement data.
 
-## Writing Data
+- [`import_isd_lite()`](https://openair-project.github.io/worldmet/reference/import_isd_lite.md)
 
-Two functions are made available for writing out the imported data for
-other uses.
-
-- [`write_met()`](https://openair-project.github.io/worldmet/reference/write_met.md)
-  will write short-term data imported from the GHCN or ISD as individual
-  files (either delimited, RDS, or parquet files) split by the year and
-  monitoring station.
-
-- [`write_adms()`](https://openair-project.github.io/worldmet/reference/write_adms.md)
-  will write out (at present) ISD data in a format compatible with the
-  Atmospheric Dispersion Modelling System (ADMS).
+> Historically, parallelism in
+> [worldmet](https://openair-project.github.io/worldmet/) was achieved
+> with [doParallel](https://github.com/RevolutionAnalytics/doparallel),
+> [foreach](https://github.com/RevolutionAnalytics/foreach) and
+> `{parallel}` and was activated using the `n.cores` argument of the
+> legacy
+> [`importNOAA()`](https://openair-project.github.io/worldmet/reference/deprecated-isd.md)
+> function. While this will still work, it is recommended users set
+> their own daemons before using
+> [`importNOAA()`](https://openair-project.github.io/worldmet/reference/deprecated-isd.md).
+> This should avoid any issues with mistakenly spawning too many
+> daemons, or accidentally spawning daemons within other daemons.

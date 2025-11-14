@@ -22,7 +22,10 @@ import_ghcn_hourly(
 obtained using \code{\link[=import_ghcn_stations]{import_ghcn_stations()}}.}
 
 \item{year}{One or more years of interest. If \code{NULL}, the default, all years
-of data available for the chosen \code{station}s will be imported.}
+of data available for the chosen \code{station}s will be imported. Note that, in
+the GHCNd and GHCNm, files are split by station but not year, so setting a
+\code{year} will not speed up the download. Specifying fewer years will improve
+the speed of a GHCNh download, however.}
 
 \item{source}{There are two identical data formats to read from - \code{"psv"}
 (flat, pipe-delimited files) and \code{"parquet"} (a newer, faster, columnar

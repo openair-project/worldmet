@@ -64,7 +64,10 @@
 #'   obtained using [import_ghcn_stations()].
 #'
 #' @param year One or more years of interest. If `NULL`, the default, all years
-#'   of data available for the chosen `station`s will be imported.
+#'   of data available for the chosen `station`s will be imported. Note that, in
+#'   the GHCNd and GHCNm, files are split by station but not year, so setting a
+#'   `year` will not speed up the download. Specifying fewer years will improve
+#'   the speed of a GHCNh download, however.
 #'
 #' @param source There are two identical data formats to read from - `"psv"`
 #'   (flat, pipe-delimited files) and `"parquet"` (a newer, faster, columnar

@@ -6,7 +6,7 @@
 #' [import_ghcn_monthly_prcp()]. Note that these functions can take a few
 #' minutes to run.
 #'
-#' @inheritParams import_ghcn_daily
+#' @inheritParams import_ghcn_hourly
 #'
 #' @param table Either `"inventory"`, `"data"`, or both. The tables to read and
 #'   return in the output list.

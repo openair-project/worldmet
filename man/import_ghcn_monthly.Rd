@@ -39,7 +39,8 @@ import monthly precipitation data for.}
 \item{year}{One or more years of interest. If \code{NULL}, the default, all years
 of data available for the chosen \code{station}s will be imported. Note that, in
 the GHCNd and GHCNm, files are split by station but not year, so setting a
-\code{year} will not speed up the download.}
+\code{year} will not speed up the download. Specifying fewer years will improve
+the speed of a GHCNh download, however.}
 
 \item{progress}{For \code{\link[=import_ghcn_monthly_prcp]{import_ghcn_monthly_prcp()}}. Show a progress bar when
 importing many stations? Defaults to \code{TRUE} in interactive R sessions.

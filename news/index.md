@@ -75,6 +75,11 @@ Several functions have been deprecated and replaced due to the updated
 - the `path` argument -\>
   [`write_met()`](https://openair-project.github.io/worldmet/reference/write_met.md)
 
+### Fixes
+
+- `rlang::%||%` is now explicitly imported by `worldmet` to avoid issues
+  in old version of R.
+
 ## worldmet 0.10.2
 
 CRAN release: 2025-11-07

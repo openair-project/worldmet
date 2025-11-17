@@ -57,6 +57,7 @@
 <h3 id="dependency-changes-development-version">Dependency Changes<a class="anchor" aria-label="anchor" href="#dependency-changes-development-version"></a></h3>
 <ul><li><p><code>arrow</code> has been added as a suggested dependency.</p></li>
 <li><p><code>leaflet</code> has been downgraded to a suggested dependency. When a user requests a met station map they will be prompted to install <code>leaflet</code> if it is not already installed.</p></li>
+<li><p><code>mirai</code> and <code>carrier</code> have been upgrade to imported dependencies. This is because they are always required by <code><a href="https://purrr.tidyverse.org/reference/in_parallel.html" class="external-link">purrr::in_parallel()</a></code> regardless of whether parallelisation is being used or not.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>

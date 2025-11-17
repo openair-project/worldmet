@@ -10,6 +10,11 @@
   requests a met station map they will be prompted to install `leaflet`
   if it is not already installed.
 
+- `mirai` and `carrier` have been upgrade to imported dependencies. This
+  is because they are always required by
+  [`purrr::in_parallel()`](https://purrr.tidyverse.org/reference/in_parallel.html)
+  regardless of whether parallelisation is being used or not.
+
 ### New Features
 
 The Global Historical Climate Network (GHCN) has officially superseded

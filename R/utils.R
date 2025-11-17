@@ -94,8 +94,7 @@ worldmet_time_average <- function(
       mydata |>
       dplyr::mutate(
         wd = as.vector(atan2(.data$Uu, .data$Vv) * 360 / 2 / pi),
-        wd = ifelse(.data$wd < 0, .data$wd + 360, .data$wd),
-        ws = (.data$Uu^2 + .data$Vv^2)^0.5
+        wd = ifelse(.data$wd < 0, .data$wd + 360, .data$wd)
       ) |>
       dplyr::select(-dplyr::any_of(c("Uu", "Vv")))
   }

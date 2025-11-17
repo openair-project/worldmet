@@ -142,8 +142,13 @@ import_ghcn_hourly <-
     ),
     progress = rlang::is_interactive()
   ) {
+    # check source option
     source <- rlang::arg_match(source, c("psv", "parquet"), multiple = FALSE)
+    if (source == "parquet") {
+      rlang::check_installed("arrow")
+    }
 
+    # check codes
     potential_codes <- c(
       "measurement_code",
       "quality_code",
@@ -155,7 +160,7 @@ import_ghcn_hourly <-
 
     # (temporary?) issue with parquet files not having ids/lats/longs - need to
     # have meta to sort that out
-    meta <- import_ghcn_stations(database = "hourly")
+    meta <- import_ghcn_stations(database = "hourly", return = "table")
 
     # iterate - need two strategies: one for year=NULL, one for station&year
     if (is.null(year)) {
@@ -332,7 +337,12 @@ import_single_ghcn_site <- function(
 
     data <- try(
       suppressWarnings(
-        readr::read_delim(url, delim = "|", progress = FALSE)
+        readr::read_delim(
+          url,
+          delim = "|",
+          progress = FALSE,
+          show_col_types = FALSE
+        )
       ),
       silent = TRUE
     )
@@ -389,8 +399,6 @@ import_single_ghcn_site <- function(
 
       data <- dplyr::rename(data, station_id = "station")
     } else if (source == "parquet") {
-      rlang::check_installed("arrow")
-
       data <- try(
         suppressWarnings(
           arrow::read_parquet(url)
@@ -411,168 +419,161 @@ import_single_ghcn_site <- function(
             tz = "UTC"
           )
         )
-
-      data <-
-        data |>
-        dplyr::select(-"station_id", -"longitude", -"latitude") |>
-        dplyr::left_join(
-          dplyr::filter(meta, .data$name %in% data$station_name) |>
-            dplyr::transmute(
-              station_name = .data$name,
-              station_id = .data$id,
-              latitude = .data$lat,
-              longitude = .data$lng
-            ),
-          by = dplyr::join_by("station_name")
-        ) |>
-        dplyr::relocate("station_id", .before = 0) |>
-        dplyr::relocate("latitude", "longitude", .after = "date")
     }
+  }
 
-    # missing wind directions
-    if ("wind_direction" %in% names(data)) {
-      data$wind_direction <- ifelse(
-        data$wind_direction == 999,
-        NA,
-        data$wind_direction
-      )
-    }
+  # missing wind directions
+  if ("wind_direction" %in% names(data)) {
+    data$wind_direction <- ifelse(
+      data$wind_direction == 999,
+      NA,
+      data$wind_direction
+    )
+  }
 
-    # coalesce sky covers
-    if ("sky_cover_1" %in% names(data)) {
-      data <- data |>
-        # split the code name away from the okta
-        tidyr::separate_wider_delim(
-          cols = dplyr::matches("sky_cover_[123456789]\\b"),
-          delim = ":",
-          names_sep = "",
-          names = c("code", ""),
-          too_few = "align_start"
-        ) |>
-        # drop the code
-        dplyr::select(
-          -dplyr::matches("sky_cover_[123456789]code")
-        ) |>
-        # coerce okta to numeric
-        dplyr::mutate(
-          dplyr::across(
-            dplyr::matches("sky_cover_[123456789]\\b"),
-            as.numeric
-          )
-        )
-
-      # get pmax of sky cover columns - for ADMS
-      data$sky_cover <- pmax(
-        data$sky_cover_1,
-        data$sky_cover_2,
-        data$sky_cover_3,
-        na.rm = TRUE
-      )
-
-      # get ceiling height
-      data <-
-        dplyr::mutate(
-          data,
-          sky_cover_baseht = dplyr::case_when(
-            .data$sky_cover_1 >= 5 ~ .data$sky_cover_baseht_1,
-            .data$sky_cover_2 >= 5 ~ .data$sky_cover_baseht_2,
-            .data$sky_cover_3 >= 5 ~ .data$sky_cover_baseht_3,
-            .default = NA
-          )
-        )
-
-      # move columns
-      data <-
-        dplyr::relocate(
-          data,
-          "sky_cover",
-          "sky_cover_baseht",
-          .before = "sky_cover_1"
-        )
-    }
-
-    # ensure data type consistency
-    data <-
+  # coalesce sky covers
+  if ("sky_cover_1" %in% names(data)) {
+    data <- data |>
+      # split the code name away from the okta
+      tidyr::separate_wider_delim(
+        cols = dplyr::matches("sky_cover_[123456789]\\b"),
+        delim = ":",
+        names_sep = "",
+        names = c("code", ""),
+        too_few = "align_start"
+      ) |>
+      # drop the code
+      dplyr::select(
+        -dplyr::matches("sky_cover_[123456789]code")
+      ) |>
+      # coerce okta to numeric
       dplyr::mutate(
-        data,
-        # all the "codes" are characters
         dplyr::across(
-          dplyr::ends_with(
-            potential_codes
-          ),
-          as.character
-        ),
-        # these variables are written observations/codes
-        dplyr::across(
-          c(
-            "pres_wx_mw1",
-            "pres_wx_mw2",
-            "pres_wx_mw3",
-            "pres_wx_au1",
-            "pres_wx_au2",
-            "pres_wx_au3",
-            "pres_wx_aw1",
-            "pres_wx_aw2",
-            "pres_wx_aw3",
-            "remarks"
-          ),
-          as.character
-        ),
-        # these variables are all numeric
-        dplyr::across(
-          c(
-            "latitude",
-            "longitude",
-            "elevation",
-            "temperature",
-            "dew_point_temperature",
-            "station_level_pressure",
-            "sea_level_pressure",
-            "wind_direction",
-            "wind_speed",
-            "wind_gust",
-            "precipitation",
-            "relative_humidity",
-            "wet_bulb_temperature",
-            "snow_depth",
-            "visibility",
-            "altimeter",
-            "pressure_3hr_change",
-            "sky_cover_baseht_1",
-            "sky_cover_baseht_2",
-            "sky_cover_baseht_3",
-            "precipitation_3_hour",
-            "precipitation_6_hour",
-            "precipitation_9_hour",
-            "precipitation_12_hour",
-            "precipitation_15_hour",
-            "precipitation_18_hour",
-            "precipitation_21_hour",
-            "precipitation_24_hour"
-          ),
+          dplyr::matches("sky_cover_[123456789]\\b"),
           as.numeric
         )
       )
 
-    # if appending codes, find out which ones we are dropping, else drop
-    # them all
-    if (append_codes) {
-      codes_to_drop <- setdiff(potential_codes, codes)
-    } else {
-      codes_to_drop <- potential_codes
-    }
+    # get pmax of sky cover columns - for ADMS
+    data$sky_cover <- pmax(
+      data$sky_cover_1,
+      data$sky_cover_2,
+      data$sky_cover_3,
+      na.rm = TRUE
+    )
 
-    if (length(codes_to_drop) > 1L) {
-      # sometimes its source_id, sometimes its source_station_id
-      if ("source_id" %in% codes_to_drop) {
-        codes_to_drop <- c(codes_to_drop, "source_station_id")
-      }
-      # drop each type of code
-      for (i in codes_to_drop) {
-        data <- dplyr::select(data, -dplyr::ends_with(i))
-      }
+    # get ceiling height
+    data <-
+      dplyr::mutate(
+        data,
+        sky_cover_baseht = dplyr::case_when(
+          .data$sky_cover_1 >= 5 ~ .data$sky_cover_baseht_1,
+          .data$sky_cover_2 >= 5 ~ .data$sky_cover_baseht_2,
+          .data$sky_cover_3 >= 5 ~ .data$sky_cover_baseht_3,
+          .default = NA
+        )
+      )
+
+    # move columns
+    data <-
+      dplyr::relocate(
+        data,
+        "sky_cover",
+        "sky_cover_baseht",
+        .before = "sky_cover_1"
+      )
+  }
+
+  # ensure data type consistency
+  data <-
+    dplyr::mutate(
+      data,
+      # all the "codes" are characters
+      dplyr::across(
+        dplyr::ends_with(
+          potential_codes
+        ),
+        as.character
+      ),
+      # these variables are written observations/codes
+      dplyr::across(
+        c(
+          "pres_wx_mw1",
+          "pres_wx_mw2",
+          "pres_wx_mw3",
+          "pres_wx_au1",
+          "pres_wx_au2",
+          "pres_wx_au3",
+          "pres_wx_aw1",
+          "pres_wx_aw2",
+          "pres_wx_aw3",
+          "remarks"
+        ),
+        as.character
+      ),
+      # these variables are all numeric
+      dplyr::across(
+        c(
+          "latitude",
+          "longitude",
+          "elevation",
+          "temperature",
+          "dew_point_temperature",
+          "station_level_pressure",
+          "sea_level_pressure",
+          "wind_direction",
+          "wind_speed",
+          "wind_gust",
+          "precipitation",
+          "relative_humidity",
+          "wet_bulb_temperature",
+          "snow_depth",
+          "visibility",
+          "altimeter",
+          "pressure_3hr_change",
+          "sky_cover_baseht_1",
+          "sky_cover_baseht_2",
+          "sky_cover_baseht_3",
+          "precipitation_3_hour",
+          "precipitation_6_hour",
+          "precipitation_9_hour",
+          "precipitation_12_hour",
+          "precipitation_15_hour",
+          "precipitation_18_hour",
+          "precipitation_21_hour",
+          "precipitation_24_hour"
+        ),
+        as.numeric
+      )
+    )
+
+  # if appending codes, find out which ones we are dropping, else drop
+  # them all
+  if (append_codes) {
+    codes_to_drop <- setdiff(potential_codes, codes)
+  } else {
+    codes_to_drop <- potential_codes
+  }
+
+  if (length(codes_to_drop) > 1L) {
+    # sometimes its source_id, sometimes its source_station_id
+    if ("source_id" %in% codes_to_drop) {
+      codes_to_drop <- c(codes_to_drop, "source_station_id")
+    }
+    # drop each type of code
+    for (i in codes_to_drop) {
+      data <- dplyr::select(data, -dplyr::ends_with(i))
     }
   }
 
+  # temporary issue w/ parquet files - no station_id lat/lng
+  data$station_id <- station
+  filtered_meta <- dplyr::filter(meta, id == station)
+  if (nrow(filtered_meta) == 1) {
+    data$latitude <- filtered_meta$lat
+    data$longitude <- filtered_meta$lng
+  }
+
+  # return data
   return(data)
 }

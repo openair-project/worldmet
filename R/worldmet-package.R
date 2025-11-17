@@ -22,6 +22,7 @@
 #' @importFrom carrier crate
 #' @importFrom lifecycle deprecated
 #' @importFrom mirai daemons
+#' @importFrom rlang %||%
 #' @importFrom rlang .data
 #' @importFrom tibble tibble
 ## usethis namespace: end

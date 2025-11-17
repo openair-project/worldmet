@@ -66,22 +66,21 @@ met_london <- import_ghcn_hourly("UKI0000EGLL", year = 2025)
 head(met_london)
 ```
 
-    #> # A tibble: 6 × 44
-    #>   id          station  date                  lat    lng  elev air_temp dew_temp
-    #>   <chr>       <chr>    <dttm>              <dbl>  <dbl> <dbl>    <dbl>    <dbl>
-    #> 1 UKI0000EGLL HEATHROW 2024-01-01 00:00:00  51.5 -0.461  25.3      8.1      5.3
-    #> 2 UKI0000EGLL HEATHROW 2024-01-01 00:20:00  51.5 -0.461  25.3      8        5  
-    #> 3 UKI0000EGLL HEATHROW 2024-01-01 00:50:00  51.5 -0.461  25.3      8        4  
-    #> 4 UKI0000EGLL HEATHROW 2024-01-01 01:00:00  51.5 -0.461  25.3      7.8      4.8
-    #> 5 UKI0000EGLL HEATHROW 2024-01-01 01:20:00  51.5 -0.461  25.3      8        4  
-    #> 6 UKI0000EGLL HEATHROW 2024-01-01 01:50:00  51.5 -0.461  25.3      8        4  
-    #> # ℹ 36 more variables: atmos_pres <dbl>, sea_pres <dbl>, wd <dbl>, ws <dbl>,
-    #> #   wg <dbl>, precip <dbl>, rh <dbl>, wet_bulb <dbl>, wx_mw1 <chr>,
-    #> #   wx_mw2 <chr>, wx_mw3 <chr>, wx_au1 <chr>, wx_au2 <chr>, wx_au3 <chr>,
-    #> #   wx_aw1 <chr>, wx_aw2 <chr>, wx_aw3 <chr>, snow_depth <dbl>,
-    #> #   visibility <dbl>, altimeter <dbl>, pres_03 <dbl>, sc_1 <chr>,
-    #> #   sc_baseht_1 <dbl>, sc_2 <chr>, sc_baseht_2 <dbl>, sc_3 <chr>,
-    #> #   sc_baseht_3 <dbl>, precip_03 <dbl>, precip_06 <dbl>, precip_09 <dbl>, …
+    #> # A tibble: 6 × 30
+    #>   station_id  station_name date                  lat    lng  elev    wd    ws
+    #>   <fct>       <fct>        <dttm>              <dbl>  <dbl> <dbl> <dbl> <dbl>
+    #> 1 UKI0000EGLL HEATHROW     2025-01-01 00:00:00  51.5 -0.461  25.3  233.  11.1
+    #> 2 UKI0000EGLL HEATHROW     2025-01-01 01:00:00  51.5 -0.461  25.3  227.  12.3
+    #> 3 UKI0000EGLL HEATHROW     2025-01-01 02:00:00  51.5 -0.461  25.3  222.  12.1
+    #> 4 UKI0000EGLL HEATHROW     2025-01-01 03:00:00  51.5 -0.461  25.3  220.  11.8
+    #> 5 UKI0000EGLL HEATHROW     2025-01-01 04:00:00  51.5 -0.461  25.3  218.  12.0
+    #> 6 UKI0000EGLL HEATHROW     2025-01-01 05:00:00  51.5 -0.461  25.3  218.  11.8
+    #> # ℹ 22 more variables: air_temp <dbl>, atmos_pres <dbl>, visibility <dbl>,
+    #> #   dew_point <dbl>, rh <dbl>, cl <dbl>, cl_baseht <dbl>, cl_1 <dbl>,
+    #> #   cl_baseht_1 <dbl>, cl_2 <dbl>, cl_baseht_2 <dbl>, cl_3 <dbl>,
+    #> #   cl_baseht_3 <dbl>, precip <dbl>, precip_03 <lgl>, precip_06 <dbl>,
+    #> #   precip_09 <lgl>, precip_12 <dbl>, precip_15 <lgl>, precip_18 <lgl>,
+    #> #   precip_21 <lgl>, precip_24 <dbl>
 
 A wind rose (for example) can easily be plotted using `openair`:
 

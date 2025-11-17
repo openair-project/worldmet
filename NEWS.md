@@ -6,6 +6,8 @@
 
 - `leaflet` has been downgraded to a suggested dependency. When a user requests a met station map they will be prompted to install `leaflet` if it is not already installed.
 
+- `mirai` and `carrier` have been upgrade to imported dependencies. This is because they are always required by `purrr::in_parallel()` regardless of whether parallelisation is being used or not.
+
 ## New Features
 
 The Global Historical Climate Network (GHCN) has officially superseded NOAA's Integrated Surface Database (ISD). Many changes in this release are related to this external change.

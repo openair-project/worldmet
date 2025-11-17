@@ -19,7 +19,9 @@
 #'   related `openair` package.
 "_PACKAGE"
 ## usethis namespace: start
+#' @importFrom carrier crate
 #' @importFrom lifecycle deprecated
+#' @importFrom mirai daemons
 #' @importFrom rlang .data
 #' @importFrom tibble tibble
 ## usethis namespace: end

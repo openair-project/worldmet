@@ -22,9 +22,11 @@ BugReports: https://github.com/openair-project/worldmet/issues
 Depends:
     R (>= 4.1.0)
 Imports:
+    carrier,
     cli,
     dplyr,
     lifecycle,
+    mirai,
     purrr (>= 1.1.0),
     readr,
     rlang,
@@ -34,9 +36,7 @@ Imports:
 Suggests: 
     arrow,
     leaflet,
-    carrier,
     knitr,
-    mirai,
     rmarkdown
 ByteCompile: true
 Config/Needs/website: openair-project/openairpkgdown,openair

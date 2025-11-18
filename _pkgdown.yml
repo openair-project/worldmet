@@ -51,11 +51,10 @@ reference:
   desc: >
     These are broadly helpful when working with meteorological data, such as 
     those accessed via the above import functions.
-- subtitle: Writing & Reading Data
+- subtitle: Writing Data
   contents:
   - write_met
   - write_adms
-  - read_adms
 
 - title: Deprecated Functions
   desc: >

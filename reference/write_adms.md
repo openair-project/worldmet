@@ -1,12 +1,11 @@
 # Export a meteorological data frame in ADMS format
 
 Writes a text file in the ADMS format to a location of the user's
-choosing, with optional interpolation of missing values. At present this
-function only works with data from
-[`import_isd_hourly()`](https://openair-project.github.io/worldmet/reference/import_isd_hourly.md);
-it will later be expanded to work with
+choosing, with optional interpolation of missing values. This function
+works with data from both
 [`import_ghcn_hourly()`](https://openair-project.github.io/worldmet/reference/import_ghcn_hourly.md)
-also.
+and
+[`import_isd_hourly()`](https://openair-project.github.io/worldmet/reference/import_isd_hourly.md).
 
 ## Usage
 
@@ -19,7 +18,11 @@ write_adms(x, file = "./ADMS_met.MET", interp = FALSE, max_gap = 2)
 - x:
 
   A data frame imported by
+  [`import_ghcn_hourly()`](https://openair-project.github.io/worldmet/reference/import_ghcn_hourly.md)
+  or
   [`import_isd_hourly()`](https://openair-project.github.io/worldmet/reference/import_isd_hourly.md).
+  Note that this function only works for hourly GHCN data when
+  `abbr_names = TRUE`.
 
 - file:
 

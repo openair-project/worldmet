@@ -55,7 +55,7 @@ reference:
   contents:
   - write_met
   - write_adms
-  
+
 - title: Deprecated Functions
   desc: >
     These functions are part of an old API for worldmet. We'd recommend using 

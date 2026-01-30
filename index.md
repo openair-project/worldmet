@@ -9,10 +9,9 @@ Historical Climate
 Network](https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly)
 and the [NOAA Integrated Surface
 Database](https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database)
-(ISD). The ISD contains detailed surface meteorological data from around
-the world for over 35,000 locations. See also the
-[map](https://gis.ncdc.noaa.gov/maps/ncei). The package outputs
-(typically hourly meteorological data) work very well with the
+(ISD). The GHCN contains detailed surface meteorological data from
+around the world for over 35,000 locations. The data available through
+the package work very well with the
 [**openair**](https://github.com/openair-project/openair) package.
 
 *Part of the openair toolkit*

@@ -1,4 +1,4 @@
-# worldmet (development version)
+# worldmet 1.0.0
 
 ## Dependency Changes
 

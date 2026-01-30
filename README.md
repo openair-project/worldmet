@@ -19,7 +19,7 @@ status](https://www.r-pkg.org/badges/version/worldmet)](https://CRAN.R-project.o
 
 </div>
 
-**worldmet** provides an easy way to access data from the [NOAA Global Historical Climate Network](https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly) and the [NOAA Integrated Surface Database](https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database) (ISD). The ISD contains detailed surface meteorological data from around the world for over 35,000 locations. See also the [map](https://gis.ncdc.noaa.gov/maps/ncei). The package outputs (typically hourly meteorological data) work very well with the [**openair**](https://github.com/openair-project/openair) package.
+**worldmet** provides an easy way to access data from the [NOAA Global Historical Climate Network](https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly) and the [NOAA Integrated Surface Database](https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database) (ISD). The GHCN contains detailed surface meteorological data from around the world for over 35,000 locations. The data available through the package work very well with the [**openair**](https://github.com/openair-project/openair) package.
 
 <div align="center">
 

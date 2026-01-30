@@ -568,7 +568,7 @@ import_single_ghcn_site <- function(
 
   # temporary issue w/ parquet files - no station_id lat/lng
   data$station_id <- station
-  filtered_meta <- dplyr::filter(meta, id == station)
+  filtered_meta <- dplyr::filter(meta, .data$id == station)
   if (nrow(filtered_meta) == 1) {
     data$latitude <- filtered_meta$lat
     data$longitude <- filtered_meta$lng

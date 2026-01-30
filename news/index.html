@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">worldmet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,15 +52,15 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="worldmet-development-version">worldmet (development version)<a class="anchor" aria-label="anchor" href="#worldmet-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.0.0" id="worldmet-100">worldmet 1.0.0<a class="anchor" aria-label="anchor" href="#worldmet-100"></a></h2>
 <div class="section level3">
-<h3 id="dependency-changes-development-version">Dependency Changes<a class="anchor" aria-label="anchor" href="#dependency-changes-development-version"></a></h3>
+<h3 id="dependency-changes-1-0-0">Dependency Changes<a class="anchor" aria-label="anchor" href="#dependency-changes-1-0-0"></a></h3>
 <ul><li><p><code>arrow</code> has been added as a suggested dependency.</p></li>
 <li><p><code>leaflet</code> has been downgraded to a suggested dependency. When a user requests a met station map they will be prompted to install <code>leaflet</code> if it is not already installed.</p></li>
 <li><p><code>mirai</code> and <code>carrier</code> have been upgrade to imported dependencies. This is because they are always required by <code><a href="https://purrr.tidyverse.org/reference/in_parallel.html" class="external-link">purrr::in_parallel()</a></code> regardless of whether parallelisation is being used or not.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-1-0-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-0-0"></a></h3>
 <p>The Global Historical Climate Network (GHCN) has officially superseded NOAA’s Integrated Surface Database (ISD). Many changes in this release are related to this external change.</p>
 <ul><li><p>Added <code><a href="../reference/import_ghcn_stations.html">import_ghcn_stations()</a></code>, <code><a href="../reference/import_ghcn_inventory.html">import_ghcn_inventory()</a></code>, and <code><a href="../reference/import_ghcn_countries.html">import_ghcn_countries()</a></code> to grant access to metadata for the GHCN.</p></li>
 <li><p>Added <code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code>, <code><a href="../reference/import_ghcn_daily.html">import_ghcn_daily()</a></code> and <code>import_ghcn_monthly()</code> to grant access to the GHCNh, GHCNd and CHCNm services.</p></li>
@@ -68,7 +68,7 @@
 <li><p>Added <code><a href="../reference/write_met.html">write_met()</a></code>, which allows for hourly ISD and GHCN and daily GHCN data to be easily split into years and sites and written to file. This is a more flexible alternative to using <code>importNOAA(path=)</code>.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="deprecations-development-version">Deprecations<a class="anchor" aria-label="anchor" href="#deprecations-development-version"></a></h3>
+<h3 id="deprecations-1-0-0">Deprecations<a class="anchor" aria-label="anchor" href="#deprecations-1-0-0"></a></h3>
 <p>Several functions have been deprecated and replaced due to the updated <code>worldmet</code> API:</p>
 <ul><li><p><code><a href="../reference/deprecated-isd.html">getMeta()</a></code> -&gt; <code><a href="../reference/import_isd_stations.html">import_isd_stations()</a></code></p></li>
 <li><p><code><a href="../reference/deprecated-isd.html">getMetaLive()</a></code> -&gt; <code><a href="../reference/import_isd_stations_live.html">import_isd_stations_live()</a></code></p></li>
@@ -78,7 +78,7 @@
 <li><p>the <code>path</code> argument -&gt; <code><a href="../reference/write_met.html">write_met()</a></code></p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-1-0-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-0"></a></h3>
 <ul><li>
 <code>rlang::%||%</code> is now explicitly imported by <code>worldmet</code> to avoid issues in old version of R.</li>
 </ul></div>

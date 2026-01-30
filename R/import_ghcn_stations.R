@@ -65,7 +65,7 @@ import_ghcn_stations <-
       switch(
         database,
         "hourly" = "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcnh-station-list.txt",
-        "daily" = "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
+        "daily" = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
       )
 
     meta <-

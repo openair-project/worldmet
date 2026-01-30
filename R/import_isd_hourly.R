@@ -2,11 +2,7 @@
 #'
 #' This is the main function to import data from the NOAA Integrated Surface
 #' Database (ISD). The ISD contains detailed surface meteorological data from
-#' around the world for over 30,000 locations. For general information of the
-#' ISD see
-#' [https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database](https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database)
-#' and the map here
-#' [https://gis.ncdc.noaa.gov/maps/ncei](https://gis.ncdc.noaa.gov/maps/ncei).
+#' around the world for over 30,000 locations.
 #'
 #' Note the following units for the main variables:
 #'
@@ -56,7 +52,6 @@
 #'
 #' \item{precip}{This value of precipitation spreads the 12-hour total across
 #' the previous 12 hours.}
-#'
 #'
 #' \item{pwc}{The description of the present weather description (if
 #' available).}
@@ -754,7 +749,7 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
 
   # location of data
   file.name <- paste0(
-    "https://www1.ncdc.noaa.gov/pub/data/noaa/",
+    "https://www.ncei.noaa.gov/pub/data/noaa/",
     year,
     "/",
     code,

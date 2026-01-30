@@ -22,7 +22,7 @@
 #'   comparisons with the NOAA metadata plotting on the map.
 #'
 #' @param country The country code. This is a two letter code. For a full
-#'   listing see <https://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv>.
+#'   listing see <https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv>.
 #'
 #' @param state The state code. This is a two letter code.
 #'
@@ -265,7 +265,7 @@ import_isd_stations <- function(
 import_isd_stations_live <- function(...) {
   ## downloads the whole thing fresh
   warn_isd()
-  url <- "https://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv"
+  url <- "https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv"
   meta <- readr::read_csv(
     url,
     skip = 21,
@@ -290,7 +290,7 @@ import_isd_stations_live <- function(...) {
   # some header data may still be read, so check column number
   if (ncol(meta) == 1L) {
     cli::cli_abort(
-      "File not available, check {.url https://www1.ncdc.noaa.gov/pub/data/noaa/} for potential server problems.",
+      "File not available, check {.url https://www.ncei.noaa.gov/pub/data/noaa/} for potential server problems.",
       call. = FALSE
     )
   }

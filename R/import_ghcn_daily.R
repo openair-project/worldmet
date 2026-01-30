@@ -224,7 +224,6 @@ import_ghcn_daily <- function(
   }
 
   # deal with "tenths of" from documentation
-  # https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/readme.txt
   for (i in c(
     "prcp",
     "tmax",

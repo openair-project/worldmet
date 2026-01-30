@@ -33,7 +33,7 @@ non-lat/lng coordinate systems will be re-projected to EPSG:4326 for making
 comparisons with the NOAA metadata plotting on the map.}
 
 \item{country}{The country code. This is a two letter code. For a full
-listing see \url{https://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv}.}
+listing see \url{https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv}.}
 
 \item{state}{The state code. This is a two letter code.}
 

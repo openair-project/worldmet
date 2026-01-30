@@ -44,11 +44,7 @@ in other time zones, e.g., to merge with air pollution data.
 \description{
 This is the main function to import data from the NOAA Integrated Surface
 Database (ISD). The ISD contains detailed surface meteorological data from
-around the world for over 30,000 locations. For general information of the
-ISD see
-\url{https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database}
-and the map here
-\url{https://gis.ncdc.noaa.gov/maps/ncei}.
+around the world for over 30,000 locations.
 }
 \details{
 Note the following units for the main variables:

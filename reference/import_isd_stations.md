@@ -52,7 +52,7 @@ import_isd_stations(
 - country:
 
   The country code. This is a two letter code. For a full listing see
-  <https://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv>.
+  <https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv>.
 
 - state:
 

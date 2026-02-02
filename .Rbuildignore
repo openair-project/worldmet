@@ -14,3 +14,4 @@ README_cache
 ^CRAN-SUBMISSION$
 ^[.]?air[.]toml$
 ^\.vscode$
+^revdep$

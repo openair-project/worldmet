@@ -1,7 +1,6 @@
 Type: Package
 Package: worldmet
-Title: Import Surface Meteorological Data from NOAA Integrated Surface
-    Database (ISD)
+Title: Import Surface Meteorological Data from NOAA
 Version: 1.0.0
 Authors@R: c(
     person("David", "Carslaw", , "david.carslaw@york.ac.uk", role = c("aut", "cre"),
@@ -11,9 +10,8 @@ Authors@R: c(
   )
 Description: Functions to import data from more than 30,000 surface
     meteorological sites around the world managed by the National Oceanic
-    and Atmospheric Administration (NOAA) Integrated Surface Database
-    (ISD, see
-    <https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database>).
+    and Atmospheric Administration (NOAA) Global Historical Climate
+    Network (GHCN) and Integrated Surface Database (ISD).
 License: MIT + file LICENSE
 URL: https://openair-project.github.io/worldmet/,
     https://github.com/openair-project/worldmet

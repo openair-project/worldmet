@@ -13,11 +13,11 @@ Source:
 [`DESCRIPTION`](https://github.com/openair-project/worldmet/blob/main/DESCRIPTION)
 
 Carslaw D, Davison J (2026). *worldmet: Import Surface Meteorological
-Data from NOAA Integrated Surface Database (ISD)*. R package version
-1.0.0, <https://openair-project.github.io/worldmet/>.
+Data from NOAA*. R package version 1.0.0,
+<https://openair-project.github.io/worldmet/>.
 
     @Manual{,
-      title = {worldmet: Import Surface Meteorological Data from NOAA Integrated Surface Database (ISD)},
+      title = {worldmet: Import Surface Meteorological Data from NOAA},
       author = {David Carslaw and Jack Davison},
       year = {2026},
       note = {R package version 1.0.0},

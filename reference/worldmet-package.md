@@ -1,18 +1,19 @@
-# worldmet: Import Surface Meteorological Data from NOAA Integrated Surface Database (ISD)
+# worldmet: Import Surface Meteorological Data from NOAA
 
 Functions to import data from more than 30,000 surface meteorological
 sites around the world managed by the National Oceanic and Atmospheric
-Administration (NOAA) Integrated Surface Database (ISD, see
-<https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database>).
+Administration (NOAA) Global Historical Climate Network (GHCN) and
+Integrated Surface Database (ISD).
 
 ## Details
 
 This package contains functions to import surface meteorological data
 from over 30,000 sites around the world. These data are curated by NOAA
-as part of the Integrated Surface Database (ISD).
+as part of the Global Historical Climate Network (GHCN), which replaced
+the Integrated Surface Database (ISD) in 2025.
 
 If you access these data using the `worldmet` package please give full
-acknowledgement to NOAA ISD. Users should also take a note of the usage
+acknowledgement to NOAA. Users should also take a note of the usage
 restrictions.
 
 These data work well with the `openair` package that has been developed
@@ -20,9 +21,11 @@ to analyse air pollution data.
 
 ## References
 
-For general information of the ISD see
-<https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database>
-and the map here <https://gis.ncdc.noaa.gov/maps/ncei>.
+For general information about the GHCNh, see
+<https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly>.
+
+For general information about the legacy ISD service, see
+<https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database>.
 
 ## See also
 

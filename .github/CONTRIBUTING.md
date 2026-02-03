@@ -30,9 +30,11 @@ If you’ve found a bug, please file an issue that illustrates the bug with a mi
 
 ### Code style
 
-*   Care should be taken such that new code follows a style similar to the rest of `{openair}` and `{worldmet}`. The most user-facing example of this is that exported functions should be written in "lowerCamelCase" (i.e., `polarMap()` rather than `polar_map()`).
+*  `{worldmet}` uses "snake_case" for function and object names, and `<-` for assignment.
 
-*  We use [roxygen2](https://cran.r-project.org/package=roxygen2), with [Markdown syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html), for documentation.  
+*  Code should be styled using the [air](https://posit-dev.github.io/air/) code formatter.
+
+*  We use [roxygen2](https://cran.r-project.org/package=roxygen2), with [Markdown syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html), for documentation.
 
 ## Code of Conduct
 

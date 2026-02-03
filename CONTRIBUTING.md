@@ -44,12 +44,11 @@ minimal [reprex](https://www.tidyverse.org/help/#reprex).
 
 ### Code style
 
-- Care should be taken such that new code follows a style similar to the
-  rest of [openair](https://openair-project.github.io/openair/) and
-  [worldmet](https://openair-project.github.io/worldmet/). The most
-  user-facing example of this is that exported functions should be
-  written in “lowerCamelCase” (i.e., `polarMap()` rather than
-  `polar_map()`).
+- [worldmet](https://openair-project.github.io/worldmet/) uses
+  “snake_case” for function and object names, and `<-` for assignment.
+
+- Code should be styled using the
+  [air](https://posit-dev.github.io/air/) code formatter.
 
 - We use [roxygen2](https://cran.r-project.org/package=roxygen2), with
   [Markdown

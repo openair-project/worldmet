@@ -10,7 +10,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/openair-project/worldmet/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/openair-project/worldmet/blob/v1.0.0/DESCRIPTION)
 
 Carslaw D, Davison J (2026). *worldmet: Import Surface Meteorological
 Data from NOAA*. R package version 1.0.0,

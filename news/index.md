@@ -2,6 +2,8 @@
 
 ## worldmet 1.0.0
 
+CRAN release: 2026-02-02
+
 ### Dependency Changes
 
 - `arrow` has been added as a suggested dependency.

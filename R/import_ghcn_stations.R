@@ -128,7 +128,7 @@ import_ghcn_stations <-
       meta <- dplyr::filter(meta, .data$state %in% !!state)
     }
 
-    if (!is.null(lat) & !is.null(lng)) {
+    if (!is.null(lat) && !is.null(lng)) {
       meta_sf <- sf::st_as_sf(
         meta,
         coords = c("lng", "lat"),

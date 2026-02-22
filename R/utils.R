@@ -168,7 +168,7 @@ check_prep <- function(
   varNames <- c(Names, type)
   matching <- varNames %in% all.vars
 
-  if (any(!matching)) {
+  if (!all(matching)) {
     # not all variables are present
     stop(cat("Can't find the variable(s)", varNames[!matching], "\n"))
   }
@@ -254,7 +254,7 @@ check_prep <- function(
 
   # make sure date is ordered in time if present
   if ("date" %in% Names) {
-    if ("POSIXlt" %in% class(mydata$date)) {
+    if (inherits(mydata$date, "POSIXlt")) {
       stop("date should be in POSIXct format not POSIXlt")
     }
 

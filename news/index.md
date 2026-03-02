@@ -2,6 +2,15 @@
 
 ## worldmet (development version)
 
+### Bug Fixes
+
+- [`import_ghcn_hourly()`](https://openair-project.github.io/worldmet/reference/import_ghcn_hourly.md)
+  and
+  [`import_isd_hourly()`](https://openair-project.github.io/worldmet/reference/import_isd_hourly.md)
+  will now always return a complete year of data - i.e., 8760 rows for a
+  non-leap year. Missing values will be padded with `NA` values
+  ([\#59](https://github.com/openair-project/worldmet/issues/59)).
+
 ## worldmet 1.0.0
 
 CRAN release: 2026-02-02

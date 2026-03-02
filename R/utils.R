@@ -104,6 +104,39 @@ worldmet_time_average <- function(
     mydata$default <- NULL
   }
 
+  # ensure all hours are present
+  if (avg.time == "hour") {
+    type_split <- c(type, "lat", "lng", "latitude", "longitude", "elev")
+    type_split <- type_split[type_split %in% names(mydata)]
+
+    # split by type, lat, lng, elev, and complete by date
+    mydata <-
+      purrr::map(
+        .x = split(
+          mydata,
+          mydata[, type_split],
+          drop = TRUE
+        ),
+        .f = \(df) {
+          from <- as.POSIXct(
+            paste0(format(min(df$date), "%Y"), "-01-01"),
+            tz = attr(df$date, "tzone")
+          )
+          to <- as.POSIXct(
+            paste0(format(max(df$date), "%Y"), "-12-31 23:00:00"),
+            tz = attr(df$date, "tzone")
+          )
+
+          tidyr::complete(
+            df,
+            tidyr::nesting(!!!rlang::syms(type_split)),
+            date = seq(from, to, by = "hour")
+          )
+        }
+      ) |>
+      dplyr::bind_rows()
+  }
+
   # return
   return(mydata)
 }

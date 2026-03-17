@@ -11,6 +11,10 @@
   non-leap year. Missing values will be padded with `NA` values
   ([\#59](https://github.com/openair-project/worldmet/issues/59)).
 
+- [`import_ghcn_inventory()`](https://openair-project.github.io/worldmet/reference/import_ghcn_inventory.md)
+  is now less sensitive to small changes in the format of NOAA’s
+  `ghcnh-inventory.txt` file.
+
 ## worldmet 1.0.0
 
 CRAN release: 2026-02-02

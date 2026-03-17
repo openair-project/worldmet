@@ -13,20 +13,20 @@ The function to use to find which sites are available is
 
 ``` r
 import_ghcn_stations()
-#> # A tibble: 34,181 × 11
+#> # A tibble: 38,870 × 11
 #>    id    name  country state network   lat   lng elevation gsn_flag hcn_crn_flag
 #>    <chr> <chr> <chr>   <chr> <chr>   <dbl> <dbl>     <dbl> <chr>    <chr>       
-#>  1 AAI0… REIN… AA      NA    I        12.5 -70.0      18.3 NA       NA          
-#>  2 ACL0… BARB… AC      TX    L        17.6 -61.8       5   NA       NA          
-#>  3 ACM0… COOL… AC      NA    M        17.1 -61.8      10   NA       NA          
-#>  4 ACU5… SOMB… AC      NA    U        18.6 -63.5      10   NA       NA          
-#>  5 ACU5… SOMB… AC      NA    U        18.6 -63.5      12   NA       NA          
-#>  6 ACU5… SOMB… AC      NA    U        18.6 -63.5      14   NA       NA          
-#>  7 ACU5… SOMB… AC      NA    U        18.6 -63.5      16   NA       NA          
-#>  8 ACU5… SOMB… AC      NA    U        18.6 -63.5       9   NA       NA          
-#>  9 ACW0… ST J… AC      NA    W        17.1 -61.8      19.2 NA       NA          
-#> 10 AEI0… ABU … AE      NA    I        24.4  54.7      26.8 NA       NA          
-#> # ℹ 34,171 more rows
+#>  1 ACL0… BARB… AC      TX    L        17.6 -61.8       5   NA       NA          
+#>  2 ACM0… COOL… AC      NA    M        17.1 -61.8      10   NA       NA          
+#>  3 ACU5… SOMB… AC      NA    U        18.6 -63.5      10   NA       NA          
+#>  4 ACW0… ST J… AC      NA    W        17.1 -61.8      19.2 NA       NA          
+#>  5 AEI0… ABU … AE      NA    I        24.4  54.7      26.8 NA       NA          
+#>  6 AEI0… BUHA… AE      NA    I        23.6  53.4      94   NA       NA          
+#>  7 AEI0… BATE… AE      NA    I        24.4  54.5       4.9 NA       NA          
+#>  8 AEI0… AL H… AE      NA    I        24.1  52.5      15.2 NA       NA          
+#>  9 AEI0… JEBE… AE      NA    I        24.2  52.6      13.1 NA       NA          
+#> 10 AEI0… AL A… AE      NA    I        24.3  55.6     265.  NA       NA          
+#> # ℹ 38,860 more rows
 #> # ℹ 1 more variable: wmo_id <chr>
 ```
 
@@ -39,6 +39,8 @@ access the data.
 
 ``` r
 import_ghcn_stations(return = "map")
+#> Warning in sf::st_is_longlat(x): bounding box has potentially an invalid value
+#> range for longlat data
 ```
 
 ### Search based on latitude and longitude
@@ -53,6 +55,12 @@ the site and the search coordinates.
 
 ``` r
 import_ghcn_stations(lat = 51.5, lng = 0, return = "map")
+#> Warning in st_is_longlat(x): bounding box has potentially an invalid value
+#> range for longlat data
+#> Warning in st_is_longlat(x): bounding box has potentially an invalid value
+#> range for longlat data
+#> Warning in st_is_longlat(x): bounding box has potentially an invalid value
+#> range for longlat data
 ```
 
 ### Importing Data

@@ -15,6 +15,10 @@
   is now less sensitive to small changes in the format of NOAA’s
   `ghcnh-inventory.txt` file.
 
+- [`import_ghcn_hourly()`](https://openair-project.github.io/worldmet/reference/import_ghcn_hourly.md)
+  will now succeed even if certain columns are not present in the raw
+  data files.
+
 ## worldmet 1.0.0
 
 CRAN release: 2026-02-02

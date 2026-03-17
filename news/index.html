@@ -57,6 +57,7 @@
 <h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> and <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code> will now always return a complete year of data - i.e., 8760 rows for a non-leap year. Missing values will be padded with <code>NA</code> values (<a href="https://github.com/openair-project/worldmet/issues/59" class="external-link">#59</a>).</p></li>
 <li><p><code><a href="../reference/import_ghcn_inventory.html">import_ghcn_inventory()</a></code> is now less sensitive to small changes in the format of NOAA’s <code>ghcnh-inventory.txt</code> file.</p></li>
+<li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> will now succeed even if certain columns are not present in the raw data files.</p></li>
 </ul></div>
 </div>
     <div class="section level2">

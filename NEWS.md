@@ -6,6 +6,8 @@
 
 - `import_ghcn_inventory()` is now less sensitive to small changes in the format of NOAA's `ghcnh-inventory.txt` file.
 
+- `import_ghcn_hourly()` will now succeed even if certain columns are not present in the raw data files.
+
 # worldmet 1.0.0
 
 ## Dependency Changes

@@ -497,51 +497,55 @@ import_single_ghcn_site <- function(
       ),
       # these variables are written observations/codes
       dplyr::across(
-        c(
-          "pres_wx_mw1",
-          "pres_wx_mw2",
-          "pres_wx_mw3",
-          "pres_wx_au1",
-          "pres_wx_au2",
-          "pres_wx_au3",
-          "pres_wx_aw1",
-          "pres_wx_aw2",
-          "pres_wx_aw3",
-          "remarks"
+        dplyr::any_of(
+          c(
+            "pres_wx_mw1",
+            "pres_wx_mw2",
+            "pres_wx_mw3",
+            "pres_wx_au1",
+            "pres_wx_au2",
+            "pres_wx_au3",
+            "pres_wx_aw1",
+            "pres_wx_aw2",
+            "pres_wx_aw3",
+            "remarks"
+          )
         ),
         as.character
       ),
       # these variables are all numeric
       dplyr::across(
-        c(
-          "latitude",
-          "longitude",
-          "elevation",
-          "temperature",
-          "dew_point_temperature",
-          "station_level_pressure",
-          "sea_level_pressure",
-          "wind_direction",
-          "wind_speed",
-          "wind_gust",
-          "precipitation",
-          "relative_humidity",
-          "wet_bulb_temperature",
-          "snow_depth",
-          "visibility",
-          "altimeter",
-          "pressure_3hr_change",
-          "sky_cover_baseht_1",
-          "sky_cover_baseht_2",
-          "sky_cover_baseht_3",
-          "precipitation_3_hour",
-          "precipitation_6_hour",
-          "precipitation_9_hour",
-          "precipitation_12_hour",
-          "precipitation_15_hour",
-          "precipitation_18_hour",
-          "precipitation_21_hour",
-          "precipitation_24_hour"
+        dplyr::any_of(
+          c(
+            "latitude",
+            "longitude",
+            "elevation",
+            "temperature",
+            "dew_point_temperature",
+            "station_level_pressure",
+            "sea_level_pressure",
+            "wind_direction",
+            "wind_speed",
+            "wind_gust",
+            "precipitation",
+            "relative_humidity",
+            "wet_bulb_temperature",
+            "snow_depth",
+            "visibility",
+            "altimeter",
+            "pressure_3hr_change",
+            "sky_cover_baseht_1",
+            "sky_cover_baseht_2",
+            "sky_cover_baseht_3",
+            "precipitation_3_hour",
+            "precipitation_6_hour",
+            "precipitation_9_hour",
+            "precipitation_12_hour",
+            "precipitation_15_hour",
+            "precipitation_18_hour",
+            "precipitation_21_hour",
+            "precipitation_24_hour"
+          )
         ),
         as.numeric
       )

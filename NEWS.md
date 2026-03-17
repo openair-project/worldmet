@@ -4,6 +4,8 @@
 
 - `import_ghcn_hourly()` and `import_isd_hourly()` will now always return a complete year of data - i.e., 8760 rows for a non-leap year. Missing values will be padded with `NA` values (#59).
 
+- `import_ghcn_inventory()` is now less sensitive to small changes in the format of NOAA's `ghcnh-inventory.txt` file.
+
 # worldmet 1.0.0
 
 ## Dependency Changes

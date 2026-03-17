@@ -313,33 +313,27 @@ import_ghcn_inventory <-
     }
 
     if (database == "hourly") {
-      inventory <-
-        readr::read_fwf(
-          "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcnh-inventory.txt",
-          col_positions = readr::fwf_widths(c(
-            11L,
-            5L,
-            7L,
-            7L,
-            7L,
-            7L,
-            7L,
-            7L,
-            7L,
-            7L,
-            7L,
-            7L,
-            7L,
-            8L
-          )),
-          show_col_types = FALSE,
-          progress = progress
-        )
+      temp_inv <- tempfile(fileext = "txt")
+      utils::download.file(
+        "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcnh-inventory.txt",
+        destfile = temp_inv,
+        quiet = !progress
+      )
 
+      inventory <- readr::read_fwf(
+        temp_inv,
+        show_col_types = FALSE,
+        progress = progress
+      )
+      inventory <- dplyr::slice_tail(
+        stats::setNames(inventory, as.vector(t(inventory[1, ]))),
+        n = -1
+      )
       inventory <-
-        inventory |>
-        stats::setNames(as.vector(t(inventory[1, ]))) |>
-        dplyr::slice_tail(n = -1)
+        dplyr::mutate(
+          inventory,
+          dplyr::across("YEAR":"DEC", as.integer)
+        )
 
       if (pivot == "wide") {
         inventory <-

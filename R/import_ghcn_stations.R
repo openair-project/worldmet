@@ -317,7 +317,8 @@ import_ghcn_inventory <-
       utils::download.file(
         "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcnh-inventory.txt",
         destfile = temp_inv,
-        quiet = !progress
+        quiet = !progress,
+        mode = "wb"
       )
 
       inventory <- readr::read_fwf(

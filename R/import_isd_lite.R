@@ -91,7 +91,12 @@ import_isd_lite <- function(
 
     download_success <- tryCatch(
       {
-        suppressWarnings(utils::download.file(path, t, quiet = TRUE))
+        suppressWarnings(utils::download.file(
+          path,
+          t,
+          quiet = TRUE,
+          mode = "wb"
+        ))
         TRUE
       },
       error = function(e) {

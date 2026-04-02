@@ -207,8 +207,8 @@ check_prep <- function(
   }
 
   # add type to names if not in pre-defined list
-  if (any(type %in% conds == FALSE)) {
-    ids <- which(type %in% conds == FALSE)
+  if (!all(type %in% conds)) {
+    ids <- which(!type %in% conds)
     Names <- c(Names, type[ids])
   }
 

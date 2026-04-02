@@ -66,7 +66,8 @@ import_ghcn_monthly_temp <- function(
       tdir,
       folder,
       "out.tar.gz"
-    )
+    ),
+    mode = "wb"
   )
 
   # untar it

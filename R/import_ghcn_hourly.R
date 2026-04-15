@@ -432,33 +432,31 @@ import_single_ghcn_site <- function(
   }
 
   # coalesce sky covers
-  if ("sky_cover_1" %in% names(data)) {
+  # coalesce sky covers
+  if ("sky_cover_layer_1" %in% names(data)) {
     data <- data |>
-      # split the code name away from the okta
       tidyr::separate_wider_delim(
-        cols = dplyr::matches("sky_cover_[123456789]\\b"),
+        cols = dplyr::matches("^sky_cover_layer_[123456789]$"),
         delim = ":",
-        names_sep = "",
-        names = c("code", ""),
+        names_sep = "_",
+        names = c("code", "okta"),
         too_few = "align_start"
       ) |>
-      # drop the code
       dplyr::select(
-        -dplyr::matches("sky_cover_[123456789]code")
+        -dplyr::matches("^sky_cover_layer_[123456789]_code$")
       ) |>
-      # coerce okta to numeric
       dplyr::mutate(
         dplyr::across(
-          dplyr::matches("sky_cover_[123456789]\\b"),
+          dplyr::matches("^sky_cover_layer_[123456789]_okta$"),
           as.numeric
         )
       )
 
     # get pmax of sky cover columns - for ADMS
     data$sky_cover <- pmax(
-      data$sky_cover_1,
-      data$sky_cover_2,
-      data$sky_cover_3,
+      data$sky_cover_layer_1_okta,
+      data$sky_cover_layer_2_okta,
+      data$sky_cover_layer_3_okta,
       na.rm = TRUE
     )
 
@@ -467,9 +465,9 @@ import_single_ghcn_site <- function(
       dplyr::mutate(
         data,
         sky_cover_baseht = dplyr::case_when(
-          .data$sky_cover_1 >= 5 ~ .data$sky_cover_baseht_1,
-          .data$sky_cover_2 >= 5 ~ .data$sky_cover_baseht_2,
-          .data$sky_cover_3 >= 5 ~ .data$sky_cover_baseht_3,
+          .data$sky_cover_layer_1_okta >= 5 ~ .data$sky_cover_layer_baseht_1,
+          .data$sky_cover_layer_2_okta >= 5 ~ .data$sky_cover_layer_baseht_2,
+          .data$sky_cover_layer_3_okta >= 5 ~ .data$sky_cover_layer_baseht_3,
           .default = NA
         )
       )
@@ -480,7 +478,7 @@ import_single_ghcn_site <- function(
         data,
         "sky_cover",
         "sky_cover_baseht",
-        .before = "sky_cover_1"
+        .before = "sky_cover_layer_1_okta"
       )
   }
 

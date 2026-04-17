@@ -1,5 +1,9 @@
 # worldmet (development version)
 
+## New Features
+
+- Added five new `convert_()` functions to convert between common units of temperature, precipitation, pressure, wind speed and wind direction.
+
 ## Bug Fixes
 
 - `import_ghcn_hourly()` and `import_isd_hourly()` will now always return a complete year of data - i.e., 8760 rows for a non-leap year. Missing values will be padded with `NA` values (#59).

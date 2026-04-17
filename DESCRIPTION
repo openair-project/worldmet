@@ -34,7 +34,8 @@ Suggests:
     arrow,
     knitr,
     leaflet,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 ByteCompile: true
 Config/Needs/website: openair-project/openairpkgdown,openair
 Encoding: UTF-8
@@ -43,3 +44,4 @@ LazyData: true
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
+Config/testthat/edition: 3

@@ -32,7 +32,7 @@ getMeta(
   state = NULL,
   n = 10,
   end.year = "current",
-  provider = c("OpenStreetMap", "Esri.WorldImagery"),
+  provider = c(`Street Map` = "CartoDB.Voyager", Satellite = "Esri.WorldImagery"),
   plot = TRUE,
   returnMap = FALSE
 )
@@ -96,7 +96,7 @@ importNOAAlite(code = "037720-99999", year = 2025, quiet = FALSE, path = NA)
 - provider:
 
   When `return = "map"`, by default a map will be created in which
-  readers may toggle between a vector base map and a satellite/aerial
+  readers may toggle between a vector street map and a satellite/aerial
   image. `provider` allows users to override this default; see
   <http://leaflet-extras.github.io/leaflet-providers/preview/> for a
   list of all base maps that can be used. Base maps can be toggled using

@@ -91,7 +91,7 @@ alternatives:</p><ul><li><p><code>getMeta()</code> -&gt; <code><a href="import_i
 <span>  state <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  end.year <span class="op">=</span> <span class="st">"current"</span>,</span>
-<span>  provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"OpenStreetMap"</span>, <span class="st">"Esri.WorldImagery"</span><span class="op">)</span>,</span>
+<span>  provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`Street Map` <span class="op">=</span> <span class="st">"CartoDB.Voyager"</span>, Satellite <span class="op">=</span> <span class="st">"Esri.WorldImagery"</span><span class="op">)</span>,</span>
 <span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  returnMap <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
@@ -154,7 +154,7 @@ current year are returned</strong>.</p></dd>
 
 <dt id="arg-provider">provider<a class="anchor" aria-label="anchor" href="#arg-provider"></a></dt>
 <dd><p>When <code>return = "map"</code>, by default a map will be created in
-which readers may toggle between a vector base map and a satellite/aerial
+which readers may toggle between a vector street map and a satellite/aerial
 image. <code>provider</code> allows users to override this default; see
 <a href="http://leaflet-extras.github.io/leaflet-providers/preview/" class="external-link">http://leaflet-extras.github.io/leaflet-providers/preview/</a> for a list
 of all base maps that can be used. Base maps can be toggled using a layer

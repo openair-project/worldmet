@@ -2,6 +2,23 @@
 
 ## worldmet (development version)
 
+### New Features
+
+- The styling of marker popups in
+  [`import_ghcn_stations()`](https://openair-project.github.io/worldmet/reference/import_ghcn_stations.md)
+  and
+  [`import_isd_stations()`](https://openair-project.github.io/worldmet/reference/import_isd_stations.md)
+  has been improved.
+
+- [`import_ghcn_stations()`](https://openair-project.github.io/worldmet/reference/import_ghcn_stations.md)
+  has gained `provider` in line with
+  [`import_isd_stations()`](https://openair-project.github.io/worldmet/reference/import_isd_stations.md).
+
+- !BREAKING: The `lon` argument of
+  [`import_isd_stations()`](https://openair-project.github.io/worldmet/reference/import_isd_stations.md)
+  has been renamed `lng` to match
+  [`import_ghcn_stations()`](https://openair-project.github.io/worldmet/reference/import_ghcn_stations.md).
+
 ### Bug Fixes
 
 - [`import_ghcn_hourly()`](https://openair-project.github.io/worldmet/reference/import_ghcn_hourly.md)
@@ -18,6 +35,10 @@
 - [`import_ghcn_hourly()`](https://openair-project.github.io/worldmet/reference/import_ghcn_hourly.md)
   will now succeed even if certain columns are not present in the raw
   data files.
+
+- [`import_ghcn_stations()`](https://openair-project.github.io/worldmet/reference/import_ghcn_stations.md)
+  now correctly show the WMO ID (previously this was a duplicated GSN
+  flag).
 
 ## worldmet 1.0.0
 

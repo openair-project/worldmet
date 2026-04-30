@@ -59,11 +59,11 @@ importNOAAlite(code = "037720-99999", year = 2025, quiet = FALSE, path = NA)
   A site name search string e.g. `site = "heathrow"`. The search strings
   and be partial and can be upper or lower case e.g. `site = "HEATHR"`.
 
-- lat, lon:
+- lat, lon, n:
 
-  Decimal latitude and longitude (or other Y/X coordinate if using a
-  different `crs`). If provided, the `n_max` closest ISD stations to
-  this coordinate will be returned.
+  Decimal latitude (`lat`) and longitude (`lon`) (or other Y/X
+  coordinate if using a different `crs`). If provided, the `n` closest
+  ISD stations to this coordinate will be returned.
 
 - crs:
 
@@ -74,8 +74,7 @@ importNOAAlite(code = "037720-99999", year = 2025, quiet = FALSE, path = NA)
   Different coordinate systems can be specified using `crs` (e.g.,
   `crs = 27700` for the [British National Grid](https://epsg.io/27700)).
   Note that non-lat/lng coordinate systems will be re-projected to
-  EPSG:4326 for making comparisons with the NOAA metadata plotting on
-  the map.
+  `EPSG:4326` for making comparisons with the NOAA metadata.
 
 - country:
 
@@ -85,11 +84,6 @@ importNOAAlite(code = "037720-99999", year = 2025, quiet = FALSE, path = NA)
 - state:
 
   The state code. This is a two letter code.
-
-- n:
-
-  The number of nearest sites to search based on `latitude` and
-  `longitude`.
 
 - end.year:
 
@@ -101,13 +95,13 @@ importNOAAlite(code = "037720-99999", year = 2025, quiet = FALSE, path = NA)
 
 - provider:
 
-  By default a map will be created in which readers may toggle between a
-  vector base map and a satellite/aerial image. `provider` allows users
-  to override this default; see
+  When `return = "map"`, by default a map will be created in which
+  readers may toggle between a vector base map and a satellite/aerial
+  image. `provider` allows users to override this default; see
   <http://leaflet-extras.github.io/leaflet-providers/preview/> for a
-  list of all base maps that can be used. If multiple base maps are
-  provided, they can be toggled between using a "layer control"
-  interface.
+  list of all base maps that can be used. Base maps can be toggled using
+  a layer control menu; the labels will be taken from the name of the
+  base map unless a named list is defined (see default value).
 
 - plot:
 

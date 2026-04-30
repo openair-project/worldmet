@@ -120,10 +120,10 @@ alternatives:</p><ul><li><p><code>getMeta()</code> -&gt; <code><a href="import_i
 strings and be partial and can be upper or lower case e.g. <code>site = "HEATHR"</code>.</p></dd>
 
 
-<dt id="arg-lat-lon">lat, lon<a class="anchor" aria-label="anchor" href="#arg-lat-lon"></a></dt>
-<dd><p>Decimal latitude and longitude (or other Y/X coordinate if
-using a different <code>crs</code>). If provided, the <code>n_max</code> closest ISD stations to this
-coordinate will be returned.</p></dd>
+<dt id="arg-lat-lon-n">lat, lon, n<a class="anchor" aria-label="anchor" href="#arg-lat-lon-n"></a></dt>
+<dd><p>Decimal latitude (<code>lat</code>) and longitude (<code>lon</code>) (or other Y/X
+coordinate if using a different <code>crs</code>). If provided, the <code>n</code> closest ISD
+stations to this coordinate will be returned.</p></dd>
 
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
@@ -131,8 +131,8 @@ coordinate will be returned.</p></dd>
 <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs()</a></code>. By default this is <a href="https://epsg.io/4326" class="external-link">EPSG:4326</a>, the
 CRS associated with the commonly used latitude and longitude coordinates.
 Different coordinate systems can be specified using <code>crs</code> (e.g., <code>crs = 27700</code> for the <a href="https://epsg.io/27700" class="external-link">British National Grid</a>). Note that
-non-lat/lng coordinate systems will be re-projected to EPSG:4326 for making
-comparisons with the NOAA metadata plotting on the map.</p></dd>
+non-lat/lng coordinate systems will be re-projected to <code>EPSG:4326</code> for
+making comparisons with the NOAA metadata.</p></dd>
 
 
 <dt id="arg-country">country<a class="anchor" aria-label="anchor" href="#arg-country"></a></dt>
@@ -144,11 +144,6 @@ listing see <a href="https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv" cl
 <dd><p>The state code. This is a two letter code.</p></dd>
 
 
-<dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
-<dd><p>The number of nearest sites to search based on <code>latitude</code> and
-<code>longitude</code>.</p></dd>
-
-
 <dt id="arg-end-year">end.year<a class="anchor" aria-label="anchor" href="#arg-end-year"></a></dt>
 <dd><p>To help filter sites based on how recent the available data
 are. <code>end.year</code> can be "current", "any" or a numeric year such as 2016, or
@@ -158,12 +153,13 @@ current year are returned</strong>.</p></dd>
 
 
 <dt id="arg-provider">provider<a class="anchor" aria-label="anchor" href="#arg-provider"></a></dt>
-<dd><p>By default a map will be created in which readers may toggle
-between a vector base map and a satellite/aerial image. <code>provider</code> allows
-users to override this default; see
+<dd><p>When <code>return = "map"</code>, by default a map will be created in
+which readers may toggle between a vector base map and a satellite/aerial
+image. <code>provider</code> allows users to override this default; see
 <a href="http://leaflet-extras.github.io/leaflet-providers/preview/" class="external-link">http://leaflet-extras.github.io/leaflet-providers/preview/</a> for a list
-of all base maps that can be used. If multiple base maps are provided, they
-can be toggled between using a "layer control" interface.</p></dd>
+of all base maps that can be used. Base maps can be toggled using a layer
+control menu; the labels will be taken from the name of the base map unless
+a named list is defined (see default value).</p></dd>
 
 
 <dt id="arg-plot">plot<a class="anchor" aria-label="anchor" href="#arg-plot"></a></dt>

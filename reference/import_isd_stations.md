@@ -12,14 +12,14 @@ latitude and longitude.
 ``` r
 import_isd_stations(
   site = NULL,
-  lat = NULL,
-  lon = NULL,
-  crs = 4326,
   country = NULL,
   state = NULL,
+  lat = NULL,
+  lng = NULL,
+  crs = 4326,
   n_max = 10,
   end_year = "current",
-  provider = c("OpenStreetMap", "Esri.WorldImagery"),
+  provider = c(OSM = "OpenStreetMap", Satellite = "Esri.WorldImagery"),
   return = c("table", "sf", "map")
 )
 ```
@@ -31,11 +31,20 @@ import_isd_stations(
   A site name search string e.g. `site = "heathrow"`. The search strings
   and be partial and can be upper or lower case e.g. `site = "HEATHR"`.
 
-- lat, lon:
+- country:
 
-  Decimal latitude and longitude (or other Y/X coordinate if using a
-  different `crs`). If provided, the `n_max` closest ISD stations to
-  this coordinate will be returned.
+  The country code. This is a two letter code. For a full listing see
+  <https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv>.
+
+- state:
+
+  The state code. This is a two letter code.
+
+- lat, lng, n_max:
+
+  Decimal latitude (`lat`) and longitude (`lng`) (or other Y/X
+  coordinate if using a different `crs`). If provided, the `n_max`
+  closest ISD stations to this coordinate will be returned.
 
 - crs:
 
@@ -46,22 +55,7 @@ import_isd_stations(
   Different coordinate systems can be specified using `crs` (e.g.,
   `crs = 27700` for the [British National Grid](https://epsg.io/27700)).
   Note that non-lat/lng coordinate systems will be re-projected to
-  EPSG:4326 for making comparisons with the NOAA metadata plotting on
-  the map.
-
-- country:
-
-  The country code. This is a two letter code. For a full listing see
-  <https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv>.
-
-- state:
-
-  The state code. This is a two letter code.
-
-- n_max:
-
-  The number of nearest sites to search based on `latitude` and
-  `longitude`.
+  `EPSG:4326` for making comparisons with the NOAA metadata.
 
 - end_year:
 
@@ -73,18 +67,17 @@ import_isd_stations(
 
 - provider:
 
-  By default a map will be created in which readers may toggle between a
-  vector base map and a satellite/aerial image. `provider` allows users
-  to override this default; see
+  When `return = "map"`, by default a map will be created in which
+  readers may toggle between a vector base map and a satellite/aerial
+  image. `provider` allows users to override this default; see
   <http://leaflet-extras.github.io/leaflet-providers/preview/> for a
-  list of all base maps that can be used. If multiple base maps are
-  provided, they can be toggled between using a "layer control"
-  interface.
+  list of all base maps that can be used. Base maps can be toggled using
+  a layer control menu; the labels will be taken from the name of the
+  base map unless a named list is defined (see default value).
 
 - return:
 
-  The type of R object to import the ISD stations as. One of the
-  following:
+  The type of R object to import the data as. One of the following:
 
   - `"table"`, which returns an R `data.frame`.
 
@@ -120,8 +113,8 @@ getMeta(site = "beijing")
 } # }
 
 if (FALSE) { # \dontrun{
-## search for near a specified lat/lon - near Beijing airport
+## search for near a specified lat/lng - near Beijing airport
 ## returns 'n_max' nearest by default
-getMeta(lat = 40, lon = 116.9)
+getMeta(lat = 40, lng = 116.9)
 } # }
 ```

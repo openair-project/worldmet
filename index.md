@@ -51,6 +51,7 @@ All **worldmet** functions are fully documented; access documentation
 using R in your IDE of choice.
 
 ``` r
+
 ?worldmet::import_ghcn_stations
 ```
 
@@ -71,6 +72,7 @@ and ideas for the application of **openair**’s various functions.
 **worldmet** can be installed from **CRAN** with:
 
 ``` r
+
 install.packages("worldmet")
 ```
 
@@ -78,6 +80,7 @@ You can also install the development version of **worldmet** from GitHub
 using [pak](https://pak.r-lib.org/):
 
 ``` r
+
 # install.packages("pak")
 pak::pak("openair-project/worldmet")
 ```

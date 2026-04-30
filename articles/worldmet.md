@@ -1,6 +1,7 @@
 # Using {worldmet} to Locate, Import & Visualise Meteorological Data
 
 ``` r
+
 library(worldmet)
 ```
 
@@ -12,6 +13,7 @@ The function to use to find which sites are available is
 [`import_ghcn_stations()`](https://openair-project.github.io/worldmet/reference/import_ghcn_stations.md).
 
 ``` r
+
 import_ghcn_stations()
 #> # A tibble: 38,870 × 11
 #>    id    name  country state network   lat   lng elevation gsn_flag hcn_crn_flag
@@ -38,6 +40,7 @@ information revealed in the marker is the station ID, which is used to
 access the data.
 
 ``` r
+
 import_ghcn_stations(return = "map")
 #> Warning in sf::st_is_longlat(x): bounding box has potentially an invalid value
 #> range for longlat data
@@ -54,6 +57,7 @@ clicking on the blue marker will show the approximate distance between
 the site and the search coordinates.
 
 ``` r
+
 import_ghcn_stations(lat = 51.5, lng = 0, return = "map")
 #> Warning in st_is_longlat(x): bounding box has potentially an invalid value
 #> range for longlat data
@@ -70,6 +74,7 @@ interest. For example, to download data for Heathrow Airport in 2024 (ID
 `UKI0000EGLL`):
 
 ``` r
+
 met_london <- import_ghcn_hourly("UKI0000EGLL", year = 2025)
 head(met_london)
 ```
@@ -93,6 +98,7 @@ head(met_london)
 A wind rose (for example) can easily be plotted using `openair`:
 
 ``` r
+
 # use function from openair
 openair::windRose(met_london)
 ```
@@ -142,6 +148,7 @@ mileage may vary, however, and naturally spawning more daemons than
 station-year combinations will lead to diminishing returns.
 
 ``` r
+
 # set workers - once per session
 mirai::daemons(4)
 

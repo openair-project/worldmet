@@ -69,14 +69,14 @@ nearest locations based on user-supplied latitude and longitude.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">import_isd_stations</span><span class="op">(</span></span>
 <span>  site <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  lat <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  lon <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  crs <span class="op">=</span> <span class="fl">4326</span>,</span>
 <span>  country <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  state <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lat <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lng <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  crs <span class="op">=</span> <span class="fl">4326</span>,</span>
 <span>  n_max <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  end_year <span class="op">=</span> <span class="st">"current"</span>,</span>
-<span>  provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"OpenStreetMap"</span>, <span class="st">"Esri.WorldImagery"</span><span class="op">)</span>,</span>
+<span>  provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>OSM <span class="op">=</span> <span class="st">"OpenStreetMap"</span>, Satellite <span class="op">=</span> <span class="st">"Esri.WorldImagery"</span><span class="op">)</span>,</span>
 <span>  return <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"table"</span>, <span class="st">"sf"</span>, <span class="st">"map"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -90,21 +90,6 @@ nearest locations based on user-supplied latitude and longitude.</p>
 strings and be partial and can be upper or lower case e.g. <code>site = "HEATHR"</code>.</p></dd>
 
 
-<dt id="arg-lat-lon">lat, lon<a class="anchor" aria-label="anchor" href="#arg-lat-lon"></a></dt>
-<dd><p>Decimal latitude and longitude (or other Y/X coordinate if
-using a different <code>crs</code>). If provided, the <code>n_max</code> closest ISD stations to this
-coordinate will be returned.</p></dd>
-
-
-<dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
-<dd><p>The coordinate reference system (CRS) of the data, passed to
-<code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs()</a></code>. By default this is <a href="https://epsg.io/4326" class="external-link">EPSG:4326</a>, the
-CRS associated with the commonly used latitude and longitude coordinates.
-Different coordinate systems can be specified using <code>crs</code> (e.g., <code>crs = 27700</code> for the <a href="https://epsg.io/27700" class="external-link">British National Grid</a>). Note that
-non-lat/lng coordinate systems will be re-projected to EPSG:4326 for making
-comparisons with the NOAA metadata plotting on the map.</p></dd>
-
-
 <dt id="arg-country">country<a class="anchor" aria-label="anchor" href="#arg-country"></a></dt>
 <dd><p>The country code. This is a two letter code. For a full
 listing see <a href="https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv" class="external-link">https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv</a>.</p></dd>
@@ -114,9 +99,19 @@ listing see <a href="https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv" cl
 <dd><p>The state code. This is a two letter code.</p></dd>
 
 
-<dt id="arg-n-max">n_max<a class="anchor" aria-label="anchor" href="#arg-n-max"></a></dt>
-<dd><p>The number of nearest sites to search based on <code>latitude</code> and
-<code>longitude</code>.</p></dd>
+<dt id="arg-lat-lng-n-max">lat, lng, n_max<a class="anchor" aria-label="anchor" href="#arg-lat-lng-n-max"></a></dt>
+<dd><p>Decimal latitude (<code>lat</code>) and longitude (<code>lng</code>) (or other
+Y/X coordinate if using a different <code>crs</code>). If provided, the <code>n_max</code>
+closest ISD stations to this coordinate will be returned.</p></dd>
+
+
+<dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
+<dd><p>The coordinate reference system (CRS) of the data, passed to
+<code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs()</a></code>. By default this is <a href="https://epsg.io/4326" class="external-link">EPSG:4326</a>, the
+CRS associated with the commonly used latitude and longitude coordinates.
+Different coordinate systems can be specified using <code>crs</code> (e.g., <code>crs = 27700</code> for the <a href="https://epsg.io/27700" class="external-link">British National Grid</a>). Note that
+non-lat/lng coordinate systems will be re-projected to <code>EPSG:4326</code> for
+making comparisons with the NOAA metadata.</p></dd>
 
 
 <dt id="arg-end-year">end_year<a class="anchor" aria-label="anchor" href="#arg-end-year"></a></dt>
@@ -128,16 +123,17 @@ current year are returned</strong>.</p></dd>
 
 
 <dt id="arg-provider">provider<a class="anchor" aria-label="anchor" href="#arg-provider"></a></dt>
-<dd><p>By default a map will be created in which readers may toggle
-between a vector base map and a satellite/aerial image. <code>provider</code> allows
-users to override this default; see
+<dd><p>When <code>return = "map"</code>, by default a map will be created in
+which readers may toggle between a vector base map and a satellite/aerial
+image. <code>provider</code> allows users to override this default; see
 <a href="http://leaflet-extras.github.io/leaflet-providers/preview/" class="external-link">http://leaflet-extras.github.io/leaflet-providers/preview/</a> for a list
-of all base maps that can be used. If multiple base maps are provided, they
-can be toggled between using a "layer control" interface.</p></dd>
+of all base maps that can be used. Base maps can be toggled using a layer
+control menu; the labels will be taken from the name of the base map unless
+a named list is defined (see default value).</p></dd>
 
 
 <dt id="arg-return">return<a class="anchor" aria-label="anchor" href="#arg-return"></a></dt>
-<dd><p>The type of R object to import the ISD stations as. One of the
+<dd><p>The type of R object to import the data as. One of the
 following:</p><ul><li><p><code>"table"</code>, which returns an R <code>data.frame</code>.</p></li>
 <li><p><code>"sf"</code>, which returns a spatial <code>data.frame</code> from the <code>sf</code> package.</p></li>
 <li><p><code>"map"</code>, which returns an interactive <code>leaflet</code> map.</p></li>
@@ -171,9 +167,9 @@ km is also returned.</p>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co">## search for near a specified lat/lon - near Beijing airport</span></span></span>
+<span class="r-in"><span><span class="co">## search for near a specified lat/lng - near Beijing airport</span></span></span>
 <span class="r-in"><span><span class="co">## returns 'n_max' nearest by default</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="deprecated-isd.html">getMeta</a></span><span class="op">(</span>lat <span class="op">=</span> <span class="fl">40</span>, lon <span class="op">=</span> <span class="fl">116.9</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="deprecated-isd.html">getMeta</a></span><span class="op">(</span>lat <span class="op">=</span> <span class="fl">40</span>, lng <span class="op">=</span> <span class="fl">116.9</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

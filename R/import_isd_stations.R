@@ -173,36 +173,31 @@ import_isd_stations <- function(
         # Temporal section
         "<div style='margin-bottom: 8px;'>",
         "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Coverage</div>",
-        "<table style='font-size: 12px; width: 100%; border-collapse: collapse;'>",
-        "<tr><td style='color: #555; padding: 2px 0;'><b>Start</b></td><td>",
+        "<div style='display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0;'><span style='color: #555; font-weight: bold;'>Start</span><span>",
         fmt_val(dat$begin),
-        "</td></tr>",
-        "<tr><td style='color: #555; padding: 2px 0;'><b>End</b></td><td>",
+        "</span></div>",
+        "<div style='display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0;'><span style='color: #555; font-weight: bold;'>End</span><span>",
         fmt_val(dat$end),
-        "</td></tr>",
-        "</table>",
+        "</span></div>",
         "</div>",
 
         # Geography section
         "<div style='margin-bottom: 8px;'>",
         "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Geography</div>",
-        "<table style='font-size: 12px; width: 100%; border-collapse: collapse;'>",
-        "<tr><td style='color: #555; padding: 2px 0;'><b>Country</b></td><td>",
+        "<div style='display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0;'><span style='color: #555; font-weight: bold;'>Country</span><span>",
         fmt_val(dat$ctry),
-        "</td></tr>",
-        "<tr><td style='color: #555; padding: 2px 0;'><b>State</b></td><td>",
+        "</span></div>",
+        "<div style='display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0;'><span style='color: #555; font-weight: bold;'>State</span><span>",
         fmt_val(dat$st),
-        "</td></tr>",
-        "<tr><td style='color: #555; padding: 2px 0;'><b>Elevation</b></td><td>",
+        "</span></div>",
+        "<div style='display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0;'><span style='color: #555; font-weight: bold;'>Elevation</span><span>",
         ifelse(
           is.na(dat$`elev(m)`),
           fmt_val(dat$`elev(m)`),
           paste(dat$`elev(m)`, "m")
         ),
-        "</td></tr>",
-        "</table>",
+        "</span></div>",
         "</div>",
-
         "</div>"
       )
 
@@ -276,17 +271,15 @@ import_isd_stations <- function(
             # Coordinates section
             "<div style='margin-bottom: 8px;'>",
             "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Coordinates</div>",
-            "<table style='font-size: 12px; width: 100%; border-collapse: collapse;'>",
-            "<tr><td style='color: #555; padding: 2px 0;'><b>Latitude</b></td><td style='font-family: monospace;'>",
+            "<div style='display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0;'><span style='color: #555; font-weight: bold;'>Latitude</span><span style='font-family: monospace;'>",
             lat,
-            "</td></tr>",
-            "<tr><td style='color: #555; padding: 2px 0;'><b>Longitude</b></td><td style='font-family: monospace;'>",
+            "</span></div>",
+            "<div style='display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0;'><span style='color: #555; font-weight: bold;'>Longitude</span><span style='font-family: monospace;'>",
             lng,
-            "</td></tr>",
-            "<tr><td style='color: #555; padding: 2px 0;'><b>CRS</b></td><td style='font-family: monospace;'>EPSG:",
+            "</span></div>",
+            "<div style='display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0;'><span style='color: #555; font-weight: bold;'>CRS</span><span style='font-family: monospace;'>EPSG:",
             crs,
-            "</td></tr>",
-            "</table>",
+            "</span></div>",
             "</div>",
 
             "</div>"

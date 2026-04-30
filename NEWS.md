@@ -16,6 +16,8 @@
 
 - `import_ghcn_hourly()` will now succeed even if certain columns are not present in the raw data files.
 
+- `import_ghcn_stations()` now correctly show the WMO ID (previously this was a duplicated GSN flag).
+
 # worldmet 1.0.0
 
 ## Dependency Changes

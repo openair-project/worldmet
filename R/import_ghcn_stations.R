@@ -226,7 +226,7 @@ import_ghcn_stations <-
           fmt_val(meta$hcn_crn_flag),
           "</td></tr>",
           "<tr><td style='color: #555; padding: 2px 0;'><b>WMO ID</b></td><td>",
-          fmt_val(meta$gsn_flag),
+          fmt_val(meta$wmo_id),
           "</td></tr>",
           "</table>",
           "</div>",

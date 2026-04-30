@@ -6,6 +6,8 @@
 
 - `import_ghcn_stations()` has gained `provider` in line with `import_isd_stations()`.
 
+- The default `provider` has changed from `OpenStreetMap` to `CartoDB.Voyager` due to ongoing issues with OSM in Leaflet (<https://github.com/rstudio/leaflet/issues/964>).
+
 - !BREAKING: The `lon` argument of `import_isd_stations()` has been renamed `lng` to match `import_ghcn_stations()`.
 
 ## Bug Fixes

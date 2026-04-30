@@ -16,7 +16,7 @@ getMeta(
   state = NULL,
   n = 10,
   end.year = "current",
-  provider = c("OpenStreetMap", "Esri.WorldImagery"),
+  provider = c(`Street Map` = "CartoDB.Voyager", Satellite = "Esri.WorldImagery"),
   plot = TRUE,
   returnMap = FALSE
 )
@@ -62,7 +62,7 @@ end date in that range. \strong{By default only sites that have some data for th
 current year are returned}.}
 
 \item{provider}{When \code{return = "map"}, by default a map will be created in
-which readers may toggle between a vector base map and a satellite/aerial
+which readers may toggle between a vector street map and a satellite/aerial
 image. \code{provider} allows users to override this default; see
 \url{http://leaflet-extras.github.io/leaflet-providers/preview/} for a list
 of all base maps that can be used. Base maps can be toggled using a layer

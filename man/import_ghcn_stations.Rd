@@ -12,6 +12,7 @@ import_ghcn_stations(
   lng = NULL,
   crs = 4326,
   n_max = 10L,
+  provider = c(OSM = "OpenStreetMap", Satellite = "Esri.WorldImagery"),
   database = c("hourly", "daily"),
   return = c("table", "sf", "map")
 )
@@ -33,12 +34,20 @@ Different coordinate systems can be specified using \code{crs} (e.g., \code{crs 
 non-lat/lng coordinate systems will be re-projected to \code{EPSG:4326} for
 making comparisons with the NOAA metadata.}
 
+\item{provider}{When \code{return = "map"}, by default a map will be created in
+which readers may toggle between a vector base map and a satellite/aerial
+image. \code{provider} allows users to override this default; see
+\url{http://leaflet-extras.github.io/leaflet-providers/preview/} for a list
+of all base maps that can be used. Base maps can be toggled using a layer
+control menu; the labels will be taken from the name of the base map unless
+a named list is defined (see default value).}
+
 \item{database}{One of \code{"hourly"} or \code{"daily"}, which defines whether to
 import stations available in the GHCNh or GHCNd. Note that there is overlap
 between the two, but some stations may only be available in one or the
 other.}
 
-\item{return}{The type of R object to import the GHCN stations as. One of the
+\item{return}{The type of R object to import the data as. One of the
 following:
 \itemize{
 \item \code{"table"}, which returns an R \code{data.frame}.

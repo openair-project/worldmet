@@ -5,51 +5,22 @@
 #' 30,000 sites can be carried out based on the site name and based on the
 #' nearest locations based on user-supplied latitude and longitude.
 #'
+#' @inheritParams import_ghcn_stations
+#'
 #' @param site A site name search string e.g. `site = "heathrow"`. The search
 #'   strings and be partial and can be upper or lower case e.g. `site =
 #'   "HEATHR"`.
-#'
-#' @param lat,lon Decimal latitude and longitude (or other Y/X coordinate if
-#'   using a different `crs`). If provided, the `n_max` closest ISD stations to this
-#'   coordinate will be returned.
-#'
-#' @param crs The coordinate reference system (CRS) of the data, passed to
-#'   [sf::st_crs()]. By default this is [EPSG:4326](https://epsg.io/4326), the
-#'   CRS associated with the commonly used latitude and longitude coordinates.
-#'   Different coordinate systems can be specified using `crs` (e.g., `crs =
-#'   27700` for the [British National Grid](https://epsg.io/27700)). Note that
-#'   non-lat/lng coordinate systems will be re-projected to EPSG:4326 for making
-#'   comparisons with the NOAA metadata plotting on the map.
 #'
 #' @param country The country code. This is a two letter code. For a full
 #'   listing see <https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv>.
 #'
 #' @param state The state code. This is a two letter code.
 #'
-#' @param n_max The number of nearest sites to search based on `latitude` and
-#'   `longitude`.
-#'
 #' @param end_year To help filter sites based on how recent the available data
 #'   are. `end_year` can be "current", "any" or a numeric year such as 2016, or
 #'   a range of years e.g. 1990:2016 (which would select any site that had an
 #'   end date in that range. **By default only sites that have some data for the
 #'   current year are returned**.
-#'
-#' @param provider By default a map will be created in which readers may toggle
-#'   between a vector base map and a satellite/aerial image. `provider` allows
-#'   users to override this default; see
-#'   \url{http://leaflet-extras.github.io/leaflet-providers/preview/} for a list
-#'   of all base maps that can be used. If multiple base maps are provided, they
-#'   can be toggled between using a "layer control" interface.
-#'
-#' @param return The type of R object to import the ISD stations as. One of the
-#'   following:
-#'
-#' - `"table"`, which returns an R `data.frame`.
-#'
-#' - `"sf"`, which returns a spatial `data.frame` from the `sf` package.
-#'
-#' - `"map"`, which returns an interactive `leaflet` map.
 #'
 #' @return A data frame is returned with all available meta data, mostly
 #'   importantly including a `code` that can be supplied to [importNOAA()]. If
@@ -66,20 +37,20 @@
 #' }
 #'
 #' \dontrun{
-#' ## search for near a specified lat/lon - near Beijing airport
+#' ## search for near a specified lat/lng - near Beijing airport
 #' ## returns 'n_max' nearest by default
-#' getMeta(lat = 40, lon = 116.9)
+#' getMeta(lat = 40, lng = 116.9)
 #' }
 import_isd_stations <- function(
   site = NULL,
-  lat = NULL,
-  lon = NULL,
-  crs = 4326,
   country = NULL,
   state = NULL,
+  lat = NULL,
+  lng = NULL,
+  crs = 4326,
   n_max = 10,
   end_year = "current",
-  provider = c("OpenStreetMap", "Esri.WorldImagery"),
+  provider = c("OSM" = "OpenStreetMap", "Satellite" = "Esri.WorldImagery"),
   return = c("table", "sf", "map")
 ) {
   ## read the meta data
@@ -126,7 +97,7 @@ import_isd_stations <- function(
     meta <- meta[id, ]
   }
 
-  # make sure no missing lat / lon
+  # make sure no missing lat / lng
   id <- which(is.na(meta$LON))
 
   if (length(id) > 0) {
@@ -143,11 +114,11 @@ import_isd_stations <- function(
   meta <- meta[id, ]
 
   ## approximate distance to site
-  if (!is.null(lat) && !is.null(lon)) {
+  if (!is.null(lat) && !is.null(lng)) {
     point <-
       sf::st_as_sf(
-        data.frame(lon = lon, lat = lat),
-        coords = c("lon", "lat"),
+        data.frame(lng = lng, lat = lat),
+        coords = c("lng", "lat"),
         crs = sf::st_crs(crs)
       ) |>
       sf::st_transform(crs = sf::st_crs(4326))
@@ -178,26 +149,97 @@ import_isd_stations <- function(
     if (return == "map") {
       rlang::check_installed("leaflet")
 
-      content <- paste(
-        paste0("<b>", dat$station, "</b>"),
-        paste("<hr><b>Code:</b>", dat$code),
-        paste("<b>Start:</b>", dat$begin),
-        paste("<b>End:</b>", dat$end),
-        sep = "<br/>"
-      )
-
-      if ("dist" %in% names(dat)) {
-        content <- paste(
-          content,
-          paste("<b>Distance:</b>", round(dat$dist, 1), "km"),
-          sep = "<br/>"
+      fmt_val <- function(x) {
+        ifelse(
+          is.na(x),
+          "<span style='color: #bbb;'>N/A</span>",
+          as.character(x)
         )
       }
 
-      m <- leaflet::leaflet(dat)
+      content <- paste0(
+        "<div style='font-family: Arial, sans-serif; min-width: 220px; max-width: 280px;'>",
 
-      for (i in provider) {
-        m <- leaflet::addProviderTiles(map = m, provider = i, group = i)
+        # Combined name + code header
+        "<div style='background: #2c9b6e; color: white; padding: 8px 12px; margin: -10px -10px 10px; border-radius: 4px 4px 0 0;'>",
+        "<div style='font-size: 14px; font-weight: bold; margin-bottom: 4px;'>",
+        dat$station,
+        "</div>",
+        "<div style='font-family: monospace; font-size: 12px; background: rgba(0,0,0,0.2); display: inline-block; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.5px;'>",
+        dat$code,
+        "</div>",
+        "</div>",
+
+        # Temporal section
+        "<div style='margin-bottom: 8px;'>",
+        "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Coverage</div>",
+        "<table style='font-size: 12px; width: 100%; border-collapse: collapse;'>",
+        "<tr><td style='color: #555; padding: 2px 0;'><b>Start</b></td><td>",
+        fmt_val(dat$begin),
+        "</td></tr>",
+        "<tr><td style='color: #555; padding: 2px 0;'><b>End</b></td><td>",
+        fmt_val(dat$end),
+        "</td></tr>",
+        "</table>",
+        "</div>",
+
+        # Geography section
+        "<div style='margin-bottom: 8px;'>",
+        "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Geography</div>",
+        "<table style='font-size: 12px; width: 100%; border-collapse: collapse;'>",
+        "<tr><td style='color: #555; padding: 2px 0;'><b>Country</b></td><td>",
+        fmt_val(dat$ctry),
+        "</td></tr>",
+        "<tr><td style='color: #555; padding: 2px 0;'><b>State</b></td><td>",
+        fmt_val(dat$st),
+        "</td></tr>",
+        "<tr><td style='color: #555; padding: 2px 0;'><b>Elevation</b></td><td>",
+        ifelse(
+          is.na(dat$`elev(m)`),
+          fmt_val(dat$`elev(m)`),
+          paste(dat$`elev(m)`, "m")
+        ),
+        "</td></tr>",
+        "</table>",
+        "</div>",
+
+        "</div>"
+      )
+
+      if ("dist" %in% names(dat)) {
+        content <- paste0(
+          content,
+          "<div style='margin-top: 8px;'>",
+          "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Distance from search</div>",
+          "<div style='font-family: monospace; font-size: 12px; background: #f4f4f4; border-left: 3px solid #c0392b; padding: 3px 8px; border-radius: 0 3px 3px 0;'>",
+          round(dat$dist, 1),
+          " km",
+          "</div>",
+          "</div>",
+          "</div>" # closes the outer wrapper div
+        )
+      }
+
+      m <- leaflet::leaflet(dat) |>
+        leaflet::addControl(
+          html = paste0(
+            "<div style='font-family: Arial, sans-serif; background: white; padding: 8px 14px; border-radius: 4px; box-shadow: 0 1px 5px rgba(0,0,0,0.3);'>",
+            "<div style='font-size: 13px; font-weight: bold; color: #2c9b6e;'>ISD Stations</div>",
+            "<div style='font-size: 11px; color: #888; margin-top: 2px;'>Integrated Surface Database</div>",
+            "</div>"
+          ),
+          position = "bottomleft"
+        )
+
+      if (!rlang::is_named(provider)) {
+        provider <- stats::setNames(provider, provider)
+      }
+      for (i in seq_along(provider)) {
+        m <- leaflet::addProviderTiles(
+          m,
+          provider = provider[[i]],
+          group = names(provider)[[i]]
+        )
       }
 
       m <-
@@ -206,37 +248,62 @@ import_isd_stations <- function(
           ~longitude,
           ~latitude,
           popup = content,
-          clusterOptions = leaflet::markerClusterOptions()
+          clusterOptions = leaflet::markerClusterOptions(),
+          group = "Stations"
         )
+      overlays <- "Stations"
 
-      if (!is.null(lat) && !is.null(lon)) {
-        m <- leaflet::addCircles(
+      if (!is.null(lat) && !is.null(lng)) {
+        overlays <- c(overlays, "Target")
+        m <- leaflet::addAwesomeMarkers(
           map = m,
           data = point,
-          weight = 20,
-          radius = 200,
-          stroke = TRUE,
-          color = "red",
-          popup = paste(
-            "Search location",
-            paste("Lat =", dat$latitude),
-            paste("Lon =", dat$longitude),
-            sep = "<br/>"
+          group = "Target",
+          icon = leaflet::makeAwesomeIcon(
+            icon = "circle",
+            library = "fa",
+            markerColor = "red",
+            iconColor = "#FFFFFF"
+          ),
+          popup = paste0(
+            "<div style='font-family: Arial, sans-serif; min-width: 200px; max-width: 260px;'>",
+
+            # Header
+            "<div style='background: #c0392b; color: white; padding: 8px 12px; margin: -10px -10px 10px; border-radius: 4px 4px 0 0;'>",
+            "<div style='font-size: 14px; font-weight: bold;'>Search Location</div>",
+            "</div>",
+
+            # Coordinates section
+            "<div style='margin-bottom: 8px;'>",
+            "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Coordinates</div>",
+            "<table style='font-size: 12px; width: 100%; border-collapse: collapse;'>",
+            "<tr><td style='color: #555; padding: 2px 0;'><b>Latitude</b></td><td style='font-family: monospace;'>",
+            lat,
+            "</td></tr>",
+            "<tr><td style='color: #555; padding: 2px 0;'><b>Longitude</b></td><td style='font-family: monospace;'>",
+            lng,
+            "</td></tr>",
+            "<tr><td style='color: #555; padding: 2px 0;'><b>CRS</b></td><td style='font-family: monospace;'>EPSG:",
+            crs,
+            "</td></tr>",
+            "</table>",
+            "</div>",
+
+            "</div>"
           )
         )
       }
 
-      if (length(provider) > 1) {
-        m <-
-          leaflet::addLayersControl(
-            map = m,
-            baseGroups = provider,
-            options = leaflet::layersControlOptions(
-              collapsed = FALSE,
-              autoZIndex = FALSE
-            )
+      m <-
+        leaflet::addLayersControl(
+          map = m,
+          baseGroups = names(provider),
+          overlayGroups = overlays,
+          options = leaflet::layersControlOptions(
+            collapsed = FALSE,
+            autoZIndex = TRUE
           )
-      }
+        )
 
       meta <- m
     }

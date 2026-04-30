@@ -1,5 +1,13 @@
 # worldmet (development version)
 
+## New Features
+
+- The styling of marker popups in `import_ghcn_stations()` and `import_isd_stations()` has been improved.
+
+- `import_ghcn_stations()` has gained `provider` in line with `import_isd_stations()`.
+
+- !BREAKING: The `lon` argument of `import_isd_stations()` has been renamed `lng` to match `import_ghcn_stations()`.
+
 ## Bug Fixes
 
 - `import_ghcn_hourly()` and `import_isd_hourly()` will now always return a complete year of data - i.e., 8760 rows for a non-leap year. Missing values will be padded with `NA` values (#59).

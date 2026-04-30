@@ -39,24 +39,21 @@ importNOAAlite(code = "037720-99999", year = 2025, quiet = FALSE, path = NA)
 \item{site}{A site name search string e.g. \code{site = "heathrow"}. The search
 strings and be partial and can be upper or lower case e.g. \code{site = "HEATHR"}.}
 
-\item{lat, lon}{Decimal latitude and longitude (or other Y/X coordinate if
-using a different \code{crs}). If provided, the \code{n_max} closest ISD stations to this
-coordinate will be returned.}
+\item{lat, lon, n}{Decimal latitude (\code{lat}) and longitude (\code{lon}) (or other Y/X
+coordinate if using a different \code{crs}). If provided, the \code{n} closest ISD
+stations to this coordinate will be returned.}
 
 \item{crs}{The coordinate reference system (CRS) of the data, passed to
 \code{\link[sf:st_crs]{sf::st_crs()}}. By default this is \href{https://epsg.io/4326}{EPSG:4326}, the
 CRS associated with the commonly used latitude and longitude coordinates.
 Different coordinate systems can be specified using \code{crs} (e.g., \code{crs = 27700} for the \href{https://epsg.io/27700}{British National Grid}). Note that
-non-lat/lng coordinate systems will be re-projected to EPSG:4326 for making
-comparisons with the NOAA metadata plotting on the map.}
+non-lat/lng coordinate systems will be re-projected to \code{EPSG:4326} for
+making comparisons with the NOAA metadata.}
 
 \item{country}{The country code. This is a two letter code. For a full
 listing see \url{https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv}.}
 
 \item{state}{The state code. This is a two letter code.}
-
-\item{n}{The number of nearest sites to search based on \code{latitude} and
-\code{longitude}.}
 
 \item{end.year}{To help filter sites based on how recent the available data
 are. \code{end.year} can be "current", "any" or a numeric year such as 2016, or
@@ -64,12 +61,13 @@ a range of years e.g. 1990:2016 (which would select any site that had an
 end date in that range. \strong{By default only sites that have some data for the
 current year are returned}.}
 
-\item{provider}{By default a map will be created in which readers may toggle
-between a vector base map and a satellite/aerial image. \code{provider} allows
-users to override this default; see
+\item{provider}{When \code{return = "map"}, by default a map will be created in
+which readers may toggle between a vector base map and a satellite/aerial
+image. \code{provider} allows users to override this default; see
 \url{http://leaflet-extras.github.io/leaflet-providers/preview/} for a list
-of all base maps that can be used. If multiple base maps are provided, they
-can be toggled between using a "layer control" interface.}
+of all base maps that can be used. Base maps can be toggled using a layer
+control menu; the labels will be taken from the name of the base map unless
+a named list is defined (see default value).}
 
 \item{plot}{If \code{TRUE} will plot sites on an interactive leaflet map.}
 

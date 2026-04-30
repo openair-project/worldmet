@@ -26,7 +26,15 @@
 #'   between the two, but some stations may only be available in one or the
 #'   other.
 #'
-#' @param return The type of R object to import the GHCN stations as. One of the
+#' @param provider When `return = "map"`, by default a map will be created in
+#'   which readers may toggle between a vector base map and a satellite/aerial
+#'   image. `provider` allows users to override this default; see
+#'   \url{http://leaflet-extras.github.io/leaflet-providers/preview/} for a list
+#'   of all base maps that can be used. Base maps can be toggled using a layer
+#'   control menu; the labels will be taken from the name of the base map unless
+#'   a named list is defined (see default value).
+#'
+#' @param return The type of R object to import the data as. One of the
 #'   following:
 #'
 #' - `"table"`, which returns an R `data.frame`.
@@ -56,6 +64,7 @@ import_ghcn_stations <-
     lng = NULL,
     crs = 4326,
     n_max = 10L,
+    provider = c("OSM" = "OpenStreetMap", "Satellite" = "Esri.WorldImagery"),
     database = c("hourly", "daily"),
     return = c("table", "sf", "map")
   ) {
@@ -166,47 +175,109 @@ import_ghcn_stations <-
       if (return == "map") {
         rlang::check_installed("leaflet")
 
-        popup <- paste(
-          paste0("<b>", meta$name, "</b>"),
-          paste("<hr><b>ID:</b>", meta$id),
-          paste("<br><b><u>Geography</u></b>"),
-          paste("<b>Country:</b>", meta$country),
-          paste("<b>State:</b>", meta$state),
-          paste("<b>Network:</b>", meta$network),
-          paste("<b>Elevation:</b>", meta$elevation, "m"),
-          paste("<br><b><u>Station Flags</u></b>"),
-          paste("<b>GSN FLAG:</b>", meta$gsn_flag),
-          paste("<b>HCN/CRN FLAG:</b>", meta$hcn_crn_flag),
-          paste("<b>WMO ID:</b>", meta$gsn_flag),
-          sep = "<br/>"
-        )
+        fmt_val <- function(x) {
+          ifelse(
+            is.na(x),
+            "<span style='color: #bbb;'>N/A</span>",
+            as.character(x)
+          )
+        }
 
+        popup <- paste0(
+          "<div style='font-family: Arial, sans-serif; min-width: 220px; max-width: 280px;'>",
+
+          # Header
+          "<div style='background: #2c7bb6; color: white; padding: 8px 12px; margin: -10px -10px 10px; border-radius: 4px 4px 0 0;'>",
+          "<div style='font-size: 14px; font-weight: bold; margin-bottom: 4px;'>",
+          meta$name,
+          "</div>",
+          "<div style='font-family: monospace; font-size: 12px; background: rgba(0,0,0,0.2); display: inline-block; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.5px;'>",
+          meta$id,
+          "</div>",
+          "</div>",
+
+          # Geography section
+          "<div style='margin-bottom: 8px;'>",
+          "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Geography</div>",
+          "<table style='font-size: 12px; width: 100%; border-collapse: collapse;'>",
+          "<tr><td style='color: #555; padding: 2px 0;'><b>Country</b></td><td>",
+          fmt_val(meta$country),
+          "</td></tr>",
+          "<tr><td style='color: #555; padding: 2px 0;'><b>State</b></td><td>",
+          fmt_val(meta$state),
+          "</td></tr>",
+          "<tr><td style='color: #555; padding: 2px 0;'><b>Network</b></td><td>",
+          fmt_val(meta$network),
+          "</td></tr>",
+          "<tr><td style='color: #555; padding: 2px 0;'><b>Elevation</b></td><td>",
+          fmt_val(meta$elevation),
+          " m</td></tr>",
+          "</table>",
+          "</div>",
+
+          # Flags section
+          "<div>",
+          "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Station Flags</div>",
+          "<table style='font-size: 12px; width: 100%; border-collapse: collapse;'>",
+          "<tr><td style='color: #555; padding: 2px 0;'><b>GSN Flag</b></td><td>",
+          fmt_val(meta$gsn_flag),
+          "</td></tr>",
+          "<tr><td style='color: #555; padding: 2px 0;'><b>HCN/CRN Flag</b></td><td>",
+          fmt_val(meta$hcn_crn_flag),
+          "</td></tr>",
+          "<tr><td style='color: #555; padding: 2px 0;'><b>WMO ID</b></td><td>",
+          fmt_val(meta$gsn_flag),
+          "</td></tr>",
+          "</table>",
+          "</div>",
+
+          "</div>"
+        )
         overlays <- c("Stations")
         if ("distance" %in% names(meta)) {
-          popup <- paste(
+          popup <- paste0(
             popup,
-            paste(
-              "<br><b>Distance from marker:</b>",
-              round(meta$distance, 1),
-              "km"
-            ),
-            sep = "<br/>"
+            "<div style='margin-top: 8px;'>",
+            "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Distance from search</div>",
+            "<div style='font-family: monospace; font-size: 12px; background: #f4f4f4; border-left: 3px solid #c0392b; padding: 3px 8px; border-radius: 0 3px 3px 0;'>",
+            round(meta$distance, 1),
+            " km",
+            "</div>",
+            "</div>",
+            "</div>" # closes the outer wrapper div
           )
           overlays <- c(overlays, "Target")
         }
 
+        n_sites <- nrow(meta)
         meta <- leaflet::leaflet(meta) |>
-          leaflet::addProviderTiles(
-            provider = leaflet::providers$OpenStreetMap,
-            group = "OSM"
-          ) |>
-          leaflet::addProviderTiles(
-            provider = leaflet::providers$Esri.WorldImagery,
-            group = "Satellite"
-          ) |>
+          leaflet::addControl(
+            html = paste0(
+              "<div style='font-family: Arial, sans-serif; background: white; padding: 8px 14px; border-radius: 4px; box-shadow: 0 1px 5px rgba(0,0,0,0.3);'>",
+              "<div style='font-size: 13px; font-weight: bold; color: #2c7bb6;'>GHCN ",
+              tools::toTitleCase(database),
+              " Stations</div>",
+              "<div style='font-size: 11px; color: #888; margin-top: 2px;'>Global Historical Climatology Network</div>",
+              "</div>"
+            ),
+            position = "bottomleft"
+          )
+
+        if (!rlang::is_named(provider)) {
+          provider <- stats::setNames(provider, provider)
+        }
+        for (i in seq_along(provider)) {
+          meta <- leaflet::addProviderTiles(
+            meta,
+            provider = provider[[i]],
+            group = names(provider)[[i]]
+          )
+        }
+
+        meta <- meta |>
           leaflet::addMarkers(
             popup = popup,
-            clusterOptions = if (nrow(meta) < 20) {
+            clusterOptions = if (n_sites < 20) {
               NULL
             } else {
               leaflet::markerClusterOptions()
@@ -214,7 +285,7 @@ import_ghcn_stations <-
             group = "Stations"
           ) |>
           leaflet::addLayersControl(
-            baseGroups = c("OSM", "Satellite"),
+            baseGroups = names(provider),
             overlayGroups = overlays,
             options = leaflet::layersControlOptions(
               collapsed = FALSE,
@@ -227,11 +298,31 @@ import_ghcn_stations <-
             leaflet::addAwesomeMarkers(
               map = meta,
               data = target_sf,
-              popup = paste(
-                "<b>TARGET</b><hr>",
-                paste0("<b>Latitude/Y</b>: ", lat, "<br>"),
-                paste0("<b>Longitude/X</b>: ", lng, "<br>"),
-                paste0("<b>CRS:</b> ", crs)
+              popup = paste0(
+                "<div style='font-family: Arial, sans-serif; min-width: 200px; max-width: 260px;'>",
+
+                # Header
+                "<div style='background: #c0392b; color: white; padding: 8px 12px; margin: -10px -10px 10px; border-radius: 4px 4px 0 0;'>",
+                "<div style='font-size: 14px; font-weight: bold;'>Search Location</div>",
+                "</div>",
+
+                # Coordinates section
+                "<div style='margin-bottom: 8px;'>",
+                "<div style='font-size: 11px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;'>Coordinates</div>",
+                "<table style='font-size: 12px; width: 100%; border-collapse: collapse;'>",
+                "<tr><td style='color: #555; padding: 2px 0;'><b>Latitude</b></td><td style='font-family: monospace;'>",
+                lat,
+                "</td></tr>",
+                "<tr><td style='color: #555; padding: 2px 0;'><b>Longitude</b></td><td style='font-family: monospace;'>",
+                lng,
+                "</td></tr>",
+                "<tr><td style='color: #555; padding: 2px 0;'><b>CRS</b></td><td style='font-family: monospace;'>EPSG:",
+                crs,
+                "</td></tr>",
+                "</table>",
+                "</div>",
+
+                "</div>"
               ),
               group = "Target",
               icon = leaflet::makeAwesomeIcon(

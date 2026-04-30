@@ -1,7 +1,6 @@
 #' Deprecated ISD access functions
 #'
-#' @description
-#' `r lifecycle::badge('deprecated')`
+#' @description `r lifecycle::badge('deprecated')`
 #'
 #' This function is part of an old `worldmet` API. Please use the following
 #' alternatives:
@@ -15,13 +14,14 @@
 #' @inheritParams import_isd_stations_live
 #' @inheritParams import_isd_hourly
 #'
+#' @param lat,lon,n Decimal latitude (`lat`) and longitude (`lon`) (or other Y/X
+#'   coordinate if using a different `crs`). If provided, the `n` closest ISD
+#'   stations to this coordinate will be returned.
 #' @param end.year To help filter sites based on how recent the available data
 #'   are. `end.year` can be "current", "any" or a numeric year such as 2016, or
 #'   a range of years e.g. 1990:2016 (which would select any site that had an
 #'   end date in that range. **By default only sites that have some data for the
 #'   current year are returned**.
-#' @param n The number of nearest sites to search based on `latitude` and
-#'   `longitude`.
 #' @param plot If `TRUE` will plot sites on an interactive leaflet map.
 #' @param returnMap Should the leaflet map be returned instead of the meta data?
 #'   Default is `FALSE`.
@@ -50,7 +50,7 @@ getMeta <- function(
     m <- import_isd_stations(
       site = site,
       lat = lat,
-      lon = lon,
+      lng = lon,
       crs = crs,
       country = country,
       state = state,
@@ -72,7 +72,7 @@ getMeta <- function(
       import_isd_stations(
         site = site,
         lat = lat,
-        lon = lon,
+        lng = lon,
         crs = crs,
         country = country,
         state = state,

@@ -15,3 +15,5 @@ README_cache
 ^[.]?air[.]toml$
 ^\.vscode$
 ^revdep$
+^\.positai$
+^\.claude$

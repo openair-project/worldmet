@@ -1,4 +1,5 @@
 url: https://openair-project.github.io/worldmet/
+llm-docs: false
 template:
   package: openairpkgdown
 reference:

@@ -28,12 +28,12 @@ associated, or state codes and their associated states. These may be a useful
 reference when examining GHCN site metadata.
 }
 \seealso{
-Other GHCN functions: 
-\code{\link{import_ghcn_daily}()},
-\code{\link{import_ghcn_hourly}()},
-\code{\link{import_ghcn_inventory}()},
-\code{\link{import_ghcn_monthly_temp}()},
-\code{\link{import_ghcn_stations}()}
+Other GHCN functions:
+\code{\link[=import_ghcn_daily]{import_ghcn_daily()}},
+\code{\link[=import_ghcn_hourly]{import_ghcn_hourly()}},
+\code{\link[=import_ghcn_inventory]{import_ghcn_inventory()}},
+\code{\link[=import_ghcn_monthly_temp]{import_ghcn_monthly_temp()}},
+\code{\link[=import_ghcn_stations]{import_ghcn_stations()}}
 }
 \author{
 Jack Davison

@@ -35,12 +35,12 @@ reveals the earliest and latest years of data available for each station from
 the NOAA database.
 }
 \seealso{
-Other GHCN functions: 
-\code{\link{import_ghcn_countries}()},
-\code{\link{import_ghcn_daily}()},
-\code{\link{import_ghcn_hourly}()},
-\code{\link{import_ghcn_monthly_temp}()},
-\code{\link{import_ghcn_stations}()}
+Other GHCN functions:
+\code{\link[=import_ghcn_countries]{import_ghcn_countries()}},
+\code{\link[=import_ghcn_daily]{import_ghcn_daily()}},
+\code{\link[=import_ghcn_hourly]{import_ghcn_hourly()}},
+\code{\link[=import_ghcn_monthly_temp]{import_ghcn_monthly_temp()}},
+\code{\link[=import_ghcn_stations]{import_ghcn_stations()}}
 }
 \author{
 Jack Davison

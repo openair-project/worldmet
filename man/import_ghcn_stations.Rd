@@ -69,12 +69,12 @@ the GHCNh or GHCNd. As well as the station \code{id}, needed for importing
 measurement data, useful geographic and network metadata is also returned.
 }
 \seealso{
-Other GHCN functions: 
-\code{\link{import_ghcn_countries}()},
-\code{\link{import_ghcn_daily}()},
-\code{\link{import_ghcn_hourly}()},
-\code{\link{import_ghcn_inventory}()},
-\code{\link{import_ghcn_monthly_temp}()}
+Other GHCN functions:
+\code{\link[=import_ghcn_countries]{import_ghcn_countries()}},
+\code{\link[=import_ghcn_daily]{import_ghcn_daily()}},
+\code{\link[=import_ghcn_hourly]{import_ghcn_hourly()}},
+\code{\link[=import_ghcn_inventory]{import_ghcn_inventory()}},
+\code{\link[=import_ghcn_monthly_temp]{import_ghcn_monthly_temp()}}
 }
 \author{
 Jack Davison

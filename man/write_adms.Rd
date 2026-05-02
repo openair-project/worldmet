@@ -38,8 +38,8 @@ write_adms(dat, file = "~/adms_met.MET")
 }
 }
 \seealso{
-Other Met writing functions: 
-\code{\link{write_met}()}
+Other Met writing functions:
+\code{\link[=write_met]{write_met()}}
 }
 \concept{ADMS functions}
 \concept{Met writing functions}

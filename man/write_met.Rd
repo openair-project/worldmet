@@ -32,7 +32,7 @@ could be \code{"_ISD"}, \code{"_hourly"}, \code{"_lite"}, and so on.}
 
 \item{progress}{Show a progress bar when writing many stations/years?
 Defaults to \code{TRUE} in interactive R sessions. Passed to \code{.progress} in
-\code{\link[purrr:map]{purrr::walk()}}.}
+\code{\link[purrr:walk]{purrr::walk()}}.}
 }
 \value{
 \code{write_met()} returns \code{path} invisibly.
@@ -51,7 +51,7 @@ write_met(dat)
 }
 }
 \seealso{
-Other Met writing functions: 
-\code{\link{write_adms}()}
+Other Met writing functions:
+\code{\link[=write_adms]{write_adms()}}
 }
 \concept{Met writing functions}

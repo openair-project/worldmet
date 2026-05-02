@@ -144,10 +144,10 @@ beijing_met2 <- import_isd_hourly(code = "545110-99999", year = 2010:2025)
 }
 }
 \seealso{
-Other NOAA ISD functions: 
-\code{\link{import_isd_lite}()},
-\code{\link{import_isd_stations}()},
-\code{\link{import_isd_stations_live}()}
+Other NOAA ISD functions:
+\code{\link[=import_isd_lite]{import_isd_lite()}},
+\code{\link[=import_isd_stations]{import_isd_stations()}},
+\code{\link[=import_isd_stations_live]{import_isd_stations_live()}}
 }
 \author{
 David Carslaw

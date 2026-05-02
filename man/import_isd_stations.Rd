@@ -84,10 +84,10 @@ getMeta(lat = 40, lng = 116.9)
 }
 }
 \seealso{
-Other NOAA ISD functions: 
-\code{\link{import_isd_hourly}()},
-\code{\link{import_isd_lite}()},
-\code{\link{import_isd_stations_live}()}
+Other NOAA ISD functions:
+\code{\link[=import_isd_hourly]{import_isd_hourly()}},
+\code{\link[=import_isd_lite]{import_isd_lite()}},
+\code{\link[=import_isd_stations_live]{import_isd_stations_live()}}
 }
 \author{
 David Carslaw

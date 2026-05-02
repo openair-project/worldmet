@@ -113,10 +113,10 @@ heathrow_lite <- import_isd_lite(code = "037720-99999", year = 2025)
 \code{\link[=getMeta]{getMeta()}} to obtain the codes based on various site search
 approaches.
 
-Other NOAA ISD functions: 
-\code{\link{import_isd_hourly}()},
-\code{\link{import_isd_stations}()},
-\code{\link{import_isd_stations_live}()}
+Other NOAA ISD functions:
+\code{\link[=import_isd_hourly]{import_isd_hourly()}},
+\code{\link[=import_isd_stations]{import_isd_stations()}},
+\code{\link[=import_isd_stations_live]{import_isd_stations_live()}}
 }
 \author{
 Jack Davison

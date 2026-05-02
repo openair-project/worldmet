@@ -22,9 +22,9 @@ head(meta)
 }
 }
 \seealso{
-Other NOAA ISD functions: 
-\code{\link{import_isd_hourly}()},
-\code{\link{import_isd_lite}()},
-\code{\link{import_isd_stations}()}
+Other NOAA ISD functions:
+\code{\link[=import_isd_hourly]{import_isd_hourly()}},
+\code{\link[=import_isd_lite]{import_isd_lite()}},
+\code{\link[=import_isd_stations]{import_isd_stations()}}
 }
 \concept{NOAA ISD functions}

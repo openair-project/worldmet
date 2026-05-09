@@ -452,13 +452,17 @@ import_single_ghcn_site <- function(
         )
       )
 
-    # get pmax of sky cover columns - for ADMS
-    data$sky_cover <- pmax(
-      data$sky_cover_layer_1_okta,
-      data$sky_cover_layer_2_okta,
-      data$sky_cover_layer_3_okta,
-      na.rm = TRUE
-    )
+    # derive total sky cover from sky_condition column
+    # format is up to 3 values separated by ";"; take the first non-empty one
+    if ("sky_condition" %in% names(data)) {
+      sky_parts <- strsplit(data$sky_condition, ";", fixed = TRUE)
+      first_val <- vapply(sky_parts, function(p) {
+        non_empty <- p[nzchar(p)]
+        if (length(non_empty) == 0L) NA_character_ else non_empty[1L]
+      }, character(1L))
+      data$sky_cover <- as.integer(first_val)
+      data$sky_cover[!is.na(data$sky_cover) & data$sky_cover == 9L] <- NA_integer_
+    }
 
     # get ceiling height
     data <-

@@ -249,18 +249,7 @@ import_ghcn_stations <-
         }
 
         n_sites <- nrow(meta)
-        meta <- leaflet::leaflet(meta) |>
-          leaflet::addControl(
-            html = paste0(
-              "<div style='font-family: Arial, sans-serif; background: white; padding: 8px 14px; border-radius: 4px; box-shadow: 0 1px 5px rgba(0,0,0,0.3);'>",
-              "<div style='font-size: 13px; font-weight: bold; color: #2c7bb6;'>GHCN ",
-              tools::toTitleCase(database),
-              " Stations</div>",
-              "<div style='font-size: 11px; color: #888; margin-top: 2px;'>Global Historical Climatology Network</div>",
-              "</div>"
-            ),
-            position = "bottomleft"
-          )
+        meta <- leaflet::leaflet(meta)
 
         if (!rlang::is_named(provider)) {
           provider <- stats::setNames(provider, provider)

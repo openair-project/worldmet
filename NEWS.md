@@ -20,6 +20,8 @@
 
 - `import_ghcn_stations()` now correctly show the WMO ID (previously this was a duplicated GSN flag).
 
+- `import_ghcn_hourly()` now calculates `sky_cover` from the `sky_condition` column.
+
 # worldmet 1.0.0
 
 ## Dependency Changes

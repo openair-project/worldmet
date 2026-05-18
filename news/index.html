@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">worldmet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,16 +52,16 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="worldmet-development-version">worldmet (development version)<a class="anchor" aria-label="anchor" href="#worldmet-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.1.0" id="worldmet-110">worldmet 1.1.0<a class="anchor" aria-label="anchor" href="#worldmet-110"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-1-1-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h3>
 <ul><li><p>The styling of marker popups in <code><a href="../reference/import_ghcn_stations.html">import_ghcn_stations()</a></code> and <code><a href="../reference/import_isd_stations.html">import_isd_stations()</a></code> has been improved.</p></li>
 <li><p><code><a href="../reference/import_ghcn_stations.html">import_ghcn_stations()</a></code> has gained <code>provider</code> in line with <code><a href="../reference/import_isd_stations.html">import_isd_stations()</a></code>.</p></li>
 <li><p>The default <code>provider</code> has changed from <code>OpenStreetMap</code> to <code>CartoDB.Voyager</code> due to ongoing issues with OSM in Leaflet (<a href="https://github.com/rstudio/leaflet/issues/964" class="external-link uri">https://github.com/rstudio/leaflet/issues/964</a>).</p></li>
 <li><p>!BREAKING: The <code>lon</code> argument of <code><a href="../reference/import_isd_stations.html">import_isd_stations()</a></code> has been renamed <code>lng</code> to match <code><a href="../reference/import_ghcn_stations.html">import_ghcn_stations()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-1-1-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-0"></a></h3>
 <ul><li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> and <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code> will now always return a complete year of data - i.e., 8760 rows for a non-leap year. Missing values will be padded with <code>NA</code> values (<a href="https://github.com/openair-project/worldmet/issues/59" class="external-link">#59</a>).</p></li>
 <li><p><code><a href="../reference/import_ghcn_inventory.html">import_ghcn_inventory()</a></code> is now less sensitive to small changes in the format of NOAA’s <code>ghcnh-inventory.txt</code> file.</p></li>
 <li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> will now succeed even if certain columns are not present in the raw data files.</p></li>

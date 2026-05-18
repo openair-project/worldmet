@@ -28,7 +28,7 @@ package.}
 a single character. Defaults to being comma-delimited (\code{","}).}
 
 \item{suffix}{An additional suffix to append to file names. Useful examples
-could be \code{"_ISD"}, \code{"_hourly"}, \code{"_lite"}, and so on.}
+could be \code{"_isd"}, \code{"_hourly"}, \code{"_lite"}, and so on.}
 
 \item{progress}{Show a progress bar when writing many stations/years?
 Defaults to \code{TRUE} in interactive R sessions. Passed to \code{.progress} in
@@ -38,10 +38,9 @@ Defaults to \code{TRUE} in interactive R sessions. Passed to \code{.progress} in
 \code{write_met()} returns \code{path} invisibly.
 }
 \description{
-Writes a text file in the ADMS format to a location of the user's choosing,
-with optional interpolation of missing values. At present this function only
-works with data from \code{\link[=import_isd_hourly]{import_isd_hourly()}}; it will later be expanded to work
-with \code{\link[=import_ghcn_hourly]{import_ghcn_hourly()}} also.
+Writes data returned by any of \code{\link[=import_isd_hourly]{import_isd_hourly()}}, \code{\link[=import_ghcn_hourly]{import_ghcn_hourly()}},
+or \code{\link[=import_ghcn_daily]{import_ghcn_daily()}} to a file. Each station and year in the data is
+written to a separate file.
 }
 \examples{
 \dontrun{

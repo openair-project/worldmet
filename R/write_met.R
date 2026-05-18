@@ -1,9 +1,8 @@
 #' Export a meteorological data frame in files, chunked by site and year
 #'
-#' Writes a text file in the ADMS format to a location of the user's choosing,
-#' with optional interpolation of missing values. At present this function only
-#' works with data from [import_isd_hourly()]; it will later be expanded to work
-#' with [import_ghcn_hourly()] also.
+#' Writes data returned by any of [import_isd_hourly()], [import_ghcn_hourly()],
+#' or [import_ghcn_daily()] to a file. Each station and year in the data is
+#' written to a separate file.
 #'
 #' @param x A data frame imported by [import_isd_hourly()],
 #'   [import_ghcn_hourly()], or [import_ghcn_daily()].
@@ -19,7 +18,7 @@
 #'   a single character. Defaults to being comma-delimited (`","`).
 #'
 #' @param suffix An additional suffix to append to file names. Useful examples
-#'   could be `"_ISD"`, `"_hourly"`, `"_lite"`, and so on.
+#'   could be `"_isd"`, `"_hourly"`, `"_lite"`, and so on.
 #'
 #' @param progress Show a progress bar when writing many stations/years?
 #'   Defaults to `TRUE` in interactive R sessions. Passed to `.progress` in

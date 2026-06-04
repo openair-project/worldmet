@@ -454,7 +454,7 @@ import_single_ghcn_site <- function(
 
     # derive total sky cover from sky_condition column
     # format is up to 3 values separated by ";"; take the first non-empty one
-    if ("sky_condition" %in% names(data)) {
+    if ("sky_condition" %in% names(data) && is.character(data$sky_condition)) {
       sky_parts <- strsplit(data$sky_condition, ";", fixed = TRUE)
       first_val <- vapply(
         sky_parts,
@@ -468,6 +468,11 @@ import_single_ghcn_site <- function(
       data$sky_cover[
         !is.na(data$sky_cover) & data$sky_cover == 9L
       ] <- NA_integer_
+    }
+
+    # ensure sky_cover exists even if sky_condition was absent/non-character
+    if (!"sky_cover" %in% names(data)) {
+      data$sky_cover <- NA_integer_
     }
 
     # get ceiling height

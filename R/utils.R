@@ -1,3 +1,6 @@
+# Session-level cache for station metadata (avoids re-downloading on every call)
+.worldmet_cache <- new.env(parent = emptyenv())
+
 #' Copy of [openair::timeAverage()] for hourly averaging, simplified for
 #' specific use in worldmet
 #' @noRd

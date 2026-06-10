@@ -175,10 +175,12 @@ import_ghcn_hourly <-
               append_codes = append_codes,
               codes = codes,
               potential_codes = potential_codes,
-              meta = meta
+              meta = meta,
+              download_retry = download_retry
             )
           },
           import_single_ghcn_site = import_single_ghcn_site,
+          download_retry = download_retry,
           year = year,
           source = source,
           append_codes = append_codes,
@@ -202,10 +204,12 @@ import_ghcn_hourly <-
               append_codes = append_codes,
               codes = codes,
               potential_codes = potential_codes,
-              meta = meta
+              meta = meta,
+              download_retry = download_retry
             )
           },
           import_single_ghcn_site = import_single_ghcn_site,
+          download_retry = download_retry,
           source = source,
           append_codes = append_codes,
           codes = codes,
@@ -318,6 +322,30 @@ import_ghcn_hourly <-
     return(data)
   }
 
+#' Download a URL to a file, retrying on partial transfers
+#' @noRd
+download_retry <- function(url, destfile, max_tries = 3) {
+  for (i in seq_len(max_tries)) {
+    partial <- FALSE
+    err <- NULL
+    withCallingHandlers(
+      tryCatch(
+        utils::download.file(url, destfile = destfile, quiet = TRUE, mode = "wb"),
+        error = function(e) err <<- e
+      ),
+      warning = function(w) {
+        if (grepl("partial|length.*!=", conditionMessage(w))) {
+          partial <<- TRUE
+          invokeRestart("muffleWarning")
+        }
+      }
+    )
+    if (!is.null(err)) return(err)
+    if (!partial) return(NULL)
+  }
+  simpleError(sprintf("Incomplete download after %d attempts: %s", max_tries, url))
+}
+
 #' Helper to import a single site
 #' @noRd
 import_single_ghcn_site <- function(
@@ -327,29 +355,30 @@ import_single_ghcn_site <- function(
   append_codes,
   codes,
   potential_codes,
-  meta
+  meta,
+  download_retry
 ) {
+  old_timeout <- options(timeout = 300)
+  on.exit(options(old_timeout), add = TRUE)
+
   if (is.null(year)) {
     per_station_url <-
       "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-station/GHCNh_INPUTCODE_por.psv"
 
     url <- sub("INPUTCODE", station, per_station_url)
 
-    data <- try(
-      suppressWarnings(
-        readr::read_delim(
-          url,
-          delim = "|",
-          progress = FALSE,
-          show_col_types = FALSE
-        )
-      ),
-      silent = TRUE
-    )
+    tmp <- tempfile(fileext = ".psv")
+    on.exit(unlink(tmp), add = TRUE)
+    if (!is.null(download_retry(url, tmp))) return(NULL)
 
-    if (class(data)[1] == "try-error") {
-      return(NULL)
-    }
+    data <- suppressWarnings(
+      readr::read_delim(
+        tmp,
+        delim = "|",
+        progress = FALSE,
+        show_col_types = FALSE
+      )
+    )
 
     data <- data |>
       dplyr::slice_head(n = -1L) |>
@@ -380,35 +409,27 @@ import_single_ghcn_site <- function(
     url <- gsub("INPUTYEAR", as.character(year), url)
 
     if (source == "psv") {
-      data <- try(
-        suppressWarnings(
-          readr::read_delim(
-            url,
-            delim = "|",
-            name_repair = tolower,
-            show_col_types = FALSE,
-            progress = FALSE
-          )
-        ),
-        silent = TRUE
-      )
+      tmp <- tempfile(fileext = ".psv")
+      on.exit(unlink(tmp), add = TRUE)
+      if (!is.null(download_retry(url, tmp))) return(NULL)
 
-      if (class(data)[1] == "try-error") {
-        return(NULL)
-      }
+      data <- suppressWarnings(
+        readr::read_delim(
+          tmp,
+          delim = "|",
+          name_repair = tolower,
+          show_col_types = FALSE,
+          progress = FALSE
+        )
+      )
 
       data <- dplyr::rename(data, station_id = "station")
     } else if (source == "parquet") {
-      data <- try(
-        suppressWarnings(
-          arrow::read_parquet(url)
-        ),
-        silent = TRUE
-      )
+      tmp <- tempfile(fileext = ".parquet")
+      on.exit(unlink(tmp), add = TRUE)
+      if (!is.null(download_retry(url, tmp))) return(NULL)
 
-      if (class(data)[1] == "try-error") {
-        return(NULL)
-      }
+      data <- suppressWarnings(arrow::read_parquet(tmp))
 
       data <- data |>
         dplyr::rename_with(tolower) |>

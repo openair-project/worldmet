@@ -330,7 +330,12 @@ download_retry <- function(url, destfile, max_tries = 3) {
     err <- NULL
     withCallingHandlers(
       tryCatch(
-        utils::download.file(url, destfile = destfile, quiet = TRUE, mode = "wb"),
+        utils::download.file(
+          url,
+          destfile = destfile,
+          quiet = TRUE,
+          mode = "wb"
+        ),
         error = function(e) err <<- e
       ),
       warning = function(w) {
@@ -340,10 +345,16 @@ download_retry <- function(url, destfile, max_tries = 3) {
         }
       }
     )
-    if (!is.null(err)) return(err)
+    if (!is.null(err)) {
+      return(err)
+    }
     if (!partial) return(NULL)
   }
-  simpleError(sprintf("Incomplete download after %d attempts: %s", max_tries, url))
+  simpleError(sprintf(
+    "Incomplete download after %d attempts: %s",
+    max_tries,
+    url
+  ))
 }
 
 #' Helper to import a single site
@@ -369,7 +380,9 @@ import_single_ghcn_site <- function(
 
     tmp <- tempfile(fileext = ".psv")
     on.exit(unlink(tmp), add = TRUE)
-    if (!is.null(download_retry(url, tmp))) return(NULL)
+    if (!is.null(download_retry(url, tmp))) {
+      return(NULL)
+    }
 
     data <- suppressWarnings(
       readr::read_delim(
@@ -411,7 +424,9 @@ import_single_ghcn_site <- function(
     if (source == "psv") {
       tmp <- tempfile(fileext = ".psv")
       on.exit(unlink(tmp), add = TRUE)
-      if (!is.null(download_retry(url, tmp))) return(NULL)
+      if (!is.null(download_retry(url, tmp))) {
+        return(NULL)
+      }
 
       data <- suppressWarnings(
         readr::read_delim(
@@ -427,7 +442,9 @@ import_single_ghcn_site <- function(
     } else if (source == "parquet") {
       tmp <- tempfile(fileext = ".parquet")
       on.exit(unlink(tmp), add = TRUE)
-      if (!is.null(download_retry(url, tmp))) return(NULL)
+      if (!is.null(download_retry(url, tmp))) {
+        return(NULL)
+      }
 
       data <- suppressWarnings(arrow::read_parquet(tmp))
 

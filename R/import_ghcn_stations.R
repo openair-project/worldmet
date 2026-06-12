@@ -92,7 +92,9 @@ import_ghcn_stations <-
       tmp <- tempfile(fileext = ".txt")
       on.exit(unlink(tmp), add = TRUE)
       err <- download_retry(meta_url, tmp)
-      if (!is.null(err)) stop(err)
+      if (!is.null(err)) {
+        stop(err)
+      }
 
       meta <-
         readr::read_fwf(

@@ -6,6 +6,10 @@
 
 - `import_ghcn_stations()` now caches data per session, speeding up data import.
 
+## Bug Fixes
+
+- fixed issue where `sky_cover` was not calculated correctly from `sky_condition` column if it was not a character column.
+
 # worldmet 1.1.0
 
 ## New Features

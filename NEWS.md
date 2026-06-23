@@ -1,5 +1,11 @@
 # worldmet (development version)
 
+## New Features
+
+- `import_ghcn_hourly()` will now re-attempt to download data up to three times if the first attempt fails. This makes it more robust to interrupted connections with NOAA's data store.
+
+- `import_ghcn_stations()` now caches data per session, speeding up data import.
+
 ## Bug Fixes
 
 - fixed issue where `sky_cover` was not calculated correctly from `sky_condition` column if it was not a character column.

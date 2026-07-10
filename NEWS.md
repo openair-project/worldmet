@@ -10,6 +10,8 @@
 
 - fixed issue where `sky_cover` was not calculated correctly from `sky_condition` column if it was not a character column.
 
+- fixed issue importing many years of data at once causing column type conflict errors in the "minute" column.
+
 # worldmet 1.1.0
 
 ## New Features

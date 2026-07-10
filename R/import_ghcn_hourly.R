@@ -568,6 +568,7 @@ import_single_ghcn_site <- function(
       dplyr::across(
         dplyr::any_of(
           c(
+            "minute",
             "latitude",
             "longitude",
             "elevation",

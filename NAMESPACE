@@ -21,6 +21,8 @@ export(write_met)
 importFrom(carrier,crate)
 importFrom(lifecycle,deprecated)
 importFrom(mirai,daemons)
-importFrom(rlang,"%||%")
-importFrom(rlang,.data)
+importFrom(rlang,
+  "%||%",
+  .data
+)
 importFrom(tibble,tibble)

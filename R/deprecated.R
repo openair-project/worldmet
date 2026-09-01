@@ -43,7 +43,7 @@ getMeta <- function(
   n = 10,
   end.year = "current",
   provider = c(
-    "Street Map" = "CartoDB.Voyager",
+    "Street Map" = "OpenStreetMap",
     "Satellite" = "Esri.WorldImagery"
   ),
   plot = TRUE,

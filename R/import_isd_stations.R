@@ -51,7 +51,7 @@ import_isd_stations <- function(
   n_max = 10,
   end_year = "current",
   provider = c(
-    "Street Map" = "CartoDB.Voyager",
+    "Street Map" = "OpenStreetMap",
     "Satellite" = "Esri.WorldImagery"
   ),
   return = c("table", "sf", "map")

@@ -12,7 +12,7 @@ import_ghcn_stations(
   lng = NULL,
   crs = 4326,
   n_max = 10L,
-  provider = c(`Street Map` = "CartoDB.Voyager", Satellite = "Esri.WorldImagery"),
+  provider = c(`Street Map` = "OpenStreetMap", Satellite = "Esri.WorldImagery"),
   database = c("hourly", "daily"),
   return = c("table", "sf", "map")
 )

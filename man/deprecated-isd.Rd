@@ -16,7 +16,7 @@ getMeta(
   state = NULL,
   n = 10,
   end.year = "current",
-  provider = c(`Street Map` = "CartoDB.Voyager", Satellite = "Esri.WorldImagery"),
+  provider = c(`Street Map` = "OpenStreetMap", Satellite = "Esri.WorldImagery"),
   plot = TRUE,
   returnMap = FALSE
 )

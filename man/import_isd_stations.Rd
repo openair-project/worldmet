@@ -13,7 +13,7 @@ import_isd_stations(
   crs = 4326,
   n_max = 10,
   end_year = "current",
-  provider = c(`Street Map` = "CartoDB.Voyager", Satellite = "Esri.WorldImagery"),
+  provider = c(`Street Map` = "OpenStreetMap", Satellite = "Esri.WorldImagery"),
   return = c("table", "sf", "map")
 )
 }

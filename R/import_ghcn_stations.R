@@ -65,7 +65,7 @@ import_ghcn_stations <-
     crs = 4326,
     n_max = 10L,
     provider = c(
-      "Street Map" = "CartoDB.Voyager",
+      "Street Map" = "OpenStreetMap",
       "Satellite" = "Esri.WorldImagery"
     ),
     database = c("hourly", "daily"),

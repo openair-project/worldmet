@@ -6,6 +6,8 @@
 
 - `import_ghcn_stations()` now caches data per session, speeding up data import.
 
+- The default `provider` has changed back to `OpenStreetMap` from `CartoDB.Voyager` as issues with OSM in Leaflet have been resolved.
+
 ## Bug Fixes
 
 - fixed issue where `sky_cover` was not calculated correctly from `sky_condition` column if it was not a character column.

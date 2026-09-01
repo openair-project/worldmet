@@ -57,6 +57,7 @@
 <h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> will now re-attempt to download data up to three times if the first attempt fails. This makes it more robust to interrupted connections with NOAA’s data store.</p></li>
 <li><p><code><a href="../reference/import_ghcn_stations.html">import_ghcn_stations()</a></code> now caches data per session, speeding up data import.</p></li>
+<li><p>The default <code>provider</code> has changed back to <code>OpenStreetMap</code> from <code>CartoDB.Voyager</code> as issues with OSM in Leaflet have been resolved.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>

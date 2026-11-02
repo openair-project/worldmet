@@ -571,7 +571,6 @@ getDatDelim <- function(code, year, hourly) {
     met_data <-
       worldmet_time_average(
         met_data,
-        avg.time = "hour",
         type = c("code", "station")
       )
   }
@@ -975,7 +974,6 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
   if (hourly) {
     dat <- worldmet_time_average(
       dat,
-      avg.time = "hour",
       type = c("usaf", "wban")
     )
   }

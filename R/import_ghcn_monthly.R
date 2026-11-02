@@ -202,7 +202,7 @@ import_ghcn_monthly_prcp <- function(
       ) |>
       dplyr::bind_rows()
 
-    if (is.null(data) || nrow(data) == 0L) {
+    if (nrow(data) == 0L) {
       cli::cli_warn("No data has been returned.")
     } else {
       data <- data |>

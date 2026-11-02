@@ -180,7 +180,7 @@ import_ghcn_daily <- function(
     dplyr::bind_rows()
 
   # if null, leave early
-  if (is.null(data) || nrow(data) == 0L) {
+  if (nrow(data) == 0L) {
     cli::cli_warn("No data has been returned.")
     return(NULL)
   }

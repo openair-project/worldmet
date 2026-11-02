@@ -1,22 +1,18 @@
 # Session-level cache for station metadata (avoids re-downloading on every call)
 .worldmet_cache <- new.env(parent = emptyenv())
 
-#' Copy of [openair::timeAverage()] for hourly averaging, simplified for
-#' specific use in worldmet
+#' Average data to hourly resolution
+#'
+#' A trimmed copy of [openair::timeAverage()] for worldmet's needs. Wind
+#' direction is vector-averaged via U/V components, character/factor columns
+#' are dropped, and each group is padded to complete calendar years of hourly
+#' data.
+#'
+#' @param mydata A data frame with a `date` column.
+#' @param type Columns to group by (e.g., station identifiers).
 #' @noRd
-worldmet_time_average <- function(
-  mydata,
-  avg.time = "hour",
-  type = "default"
-) {
-  # extract variables of interest
-  vars <- unique(c("date", names(mydata)))
-  mydata <- check_prep(
-    mydata,
-    vars,
-    type = "default",
-    remove.calm = FALSE
-  )
+worldmet_time_average <- function(mydata, type) {
+  mydata <- check_prep(mydata)
 
   # time zone of data (replace missing w/ GMT)
   TZ <- attr(mydata$date, "tzone") %||% "GMT"
@@ -30,20 +26,15 @@ worldmet_time_average <- function(
     }
   }
 
-  # function to calculate means
-  #
-  # need to check whether avg.time is > or < actual time gap of data
-  # then data will be expanded or aggregated accordingly
+  # function to calculate hourly means
   calc.mean <- function(mydata) {
     # calculate Uu & Vv if "wd" (& "ws") are in mydata
     mydata <- calculate_wind_components(mydata = mydata)
 
-    ## Aggregate data
-
     ## variables to split by
     vars <- c(type, "date")
     mydata$date <-
-      cut(mydata$date, avg.time) |>
+      cut(mydata$date, "hour") |>
       as.character() |>
       (function(x) {
         id <- !grepl("00:00", x)
@@ -52,8 +43,7 @@ worldmet_time_average <- function(
       })() |>
       as.POSIXct(tz = TZ)
 
-    avmet <-
-      mydata |>
+    mydata |>
       dplyr::group_by(dplyr::across(dplyr::all_of(vars))) |>
       dplyr::summarise(dplyr::across(
         dplyr::where(function(x) {
@@ -63,8 +53,6 @@ worldmet_time_average <- function(
           FUN(x)
         }
       ))
-
-    avmet
   }
 
   # type will always be a factor
@@ -102,43 +90,36 @@ worldmet_time_average <- function(
       dplyr::select(-dplyr::any_of(c("Uu", "Vv")))
   }
 
-  # drop default column if it exists
-  if ("default" %in% names(mydata)) {
-    mydata$default <- NULL
-  }
-
   # ensure all hours are present
-  if (avg.time == "hour") {
-    type_split <- c(type, "lat", "lng", "latitude", "longitude", "elev")
-    type_split <- type_split[type_split %in% names(mydata)]
+  type_split <- c(type, "lat", "lng", "latitude", "longitude", "elev")
+  type_split <- type_split[type_split %in% names(mydata)]
 
-    # split by type, lat, lng, elev, and complete by date
-    mydata <-
-      purrr::map(
-        .x = split(
-          mydata,
-          mydata[, type_split],
-          drop = TRUE
-        ),
-        .f = \(df) {
-          from <- as.POSIXct(
-            paste0(format(min(df$date), "%Y"), "-01-01"),
-            tz = attr(df$date, "tzone")
-          )
-          to <- as.POSIXct(
-            paste0(format(max(df$date), "%Y"), "-12-31 23:00:00"),
-            tz = attr(df$date, "tzone")
-          )
+  # split by type, lat, lng, elev, and complete by date
+  mydata <-
+    purrr::map(
+      .x = split(
+        mydata,
+        mydata[, type_split],
+        drop = TRUE
+      ),
+      .f = \(df) {
+        from <- as.POSIXct(
+          paste0(format(min(df$date), "%Y"), "-01-01"),
+          tz = attr(df$date, "tzone")
+        )
+        to <- as.POSIXct(
+          paste0(format(max(df$date), "%Y"), "-12-31 23:00:00"),
+          tz = attr(df$date, "tzone")
+        )
 
-          tidyr::complete(
-            df,
-            tidyr::nesting(!!!rlang::syms(type_split)),
-            date = seq(from, to, by = "hour")
-          )
-        }
-      ) |>
-      dplyr::bind_rows()
-  }
+        tidyr::complete(
+          df,
+          tidyr::nesting(!!!rlang::syms(type_split)),
+          date = seq(from, to, by = "hour")
+        )
+      }
+    ) |>
+    dplyr::bind_rows()
 
   # return
   return(mydata)
@@ -168,156 +149,49 @@ calculate_wind_components <- function(mydata) {
   return(mydata)
 }
 
-#' Copy of `check_prep()` from `openair`
+#' Prepare data for time averaging
+#'
+#' A trimmed copy of `check_prep()` from `openair`, keeping only the checks
+#' that apply to worldmet's hourly averaging.
 #' @noRd
-check_prep <- function(
-  mydata,
-  Names,
-  type,
-  remove.calm = TRUE,
-  remove.neg = TRUE,
-  wd = "wd"
-) {
-  # deal with conditioning variable if present, if user-defined, must exist in
-  # data pre-defined types existing conditioning variables that only depend on
-  # date (which is checked)
-  conds <- c(
-    "default",
-    "year",
-    "hour",
-    "month",
-    "season",
-    "weekday",
-    "week",
-    "weekend",
-    "monthyear",
-    "gmtbst",
-    "bstgmt",
-    "dst",
-    "daylight",
-    "yearseason",
-    "seasonyear"
-  )
-  all.vars <- unique(c(names(mydata), conds))
-
-  # names we want to be there
-  varNames <- c(Names, type)
-  matching <- varNames %in% all.vars
-
-  if (!all(matching)) {
-    # not all variables are present
-    stop(cat("Can't find the variable(s)", varNames[!matching], "\n"))
-  }
-
-  # add type to names if not in pre-defined list
-  if (!all(type %in% conds)) {
-    ids <- which(!type %in% conds)
-    Names <- c(Names, type[ids])
-  }
-
-  # if type already present in data frame
-  if (any(type %in% names(mydata))) {
-    ids <- which(type %in% names(mydata))
-    Names <- unique(c(Names, type[ids]))
-  }
-
-  # just select data needed
-  mydata <- mydata[, Names]
-
-  # if site is in the data set, check none are missing
-  # seems to be a problem for some KCL data...
-  if ("site" %in% names(mydata)) {
-    # split by site
-
-    # remove any NA sites
-    if (anyNA(mydata$site)) {
-      id <- which(is.na(mydata$site))
-      mydata <- mydata[-id, ]
-    }
-  }
-
-  # sometimes ratios are considered which can results in infinite values
+check_prep <- function(mydata) {
   # make sure all infinite values are set to NA
   mydata[] <- lapply(mydata, function(x) {
     replace(x, x == Inf | x == -Inf, NA)
   })
 
-  if ("ws" %in% Names) {
-    if ("ws" %in% Names && is.numeric(mydata$ws)) {
-      # check for negative wind speeds
-      if (any(sign(mydata$ws[!is.na(mydata$ws)]) == -1)) {
-        if (remove.neg) {
-          # remove negative ws only if TRUE
-          warning("Wind speed <0; removing negative data")
-          mydata$ws[mydata$ws < 0] <- NA
-        }
-      }
+  # check for negative wind speeds
+  if ("ws" %in% names(mydata) && is.numeric(mydata$ws)) {
+    if (any(sign(mydata$ws[!is.na(mydata$ws)]) == -1)) {
+      warning("Wind speed <0; removing negative data")
+      mydata$ws[mydata$ws < 0] <- NA
     }
   }
 
-  # round wd to make processing obvious
-  # data already rounded to nearest 10 degress will not be affected
-  # data not rounded will be rounded to nearest 10 degrees
-  # assumes 10 is average of 5-15 etc
-  if (wd %in% Names) {
-    if (wd %in% Names && is.numeric(mydata[, wd])) {
-      # check for wd <0 or > 360
-      if (
-        any(
-          sign(mydata[[wd]][!is.na(mydata[[wd]])]) == -1 |
-            mydata[[wd]][!is.na(mydata[[wd]])] > 360
-        )
-      ) {
-        warning("Wind direction < 0 or > 360; removing these data")
-        mydata[[wd]][mydata[[wd]] < 0] <- NA
-        mydata[[wd]][mydata[[wd]] > 360] <- NA
-      }
-
-      if (remove.calm) {
-        if ("ws" %in% names(mydata)) {
-          mydata[[wd]][mydata$ws == 0] <- NA # set wd to NA where there are calms
-          mydata$ws[mydata$ws == 0] <- NA # remove calm ws
-        }
-        mydata[[wd]][mydata[[wd]] == 0] <- 360 # set any legitimate wd to 360
-
-        # round wd for use in functions - except windRose/pollutionRose
-        mydata[[wd]] <- 10 * ceiling(mydata[[wd]] / 10 - 0.5)
-        mydata[[wd]][mydata[[wd]] == 0] <- 360 # angles <5 should be in 360 bin
-      }
-      mydata[[wd]][mydata[[wd]] == 0] <- 360 # set any legitimate wd to 360
-    }
+  # make sure date is POSIXct
+  if (inherits(mydata$date, "POSIXlt")) {
+    stop("date should be in POSIXct format not POSIXlt")
   }
 
-  # make sure date is ordered in time if present
-  if ("date" %in% Names) {
-    if (inherits(mydata$date, "POSIXlt")) {
-      stop("date should be in POSIXct format not POSIXlt")
-    }
-
-    # try and work with a factor date - but probably a problem in original data
-    if (is.factor(mydata$date)) {
-      warning("date field is a factor, check date format")
-      mydata$date <- as.POSIXct(mydata$date, "GMT")
-    }
-
-    mydata <- dplyr::arrange(mydata, date)
-
-    # make sure date is the first field
-    if (names(mydata)[1] != "date") {
-      mydata <- mydata[c("date", setdiff(names(mydata), "date"))]
-    }
-
-    # check to see if there are any missing dates, stop if there are
-    ids <- which(is.na(mydata$date))
-    if (length(ids) > 0) {
-      mydata <- mydata[-ids, ]
-      warning(
-        paste("Missing dates detected, removing", length(ids), "lines"),
-        call. = FALSE
-      )
-    }
+  # try and work with a factor date - but probably a problem in original data
+  if (is.factor(mydata$date)) {
+    warning("date field is a factor, check date format")
+    mydata$date <- as.POSIXct(mydata$date, "GMT")
   }
 
-  # return data frame
+  # make sure date is ordered in time and is the first field
+  mydata <- dplyr::arrange(mydata, date)
+  mydata <- mydata[c("date", setdiff(names(mydata), "date"))]
+
+  # remove any missing dates
+  ids <- which(is.na(mydata$date))
+  if (length(ids) > 0) {
+    mydata <- mydata[-ids, ]
+    warning(
+      paste("Missing dates detected, removing", length(ids), "lines"),
+      call. = FALSE
+    )
+  }
+
   return(mydata)
 }

@@ -224,7 +224,7 @@ import_ghcn_hourly <-
     data <- dplyr::bind_rows(data)
 
     # if null, leave early
-    if (is.null(data) || nrow(data) == 0L) {
+    if (nrow(data) == 0L) {
       cli::cli_warn("No data has been returned.")
       return(NULL)
     }
@@ -274,7 +274,6 @@ import_ghcn_hourly <-
         rn_data("wind_gust", "wg") |>
         rn_data("relative_humidity", "rh") |>
         rn_data("wet_bulb_temperature", "wet_bulb") |>
-        rn_data("wet_bulb_temperature", "wet_bulb") |>
         rn_data("pressure_3hr_change", "pres_03") |>
         dplyr::rename_with(\(x) gsub("precipitation", "precip", x)) |>
         dplyr::rename_with(\(x) gsub("pres_wx_", "wx_", x)) |>
@@ -289,8 +288,6 @@ import_ghcn_hourly <-
         dplyr::rename_with(\(x) gsub("_source_code", "_sc", x)) |>
         dplyr::rename_with(\(x) gsub("_source_id", "_si", x)) |>
         dplyr::rename_with(\(x) gsub("_source_station_id", "_si", x))
-
-      names(data)
     }
 
     # time average to hourly concentrations
@@ -306,7 +303,6 @@ import_ghcn_hourly <-
       # time average to hourly
       data <- worldmet_time_average(
         data,
-        avg.time = "hour",
         type = c("station_id", "station_name")
       )
 
@@ -469,7 +465,6 @@ import_single_ghcn_site <- function(
     )
   }
 
-  # coalesce sky covers
   # coalesce sky covers
   if ("sky_cover_layer_1" %in% names(data)) {
     data <- data |>

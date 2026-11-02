@@ -214,6 +214,17 @@ import_ghcn_monthly_prcp <- function(
           .keep = "unused"
         ) |>
         dplyr::relocate("date", "year", "month", .before = "precip")
+
+      if (!is.null(year)) {
+        data <- dplyr::filter(
+          data,
+          as.numeric(format(.data$date, "%Y")) %in% !!year
+        )
+
+        if (nrow(data) == 0L) {
+          cli::cli_warn("No data has been returned. Check {.arg year}.")
+        }
+      }
     }
 
     out <- append(out, list(data = data))
@@ -245,18 +256,6 @@ import_ghcn_monthly_prcp <- function(
       )
 
     out <- append(out, list(inventory = inv))
-  }
-
-  if (!is.null(year)) {
-    data <- dplyr::filter(
-      data,
-      as.numeric(format(.data$date, "%Y")) %in% year
-    )
-
-    if (nrow(data) == 0L) {
-      cli::cli_warn("No data has been returned. Check {.arg year}.")
-      return(NULL)
-    }
   }
 
   return(out)

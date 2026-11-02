@@ -14,6 +14,16 @@
 
 - fixed issue importing many years of data at once causing column type conflict errors in the "minute" column.
 
+- `write_met(ext = "delim")` now writes files. Previously no files were written, and the `delim` argument was ignored. Files are now given a `.csv`, `.tsv` or `.txt` extension depending on `delim`.
+
+- `import_ghcn_hourly()` now drops the unwanted code columns when all but one code type is requested in `codes`.
+
+- `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
+
+- `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.
+
+- `import_ghcn_monthly_prcp()` now filters the returned data by `year`. Previously `year` was ignored, and using it with `table = "inventory"` alone caused an error.
+
 # worldmet 1.1.0
 
 ## New Features

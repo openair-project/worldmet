@@ -759,10 +759,16 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
   )
 
   # Download file to temp directory
-  tmp <- paste0(tempdir(), basename(file.name))
+  gz_file <- tempfile(fileext = ".gz")
+  on.exit(unlink(gz_file), add = TRUE)
 
   # deal with any missing data, issue warning
-  bin <- try(utils::download.file(file.name, tmp, quiet = TRUE, mode = "wb"))
+  bin <- try(utils::download.file(
+    file.name,
+    gz_file,
+    quiet = TRUE,
+    mode = "wb"
+  ))
 
   if (inherits(bin, "try-error")) {
     return(NULL)
@@ -807,13 +813,13 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
 
   # mandatory fields, fast read
   dat <- readr::read_fwf(
-    tmp,
+    gz_file,
     readr::fwf_widths(column_widths),
     col_types = "ccciiiiicccccccicciccccccccccccccc"
   )
 
   # additional fields, variable length, need to read eveything
-  add <- readLines(tmp)
+  add <- readLines(gz_file)
 
   # Remove select columns from data frame
   dat <- dat[, c(2:8, 10:11, 13, 16, 19, 21, 25, 29, 31, 33)]

@@ -64,6 +64,13 @@ write_met <- function(
     )
   }
 
+  # file extension on disk - "delim" isn't a real extension
+  file_ext <- if (ext == "delim") {
+    switch(delim, "," = "csv", "\t" = "tsv", "txt")
+  } else {
+    ext
+  }
+
   # save as year / site files
   write_met_helper <- function(x) {
     filepath <- paste0(
@@ -74,15 +81,15 @@ write_met <- function(
       unique(x$year),
       suffix,
       ".",
-      ext
+      file_ext
     )
 
     if (ext == "rds") {
       saveRDS(x, filepath)
     }
 
-    if (ext == "csv") {
-      readr::write_delim(x, filepath)
+    if (ext == "delim") {
+      readr::write_delim(x, filepath, delim = delim)
     }
 
     if (ext == "parquet") {

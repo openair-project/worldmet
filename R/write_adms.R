@@ -83,7 +83,7 @@ write_adms <- function(
     for (variable in var_interp) {
       # if all missing, then don't interpolate
       if (all(is.na(dat[[variable]]))) {
-        return()
+        next
       }
 
       # first fill with linear interpolation

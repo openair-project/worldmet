@@ -264,7 +264,7 @@ import_ghcn_daily <- function(
       nchar(names(data)) == 4 &
       !names(data) %in% c("snwd", "snow")
   ]
-  if (length(soil_names) > 1) {
+  if (length(soil_names) >= 1) {
     for (i in soil_names) {
       data[i] <- data[[i]] / 10
     }
@@ -273,7 +273,7 @@ import_ghcn_daily <- function(
   sx_names <- names(data)[
     startsWith(names(data), "sx")
   ]
-  if (length(sx_names) > 1) {
+  if (length(sx_names) >= 1) {
     for (i in sx_names) {
       data[i] <- data[[i]] / 10
     }

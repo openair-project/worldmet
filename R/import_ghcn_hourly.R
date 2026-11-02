@@ -611,7 +611,7 @@ import_single_ghcn_site <- function(
     codes_to_drop <- potential_codes
   }
 
-  if (length(codes_to_drop) > 1L) {
+  if (length(codes_to_drop) >= 1L) {
     # sometimes its source_id, sometimes its source_station_id
     if ("source_id" %in% codes_to_drop) {
       codes_to_drop <- c(codes_to_drop, "source_station_id")

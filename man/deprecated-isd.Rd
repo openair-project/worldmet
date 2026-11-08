@@ -37,7 +37,7 @@ importNOAAlite(code = "037720-99999", year = 2025, quiet = FALSE, path = NA)
 }
 \arguments{
 \item{site}{A site name search string e.g. \code{site = "heathrow"}. The search
-strings and be partial and can be upper or lower case e.g. \code{site = "HEATHR"}.}
+strings can be partial and can be upper or lower case e.g. \code{site = "HEATHR"}.}
 
 \item{lat, lon, n}{Decimal latitude (\code{lat}) and longitude (\code{lon}) (or other Y/X
 coordinate if using a different \code{crs}). If provided, the \code{n} closest ISD

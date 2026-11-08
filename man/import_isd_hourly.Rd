@@ -73,9 +73,9 @@ surface-based obstruction.}
 
 \item{visibility}{The visibility in metres.}
 
-\item{air_temp}{Air temperature in degrees Celcius.}
+\item{air_temp}{Air temperature in degrees Celsius.}
 
-\item{dew_point}{The dew point temperature in degrees Celcius.}
+\item{dew_point}{The dew point temperature in degrees Celsius.}
 
 \item{atmos_pres}{The sea level pressure in millibars.}
 
@@ -85,7 +85,7 @@ surface-based obstruction.}
 
 \item{cl}{Maximum of cl_1 to cl_3 cloud cover in Oktas (1-8).}
 
-\item{cl_1_height, ..., cl_3_height}{Height of the cloud base for each later
+\item{cl_1_height, ..., cl_3_height}{Height of the cloud base for each layer
 in metres.}
 
 \item{precip_12}{12-hour precipitation in mm. The sum of this column should

@@ -4,7 +4,7 @@
 #' is not of general use to most users.
 #'
 #' \describe{
-#'   \item{pwc}{Weather code, which can be merged with the `pwc` column in [importNOAA()] datasets.}
+#'   \item{pwc}{Weather code, which can be merged with the `pwc` column in [import_isd_hourly()] datasets.}
 #'   \item{description}{Description associated with the weather codes.}
 #' }
 #' @examples

@@ -34,12 +34,13 @@ Suggests:
     arrow,
     knitr,
     leaflet,
-    rmarkdown
+    rmarkdown,
+    spelling
 ByteCompile: true
 Config/Needs/website: openair-project/openairpkgdown,openair
+Config/roxygen2/version: 8.1.1
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.1.1

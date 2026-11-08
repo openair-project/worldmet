@@ -1,11 +1,12 @@
 #' Import "Lite" Meteorological data from the NOAA Integrated Surface Database
 #' (ISD)
 #'
-#' This function is an alternative to [importNOAA()], and provides access to the
-#' "Lite" format of the data. This a subset of the larger [importNOAA()] dataset
-#' featuring eight common climatological variables. As it assigns the nearest
-#' measurement to the "top of the hour" to the data, specific values are likely
-#' similar but different to those returned by [importNOAA()]. Read the
+#' This function is an alternative to [import_isd_hourly()], and provides access
+#' to the "Lite" format of the data. This is a subset of the larger
+#' [import_isd_hourly()] dataset featuring eight common climatological
+#' variables. As it assigns the nearest measurement to the "top of the hour" to
+#' the data, specific values are likely similar but different to those returned
+#' by [import_isd_hourly()]. Read the
 #' [technical
 #' document](https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/isd-lite-technical-document.pdf)
 #' for more information.
@@ -15,7 +16,7 @@
 #' \describe{
 #'
 #' \item{date}{Date/time in POSIXct format. **Note the time zone is UTC
-#' and may need to be adjusted to merge with other local data.}
+#' and may need to be adjusted to merge with other local data.**}
 #'
 #' \item{latitude}{Latitude in decimal degrees (-90 to 90).}
 #'
@@ -28,11 +29,11 @@
 #'
 #' \item{wd}{Wind direction in degrees. 90 is from the east.}
 #'
-#' \item{air_temp}{Air temperature in degrees Celcius.}
+#' \item{air_temp}{Air temperature in degrees Celsius.}
 #'
 #' \item{atmos_pres}{The sea level pressure in millibars.}
 #'
-#' \item{dew_point}{The dew point temperature in degrees Celcius.}
+#' \item{dew_point}{The dew point temperature in degrees Celsius.}
 #'
 #' \item{precip_6}{6-hour precipitation in mm.}
 #'
@@ -60,7 +61,7 @@
 #'   in other time zones, e.g., to merge with air pollution data.
 #'
 #' @family NOAA ISD functions
-#' @seealso [getMeta()] to obtain the codes based on various site search
+#' @seealso [import_isd_stations()] to obtain the codes based on various site search
 #'   approaches.
 #' @author Jack Davison
 #' @examples

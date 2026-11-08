@@ -2,7 +2,7 @@
 % Please edit documentation in R/import_isd_stations.R
 \name{import_isd_stations}
 \alias{import_isd_stations}
-\title{Import station metadata for the Integrated Surface Databse}
+\title{Import station metadata for the Integrated Surface Database}
 \usage{
 import_isd_stations(
   site = NULL,
@@ -19,7 +19,7 @@ import_isd_stations(
 }
 \arguments{
 \item{site}{A site name search string e.g. \code{site = "heathrow"}. The search
-strings and be partial and can be upper or lower case e.g. \code{site = "HEATHR"}.}
+strings can be partial and can be upper or lower case e.g. \code{site = "HEATHR"}.}
 
 \item{country}{The country code. This is a two letter code. For a full
 listing see \url{https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv}.}
@@ -28,7 +28,7 @@ listing see \url{https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv}.}
 
 \item{lat, lng, n_max}{Decimal latitude (\code{lat}) and longitude (\code{lng}) (or other
 Y/X coordinate if using a different \code{crs}). If provided, the \code{n_max}
-closest ISD stations to this coordinate will be returned.}
+closest GHCN stations to this coordinate will be returned.}
 
 \item{crs}{The coordinate reference system (CRS) of the data, passed to
 \code{\link[sf:st_crs]{sf::st_crs()}}. By default this is \href{https://epsg.io/4326}{EPSG:4326}, the
@@ -61,7 +61,8 @@ following:
 }
 \value{
 A data frame is returned with all available meta data, mostly
-importantly including a \code{code} that can be supplied to \code{\link[=importNOAA]{importNOAA()}}. If
+importantly including a \code{code} that can be supplied to
+\code{\link[=import_isd_hourly]{import_isd_hourly()}}. If
 latitude and longitude searches are made an approximate distance, \code{dist} in
 km is also returned.
 }
@@ -74,13 +75,13 @@ nearest locations based on user-supplied latitude and longitude.
 \examples{
 \dontrun{
 ## search for sites with name beijing
-getMeta(site = "beijing")
+import_isd_stations(site = "beijing")
 }
 
 \dontrun{
 ## search for near a specified lat/lng - near Beijing airport
 ## returns 'n_max' nearest by default
-getMeta(lat = 40, lng = 116.9)
+import_isd_stations(lat = 40, lng = 116.9)
 }
 }
 \seealso{

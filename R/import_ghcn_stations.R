@@ -11,7 +11,7 @@
 #'
 #' @param lat,lng,n_max Decimal latitude (`lat`) and longitude (`lng`) (or other
 #'   Y/X coordinate if using a different `crs`). If provided, the `n_max`
-#'   closest ISD stations to this coordinate will be returned.
+#'   closest GHCN stations to this coordinate will be returned.
 #'
 #' @param crs The coordinate reference system (CRS) of the data, passed to
 #'   [sf::st_crs()]. By default this is [EPSG:4326](https://epsg.io/4326), the

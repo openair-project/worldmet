@@ -16,7 +16,7 @@ is not of general use to most users.
 }
 \details{
 \describe{
-\item{pwc}{Weather code, which can be merged with the \code{pwc} column in \code{\link[=importNOAA]{importNOAA()}} datasets.}
+\item{pwc}{Weather code, which can be merged with the \code{pwc} column in \code{\link[=import_isd_hourly]{import_isd_hourly()}} datasets.}
 \item{description}{Description associated with the weather codes.}
 }
 }

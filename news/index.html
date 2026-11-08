@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">worldmet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,19 +52,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="worldmet-development-version">worldmet (development version)<a class="anchor" aria-label="anchor" href="#worldmet-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.2.0" id="worldmet-120">worldmet 1.2.0<a class="anchor" aria-label="anchor" href="#worldmet-120"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-1-2-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-2-0"></a></h3>
 <ul><li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> will now re-attempt to download data up to three times if the first attempt fails. This makes it more robust to interrupted connections with NOAA’s data store.</p></li>
 <li><p><code><a href="../reference/import_ghcn_stations.html">import_ghcn_stations()</a></code> now caches data per session, speeding up data import.</p></li>
 <li><p>The default <code>provider</code> has changed back to <code>OpenStreetMap</code> from <code>CartoDB.Voyager</code> as issues with OSM in Leaflet have been resolved.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="lifecycle-changes-development-version">Lifecycle Changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-development-version"></a></h3>
+<h3 id="lifecycle-changes-1-2-0">Lifecycle Changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-1-2-0"></a></h3>
 <ul><li>The functions deprecated in worldmet 1.0.0 now give a deprecation warning when used: <code><a href="../reference/deprecated-isd.html">getMeta()</a></code>, <code><a href="../reference/deprecated-isd.html">getMetaLive()</a></code>, <code><a href="../reference/deprecated-isd.html">importNOAA()</a></code>, <code><a href="../reference/deprecated-isd.html">importNOAAlite()</a></code> and <code><a href="../reference/deprecated-data.html">exportADMS()</a></code>. They continue to work, but will be removed in a future release. Please use <code><a href="../reference/import_isd_stations.html">import_isd_stations()</a></code>, <code><a href="../reference/import_isd_stations_live.html">import_isd_stations_live()</a></code>, <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code>, <code><a href="../reference/import_isd_lite.html">import_isd_lite()</a></code> and <code><a href="../reference/write_adms.html">write_adms()</a></code> instead.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-1-2-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-0"></a></h3>
 <p>This update contains a myriad of minor bug fixes. The following may change the values returned by, or written from, existing code.</p>
 <ul><li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> now calculates total cloud cover (<code>cl</code>/<code>sky_cover</code>) as the maximum of all cloud layer amounts, as documented and consistent with <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code>. Previously, when <code>sky_condition</code> did not report a total, the lowest layer’s amount was used instead, under-reporting cloud cover in roughly 10% of observations.</p></li>
 <li><p>When <code>hourly = TRUE</code>, <code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> and <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code> no longer return duplicate hours for stations whose latitude, longitude or elevation change within the requested period.</p></li>

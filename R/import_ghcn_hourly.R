@@ -542,9 +542,15 @@ import_single_ghcn_site <- function(
             "pres_wx_aw1",
             "pres_wx_aw2",
             "pres_wx_aw3",
-            "remarks"
+            "remarks",
+            "rem",
+            "sky_condition"
           )
         ),
+        as.character
+      ),
+      dplyr::across(
+        dplyr::matches("^sky_cover_summation_[0-9]$"),
         as.character
       ),
       # these variables are all numeric
@@ -569,9 +575,11 @@ import_single_ghcn_site <- function(
             "visibility",
             "altimeter",
             "pressure_3hr_change",
-            "sky_cover_baseht_1",
-            "sky_cover_baseht_2",
-            "sky_cover_baseht_3",
+            "ceiling_height",
+            "sky_condition_baseht",
+            "sky_cover_baseht",
+            "precipitation_5_minute",
+            "precipitation_15_minute",
             "precipitation_3_hour",
             "precipitation_6_hour",
             "precipitation_9_hour",
@@ -582,6 +590,10 @@ import_single_ghcn_site <- function(
             "precipitation_24_hour"
           )
         ),
+        as.numeric
+      ),
+      dplyr::across(
+        dplyr::matches("^sky_cover_(layer|summation)_baseht_[0-9]$"),
         as.numeric
       )
     )

@@ -203,12 +203,17 @@ import_ghcn_daily <- function(
   if (!append_codes) {
     data <- dplyr::select(data, -dplyr::ends_with("attributes"))
   } else {
+    # attributes are "measurement,quality,source" but some elements (e.g., PRCP
+    # at US COOP stations) carry a fourth "observation time" piece, which is
+    # dropped
     data <- tidyr::separate_wider_delim(
       data,
       dplyr::ends_with("_attributes"),
       delim = ",",
       names_sep = "_",
-      names = c("mf", "qf", "sf")
+      names = c("mf", "qf", "sf"),
+      too_many = "drop",
+      too_few = "align_start"
     ) |>
       dplyr::rename_with(\(x) gsub("_attributes_", "_", x))
 

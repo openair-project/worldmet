@@ -18,6 +18,8 @@
 
 - `import_ghcn_hourly()` now drops the unwanted code columns when all but one code type is requested in `codes`.
 
+- `import_ghcn_daily(append_codes = TRUE)` no longer errors for stations whose attributes include an observation time (e.g., precipitation at many US stations).
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

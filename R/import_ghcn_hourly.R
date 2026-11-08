@@ -485,28 +485,16 @@ import_single_ghcn_site <- function(
         )
       )
 
-    # derive total sky cover from sky_condition column
-    # format is up to 3 values separated by ";"; take the first non-empty one
-    if ("sky_condition" %in% names(data) && is.character(data$sky_condition)) {
-      sky_parts <- strsplit(data$sky_condition, ";", fixed = TRUE)
-      first_val <- vapply(
-        sky_parts,
-        function(p) {
-          non_empty <- p[nzchar(p)]
-          if (length(non_empty) == 0L) NA_character_ else non_empty[1L]
-        },
-        character(1L)
-      )
-      data$sky_cover <- as.integer(first_val)
-      data$sky_cover[
-        !is.na(data$sky_cover) & data$sky_cover == 9L
-      ] <- NA_integer_
-    }
-
-    # ensure sky_cover exists even if sky_condition was absent/non-character
-    if (!"sky_cover" %in% names(data)) {
-      data$sky_cover <- NA_integer_
-    }
+    # total sky cover is the maximum of all layer amounts, consistent with
+    # import_isd_hourly(); amounts above 8 oktas (e.g., 9 = sky obscured) are
+    # not cloud amounts, so are ignored
+    okta_cols <- grep(
+      "^sky_cover_layer_[123456789]_okta$",
+      names(data),
+      value = TRUE
+    )
+    oktas <- lapply(data[okta_cols], \(x) replace(x, x > 8, NA))
+    data$sky_cover <- do.call(pmax, c(unname(oktas), na.rm = TRUE))
 
     # get ceiling height
     data <-

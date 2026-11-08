@@ -24,6 +24,8 @@
 
 - `write_met()` no longer writes empty `_.<ext>` files when the input contains several stations that do not share the same years.
 
+- `import_ghcn_hourly()` now calculates total cloud cover (`cl`/`sky_cover`) as the maximum of all cloud layer amounts, as documented and consistent with `import_isd_hourly()`. Previously, when `sky_condition` did not report a total, the lowest layer's amount was used instead, under-reporting cloud cover in roughly 10% of observations.
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

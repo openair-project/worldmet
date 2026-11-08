@@ -78,10 +78,12 @@ import_isd_lite <- function(
   meta <- import_isd_stations(return = "table", end_year = "all")
 
   import_lite <- function(code, year) {
-    station_name <- meta[meta$code == code, ]$station
-    latitude <- meta[meta$code == code, ]$latitude
-    longitude <- meta[meta$code == code, ]$longitude
-    elevation <- meta[meta$code == code, ]$`elev(m)`
+    # use [1] so that codes missing from the metadata give NA, not character(0)
+    site_meta <- meta[meta$code == code, ]
+    station_name <- site_meta$station[1]
+    latitude <- site_meta$latitude[1]
+    longitude <- site_meta$longitude[1]
+    elevation <- site_meta$`elev(m)`[1]
 
     path <- "https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/DATAYEAR/DATACODE-DATAYEAR.gz"
     path <- gsub("DATACODE", code, path)

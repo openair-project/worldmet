@@ -1010,10 +1010,11 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
   meta <- getMeta(returnMap = FALSE, plot = FALSE, end.year = "all")
   info <- meta[meta$code == code, ]
 
-  dat$station <- as.character(info$station)
-  dat$latitude <- info$latitude
-  dat$longitude <- info$longitude
-  dat$elev <- info$`elev(m)`
+  # use [1] so that codes missing from the metadata give NA, not character(0)
+  dat$station <- as.character(info$station[1])
+  dat$latitude <- info$latitude[1]
+  dat$longitude <- info$longitude[1]
+  dat$elev <- info$`elev(m)`[1]
   dat$code <- code
 
   # rearrange columns, one to move to front

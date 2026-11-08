@@ -46,6 +46,8 @@
 
 - `import_ghcn_hourly()` now sets consistent types for cloud layer heights, ceiling height, sub-hourly precipitation, sky condition and remarks columns. Several of these were previously targeted using out-of-date column names, so combining years could fail with a column type conflict.
 
+- `write_adms()` now writes every year present in the data. Previously only the year of the first row was written, and all other data were silently dropped.
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

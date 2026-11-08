@@ -41,11 +41,11 @@ write_adms <- function(
   # ensure all data is lowercase - difference between ISD & GHCN
   dat <- dplyr::rename_with(x, .fn = tolower)
 
-  # make sure the data do not have gaps
+  # make sure the data do not have gaps, covering every year in the data
   all_dates <- dplyr::tibble(
     date = seq(
       ISOdatetime(
-        year = as.numeric(format(dat$date[1], "%Y")),
+        year = as.numeric(format(min(dat$date, na.rm = TRUE), "%Y")),
         month = 1,
         day = 1,
         hour = 0,
@@ -54,7 +54,7 @@ write_adms <- function(
         tz = "GMT"
       ),
       ISOdatetime(
-        year = as.numeric(format(dat$date[1], "%Y")),
+        year = as.numeric(format(max(dat$date, na.rm = TRUE), "%Y")),
         month = 12,
         day = 31,
         hour = 23,

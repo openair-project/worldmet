@@ -287,9 +287,10 @@ import_ghcn_daily <- function(
   if (!extra) {
     # keep core elements, each followed by any of its appended flag columns
     core_elements <- c("prcp", "snow", "snwd", "tavg", "tmax", "tmin")
-    core_cols <- unlist(lapply(core_elements, \(x) {
+    core_cols <- purrr::map(core_elements, \(x) {
       c(x, paste0(x, c("_mf", "_qf", "_sf")))
-    }))
+    }) |>
+      purrr::list_c()
 
     data <- dplyr::select(
       data,

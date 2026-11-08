@@ -493,8 +493,10 @@ import_single_ghcn_site <- function(
       names(data),
       value = TRUE
     )
-    oktas <- lapply(data[okta_cols], \(x) replace(x, x > 8, NA))
-    data$sky_cover <- do.call(pmax, c(unname(oktas), na.rm = TRUE))
+    data$sky_cover <-
+      data[okta_cols] |>
+      purrr::map(\(x) replace(x, x > 8, NA)) |>
+      purrr::reduce(pmax, na.rm = TRUE)
 
     # get ceiling height
     data <-

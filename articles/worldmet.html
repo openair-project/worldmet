@@ -248,10 +248,10 @@ parallelism.</p>
 with <a href="https://github.com/RevolutionAnalytics/doparallel" class="external-link">doParallel</a>, <a href="https://github.com/RevolutionAnalytics/foreach" class="external-link">foreach</a> and
 <code>{parallel}</code> and was activated using the <code>n.cores</code>
 argument of the legacy <code><a href="../reference/deprecated-isd.html">importNOAA()</a></code> function. While this
-will still work, it is recommended users set their own daemons before
-using <code><a href="../reference/deprecated-isd.html">importNOAA()</a></code>. This should avoid any issues with
-mistakenly spawning too many daemons, or accidentally spawning daemons
-within other daemons.</p>
+will still work (with a deprecation warning), it is recommended users
+set their own daemons and use <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code> instead.
+This should avoid any issues with mistakenly spawning too many daemons,
+or accidentally spawning daemons within other daemons.</p>
 </blockquote>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

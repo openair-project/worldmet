@@ -60,6 +60,10 @@
 <li><p>The default <code>provider</code> has changed back to <code>OpenStreetMap</code> from <code>CartoDB.Voyager</code> as issues with OSM in Leaflet have been resolved.</p></li>
 </ul></div>
 <div class="section level3">
+<h3 id="lifecycle-changes-development-version">Lifecycle Changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-development-version"></a></h3>
+<ul><li>The functions deprecated in worldmet 1.0.0 now give a deprecation warning when used: <code><a href="../reference/deprecated-isd.html">getMeta()</a></code>, <code><a href="../reference/deprecated-isd.html">getMetaLive()</a></code>, <code><a href="../reference/deprecated-isd.html">importNOAA()</a></code>, <code><a href="../reference/deprecated-isd.html">importNOAAlite()</a></code> and <code><a href="../reference/deprecated-data.html">exportADMS()</a></code>. They continue to work, but will be removed in a future release. Please use <code><a href="../reference/import_isd_stations.html">import_isd_stations()</a></code>, <code><a href="../reference/import_isd_stations_live.html">import_isd_stations_live()</a></code>, <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code>, <code><a href="../reference/import_isd_lite.html">import_isd_lite()</a></code> and <code><a href="../reference/write_adms.html">write_adms()</a></code> instead.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <p>This update contains a myriad of minor bug fixes. The following may change the values returned by, or written from, existing code.</p>
 <ul><li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> now calculates total cloud cover (<code>cl</code>/<code>sky_cover</code>) as the maximum of all cloud layer amounts, as documented and consistent with <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code>. Previously, when <code>sky_condition</code> did not report a total, the lowest layer’s amount was used instead, under-reporting cloud cover in roughly 10% of observations.</p></li>
@@ -126,7 +130,7 @@
 <h3 id="new-features-1-0-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-0-0"></a></h3>
 <p>The Global Historical Climate Network (GHCN) has officially superseded NOAA’s Integrated Surface Database (ISD). Many changes in this release are related to this external change.</p>
 <ul><li><p>Added <code><a href="../reference/import_ghcn_stations.html">import_ghcn_stations()</a></code>, <code><a href="../reference/import_ghcn_inventory.html">import_ghcn_inventory()</a></code>, and <code><a href="../reference/import_ghcn_countries.html">import_ghcn_countries()</a></code> to grant access to metadata for the GHCN.</p></li>
-<li><p>Added <code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code>, <code><a href="../reference/import_ghcn_daily.html">import_ghcn_daily()</a></code> and <code>import_ghcn_monthly()</code> to grant access to the GHCNh, GHCNd and CHCNm services.</p></li>
+<li><p>Added <code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code>, <code><a href="../reference/import_ghcn_daily.html">import_ghcn_daily()</a></code> and <code>import_ghcn_monthly()</code> to grant access to the GHCNh, GHCNd and GHCNm services.</p></li>
 <li><p>Added <code><a href="../reference/import_isd_stations.html">import_isd_stations()</a></code>, <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code> and <code><a href="../reference/import_isd_lite.html">import_isd_lite()</a></code> to provide a consistent API with the newly added GHCN functions.</p></li>
 <li><p>Added <code><a href="../reference/write_met.html">write_met()</a></code>, which allows for hourly ISD and GHCN and daily GHCN data to be easily split into years and sites and written to file. This is a more flexible alternative to using <code>importNOAA(path=)</code>.</p></li>
 </ul></div>
@@ -184,7 +188,7 @@
 <h3 id="new-features-0-10-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-10-0"></a></h3>
 <ul><li>
 <p>Parallel importing of NOAA data is now powered by <a href="https://mirai.r-lib.org" class="external-link">mirai</a>. This reduces the number of dependencies of <a href="https://openair-project.github.io/worldmet/">worldmet</a>, and also allows users to be more flexible with how parallel processing is achieved.</p>
-<ul><li>Due to this change, users are recommended to set <code><a href="https://mirai.r-lib.org/reference/daemons.html" class="external-link">mirai::daemons()</a></code> themselves. <code>n.core</code> will stil work for back-compatibility, but will give a once-per-session warning.</li>
+<ul><li>Due to this change, users are recommended to set <code><a href="https://mirai.r-lib.org/reference/daemons.html" class="external-link">mirai::daemons()</a></code> themselves. <code>n.core</code> will still work for back-compatibility, but will give a once-per-session warning.</li>
 </ul></li>
 <li><p><code><a href="../reference/deprecated-isd.html">getMeta()</a></code> has gained the <code>crs</code> argument to search NOAA ISD stations by coordinates other than latitude and longitude.</p></li>
 <li><p>Added <code>importNOAALite()</code> to access the ISDLite filestore.</p></li>

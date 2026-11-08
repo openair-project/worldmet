@@ -30,6 +30,8 @@
 
 - `import_isd_hourly()` no longer discards a whole site-year when all of its 12-hour precipitation values are missing.
 
+- `import_isd_hourly(source = "fwf")` no longer ignores cloud, precipitation and present weather fields that appear in only one record of a file.
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

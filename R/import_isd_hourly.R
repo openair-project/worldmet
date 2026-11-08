@@ -637,7 +637,7 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     # variables for precip amount
     dat[[out]] <- NA
 
-    if (length(id) > 1) {
+    if (length(id) > 0) {
       # location of begining of AA1 etc
 
       loc <- sapply(id, function(x) regexpr(field, add[x]))
@@ -673,7 +673,7 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     dat[[out]] <- NA
     dat[[height]] <- NA
 
-    if (length(id) > 1) {
+    if (length(id) > 0) {
       # location of begining of GA1 etc
 
       loc <- sapply(id, function(x) regexpr(field, add[x]))
@@ -712,7 +712,7 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     # fields that contain search string
     id <- grep(field, add)
 
-    if (length(id) > 1) {
+    if (length(id) > 0) {
       # name of output variable
       dat[["pwc"]] <- NA
 

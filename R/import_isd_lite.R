@@ -197,7 +197,7 @@ import_isd_lite <- function(
         import_lite = import_lite,
         meta = meta
       ),
-      .progress = !quiet
+      .progress = progress
     ) |>
     dplyr::bind_rows()
 

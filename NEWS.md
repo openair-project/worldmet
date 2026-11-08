@@ -40,6 +40,8 @@
 
 - `import_isd_lite()` and `import_isd_hourly(source = "fwf")` no longer error when a station code is missing from the ISD station metadata; station name and coordinates are returned as `NA` instead.
 
+- `import_isd_lite()` now respects its `progress` argument. Previously the progress bar was controlled by `quiet`.
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

@@ -34,6 +34,8 @@
 
 - `import_isd_hourly(source = "fwf", hourly = FALSE)` no longer returns a `precip` column, or modifies `precip_6`, based on row positions rather than hours. This matches `source = "delim"`.
 
+- `import_isd_hourly()` is no longer affected by an object called `pwc` in the user's global environment.
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

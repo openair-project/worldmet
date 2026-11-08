@@ -576,7 +576,7 @@ getDatDelim <- function(code, year, hourly) {
   }
 
   ## add pwc back in
-  if (exists("pwc")) {
+  if (exists("pwc", inherits = FALSE)) {
     met_data <- dplyr::left_join(met_data, pwc, by = "date")
   }
 

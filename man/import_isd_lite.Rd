@@ -37,8 +37,7 @@ to the "Lite" format of the data. This is a subset of the larger
 \code{\link[=import_isd_hourly]{import_isd_hourly()}} dataset featuring eight common climatological
 variables. As it assigns the nearest measurement to the "top of the hour" to
 the data, specific values are likely similar but different to those returned
-by \code{\link[=import_isd_hourly]{import_isd_hourly()}}. Read the
-\href{https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/isd-lite-technical-document.pdf}{technical document}
+by \code{\link[=import_isd_hourly]{import_isd_hourly()}}. Read the \href{https://noaa-isd-pds.s3.amazonaws.com/isd-lite/isd-lite-technical-document.pdf}{technical document}
 for more information.
 }
 \details{
@@ -111,8 +110,8 @@ heathrow_lite <- import_isd_lite(code = "037720-99999", year = 2025)
 }
 }
 \seealso{
-\code{\link[=import_isd_stations]{import_isd_stations()}} to obtain the codes based on various site search
-approaches.
+\code{\link[=import_isd_stations]{import_isd_stations()}} to obtain the codes based on various site
+search approaches.
 
 Other NOAA ISD functions:
 \code{\link[=import_isd_hourly]{import_isd_hourly()}},

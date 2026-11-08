@@ -6,9 +6,8 @@
 #' [import_isd_hourly()] dataset featuring eight common climatological
 #' variables. As it assigns the nearest measurement to the "top of the hour" to
 #' the data, specific values are likely similar but different to those returned
-#' by [import_isd_hourly()]. Read the
-#' [technical
-#' document](https://www.ncei.noaa.gov/pub/data/noaa/isd-lite/isd-lite-technical-document.pdf)
+#' by [import_isd_hourly()]. Read the [technical
+#' document](https://noaa-isd-pds.s3.amazonaws.com/isd-lite/isd-lite-technical-document.pdf)
 #' for more information.
 #'
 #' Note the following units for the main variables:
@@ -61,8 +60,8 @@
 #'   in other time zones, e.g., to merge with air pollution data.
 #'
 #' @family NOAA ISD functions
-#' @seealso [import_isd_stations()] to obtain the codes based on various site search
-#'   approaches.
+#' @seealso [import_isd_stations()] to obtain the codes based on various site
+#'   search approaches.
 #' @author Jack Davison
 #' @examples
 #'

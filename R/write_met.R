@@ -100,7 +100,7 @@ write_met <- function(
 
   x |>
     dplyr::mutate(year = format(.data$date, "%Y")) |>
-    (\(df) split(df, df[c(id_col, "year")]))() |>
+    (\(df) split(df, df[c(id_col, "year")], drop = TRUE))() |>
     purrr::walk(.f = write_met_helper, .progress = progress)
 
   invisible(path)

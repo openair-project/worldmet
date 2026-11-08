@@ -61,28 +61,39 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li><p>fixed issue where <code>sky_cover</code> was not calculated correctly from <code>sky_condition</code> column if it was not a character column.</p></li>
-<li><p>fixed issue importing many years of data at once causing column type conflict errors in the “minute” column.</p></li>
-<li><p><code>write_met(ext = "delim")</code> now writes files. Previously no files were written, and the <code>delim</code> argument was ignored. Files are now given a <code>.csv</code>, <code>.tsv</code> or <code>.txt</code> extension depending on <code>delim</code>.</p></li>
-<li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> now drops the unwanted code columns when all but one code type is requested in <code>codes</code>.</p></li>
-<li><p><code>import_ghcn_daily(append_codes = TRUE)</code> no longer errors for stations whose attributes include an observation time (e.g., precipitation at many US stations).</p></li>
-<li><p><code>import_ghcn_daily(append_codes = TRUE)</code> now returns the requested flag columns when <code>extra = FALSE</code>. Previously they were silently dropped unless <code>extra = TRUE</code>.</p></li>
-<li><p><code><a href="../reference/write_met.html">write_met()</a></code> no longer writes empty <code>_.&lt;ext&gt;</code> files when the input contains several stations that do not share the same years.</p></li>
-<li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> now calculates total cloud cover (<code>cl</code>/<code>sky_cover</code>) as the maximum of all cloud layer amounts, as documented and consistent with <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code>. Previously, when <code>sky_condition</code> did not report a total, the lowest layer’s amount was used instead, under-reporting cloud cover in roughly 10% of observations.</p></li>
-<li><p>When <code>hourly = TRUE</code>, <code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> and <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code> no longer return duplicate hours for stations whose latitude, longitude or elevation change within the requested period. Station metadata is now also filled in for padded hours when <code>abbr_names = FALSE</code>.</p></li>
-<li><p><code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code> no longer discards a whole site-year when all of its 12-hour precipitation values are missing.</p></li>
-<li><p><code>import_isd_hourly(source = "fwf")</code> no longer ignores cloud, precipitation and present weather fields that appear in only one record of a file.</p></li>
-<li><p><code>import_isd_hourly(source = "fwf", hourly = FALSE)</code> no longer returns a <code>precip</code> column, or modifies <code>precip_6</code>, based on row positions rather than hours. This matches <code>source = "delim"</code>.</p></li>
-<li><p><code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code> is no longer affected by an object called <code>pwc</code> in the user’s global environment.</p></li>
-<li><p><code>import_isd_hourly(source = "fwf", hourly = TRUE)</code> now returns the present weather (<code>pwc</code>) column, which was previously dropped during hourly averaging.</p></li>
-<li><p><code><a href="../reference/import_isd_lite.html">import_isd_lite()</a></code> and <code>import_isd_hourly(source = "fwf")</code> no longer error when a station code is missing from the ISD station metadata; station name and coordinates are returned as <code>NA</code> instead.</p></li>
-<li><p><code><a href="../reference/import_isd_lite.html">import_isd_lite()</a></code> now respects its <code>progress</code> argument. Previously the progress bar was controlled by <code>quiet</code>.</p></li>
-<li><p><code><a href="../reference/import_ghcn_monthly.html">import_ghcn_monthly_temp()</a></code> now always reads data flag columns as character. Previously flags could be guessed as logical (e.g., a “T” flag becoming <code>TRUE</code>), and the attempt to convert them to character matched no columns.</p></li>
-<li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> now sets consistent types for cloud layer heights, ceiling height, sub-hourly precipitation, sky condition and remarks columns. Several of these were previously targeted using out-of-date column names, so combining years could fail with a column type conflict.</p></li>
+<p>This update contains a myriad of minor bug fixes. The following may change the values returned by, or written from, existing code.</p>
+<ul><li><p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> now calculates total cloud cover (<code>cl</code>/<code>sky_cover</code>) as the maximum of all cloud layer amounts, as documented and consistent with <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code>. Previously, when <code>sky_condition</code> did not report a total, the lowest layer’s amount was used instead, under-reporting cloud cover in roughly 10% of observations.</p></li>
+<li><p>When <code>hourly = TRUE</code>, <code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code> and <code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code> no longer return duplicate hours for stations whose latitude, longitude or elevation change within the requested period.</p></li>
 <li><p><code><a href="../reference/write_adms.html">write_adms()</a></code> now writes every year present in the data. Previously only the year of the first row was written, and all other data were silently dropped.</p></li>
-<li><p><code><a href="../reference/import_ghcn_daily.html">import_ghcn_daily()</a></code> now correctly converts soil temperature columns (<code>sn**</code>/<code>sx**</code>) from tenths of degrees when only one such column is present.</p></li>
-<li><p><code>write_adms(interp = TRUE)</code> no longer exits early without writing a file when one of the interpolated variables is entirely missing.</p></li>
+</ul><p>The following fixes are more minor and broadly make <a href="https://openair-project.github.io/worldmet/">worldmet</a> more robust to variations in returned data.</p>
+<ul><li>
+<p><code><a href="../reference/import_ghcn_hourly.html">import_ghcn_hourly()</a></code>:</p>
+<ul><li>Combining many years of data no longer fails with column type conflicts (e.g., in <code>minute</code>, cloud layer heights or sub-hourly precipitation).</li>
+<li>Unwanted code columns are now dropped when all but one code type is requested in <code>codes</code>.</li>
+<li>Station metadata is now filled in for padded hours when <code>abbr_names = FALSE</code>.</li>
+</ul></li>
+<li>
+<p><code><a href="../reference/import_ghcn_daily.html">import_ghcn_daily()</a></code>:</p>
+<ul><li>
+<code>append_codes = TRUE</code> no longer errors for stations whose attributes include an observation time (e.g., precipitation at many US stations), and now returns flag columns when <code>extra = FALSE</code>.</li>
+<li>Soil temperature columns (<code>sn**</code>/<code>sx**</code>) are now converted from tenths of degrees when only one such column is present.</li>
+</ul></li>
+<li><p><code><a href="../reference/import_ghcn_monthly.html">import_ghcn_monthly_temp()</a></code> now always reads data flag columns as character, rather than sometimes as logical (e.g., a “T” flag becoming <code>TRUE</code>).</p></li>
 <li><p><code><a href="../reference/import_ghcn_monthly.html">import_ghcn_monthly_prcp()</a></code> now filters the returned data by <code>year</code>. Previously <code>year</code> was ignored, and using it with <code>table = "inventory"</code> alone caused an error.</p></li>
+<li>
+<p><code><a href="../reference/import_isd_hourly.html">import_isd_hourly()</a></code>:</p>
+<ul><li>A site-year is no longer discarded when all of its 12-hour precipitation values are missing.</li>
+<li>It is no longer affected by an object called <code>pwc</code> in the global environment.</li>
+<li>With <code>source = "fwf"</code>: present weather (<code>pwc</code>) is now returned when <code>hourly = TRUE</code>; fields appearing in only one record of a file are no longer ignored; <code>precip</code> is no longer derived from row positions when <code>hourly = FALSE</code>; and station codes missing from the ISD metadata no longer cause an error.</li>
+</ul></li>
+<li><p><code><a href="../reference/import_isd_lite.html">import_isd_lite()</a></code> now respects its <code>progress</code> argument, and no longer errors when a station code is missing from the ISD metadata.</p></li>
+<li>
+<p><code><a href="../reference/write_met.html">write_met()</a></code>:</p>
+<ul><li>
+<code>ext = "delim"</code> now writes files, using the <code>delim</code> argument and a <code>.csv</code>, <code>.tsv</code> or <code>.txt</code> extension as appropriate. Previously no files were written.</li>
+<li>Empty <code>_.&lt;ext&gt;</code> files are no longer written when stations in the data do not share the same years.</li>
+</ul></li>
+<li><p><code>write_adms(interp = TRUE)</code> no longer exits early without writing a file when one of the interpolated variables is entirely missing.</p></li>
 </ul></div>
 </div>
     <div class="section level2">

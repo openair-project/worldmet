@@ -591,11 +591,6 @@ getDatDelim <- function(code, year, hourly) {
 
     ## id where there is 12 hour data
     id <- which(!is.na(met_data$precip_12))
-
-    if (length(id) == 0L) {
-      return()
-    }
-
     id <- id[id > 11] ## make sure we don't run off beginning
 
     for (i in seq_along(id)) {

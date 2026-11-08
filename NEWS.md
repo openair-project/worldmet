@@ -28,6 +28,8 @@
 
 - When `hourly = TRUE`, `import_ghcn_hourly()` and `import_isd_hourly()` no longer return duplicate hours for stations whose latitude, longitude or elevation change within the requested period. Station metadata is now also filled in for padded hours when `abbr_names = FALSE`.
 
+- `import_isd_hourly()` no longer discards a whole site-year when all of its 12-hour precipitation values are missing.
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

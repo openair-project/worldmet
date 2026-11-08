@@ -20,6 +20,8 @@
 
 - `import_ghcn_daily(append_codes = TRUE)` no longer errors for stations whose attributes include an observation time (e.g., precipitation at many US stations).
 
+- `import_ghcn_daily(append_codes = TRUE)` now returns the requested flag columns when `extra = FALSE`. Previously they were silently dropped unless `extra = TRUE`.
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

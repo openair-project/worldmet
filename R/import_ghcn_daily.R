@@ -285,6 +285,12 @@ import_ghcn_daily <- function(
   }
 
   if (!extra) {
+    # keep core elements, each followed by any of its appended flag columns
+    core_elements <- c("prcp", "snow", "snwd", "tavg", "tmax", "tmin")
+    core_cols <- unlist(lapply(core_elements, \(x) {
+      c(x, paste0(x, c("_mf", "_qf", "_sf")))
+    }))
+
     data <- dplyr::select(
       data,
       dplyr::any_of(c(
@@ -294,12 +300,7 @@ import_ghcn_daily <- function(
         "lat",
         "lng",
         "elev",
-        "prcp",
-        "snow",
-        "snwd",
-        "tavg",
-        "tmax",
-        "tmin"
+        core_cols
       ))
     )
   }

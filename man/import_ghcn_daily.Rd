@@ -179,7 +179,7 @@ daemons than station-year combinations will lead to diminishing returns.
 mirai::daemons(4)
 
 # import lots of data - NB: no change in the import function!
-big_met <- import_ghcn_hourly(code = "UKI0000EGLL", year = 2010:2025)
+big_met <- import_ghcn_hourly(station = "UKI0000EGLL", year = 2010:2025)
 }\if{html}{\out{</div>}}
 }
 

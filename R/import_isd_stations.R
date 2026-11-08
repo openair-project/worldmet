@@ -17,7 +17,7 @@
 #' @param state The state code. This is a two letter code.
 #'
 #' @param end_year To help filter sites based on how recent the available data
-#'   are. `end_year` can be "current", "any" or a numeric year such as 2016, or
+#'   are. `end_year` can be "current", "all" or a numeric year such as 2016, or
 #'   a range of years e.g. 1990:2016 (which would select any site that had an
 #'   end date in that range. **By default only sites that have some data for the
 #'   current year are returned**.

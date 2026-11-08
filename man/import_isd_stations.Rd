@@ -38,7 +38,7 @@ non-lat/lng coordinate systems will be re-projected to \code{EPSG:4326} for
 making comparisons with the NOAA metadata.}
 
 \item{end_year}{To help filter sites based on how recent the available data
-are. \code{end_year} can be "current", "any" or a numeric year such as 2016, or
+are. \code{end_year} can be "current", "all" or a numeric year such as 2016, or
 a range of years e.g. 1990:2016 (which would select any site that had an
 end date in that range. \strong{By default only sites that have some data for the
 current year are returned}.}

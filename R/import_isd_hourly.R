@@ -962,7 +962,6 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     dates <- as.POSIXct(paste0(unique(pwc$date2), ":00:00"), tz = "GMT")
 
     pwc <- data.frame(date = dates, pwc = tmp$pwc)
-    PWC <- TRUE
   }
 
   # average to hourly
@@ -971,6 +970,11 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
       dat,
       type = c("usaf", "wban")
     )
+  }
+
+  # add pwc back in (dropped by averaging as it is character)
+  if (exists("pwc", inherits = FALSE)) {
+    dat <- dplyr::left_join(dat, pwc, by = "date")
   }
 
   # add precipitation - row offsets below assume one row per hour, so only do

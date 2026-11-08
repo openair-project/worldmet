@@ -36,6 +36,8 @@
 
 - `import_isd_hourly()` is no longer affected by an object called `pwc` in the user's global environment.
 
+- `import_isd_hourly(source = "fwf", hourly = TRUE)` now returns the present weather (`pwc`) column, which was previously dropped during hourly averaging.
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

@@ -104,6 +104,10 @@ import_ghcn_monthly_temp <- function(
           4,
           rep(c(5, 1, 1, 1), 12)
         )),
+        # id, year, element, then value + three flags for each month. Flags
+        # are read as character, as e.g. "T" could otherwise be guessed as
+        # logical
+        col_types = paste0("cic", strrep("dccc", 12)),
         na = "-9999",
         show_col_types = FALSE
       ) |>
@@ -116,8 +120,7 @@ import_ghcn_monthly_temp <- function(
         )
       ) |>
       dplyr::mutate(
-        dplyr::across(dplyr::ends_with("_value"), \(x) x / 100),
-        dplyr::across(dplyr::ends_with("_dmf|_qcf|_dsf"), as.character)
+        dplyr::across(dplyr::ends_with("_value"), \(x) x / 100)
       )
 
     out <- append(out, list(data = dat))

@@ -42,6 +42,8 @@
 
 - `import_isd_lite()` now respects its `progress` argument. Previously the progress bar was controlled by `quiet`.
 
+- `import_ghcn_monthly_temp()` now always reads data flag columns as character. Previously flags could be guessed as logical (e.g., a "T" flag becoming `TRUE`), and the attempt to convert them to character matched no columns.
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

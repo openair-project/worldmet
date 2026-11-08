@@ -10,49 +10,41 @@
 
 ## Bug Fixes
 
-- fixed issue where `sky_cover` was not calculated correctly from `sky_condition` column if it was not a character column.
-
-- fixed issue importing many years of data at once causing column type conflict errors in the "minute" column.
-
-- `write_met(ext = "delim")` now writes files. Previously no files were written, and the `delim` argument was ignored. Files are now given a `.csv`, `.tsv` or `.txt` extension depending on `delim`.
-
-- `import_ghcn_hourly()` now drops the unwanted code columns when all but one code type is requested in `codes`.
-
-- `import_ghcn_daily(append_codes = TRUE)` no longer errors for stations whose attributes include an observation time (e.g., precipitation at many US stations).
-
-- `import_ghcn_daily(append_codes = TRUE)` now returns the requested flag columns when `extra = FALSE`. Previously they were silently dropped unless `extra = TRUE`.
-
-- `write_met()` no longer writes empty `_.<ext>` files when the input contains several stations that do not share the same years.
+This update contains a myriad of minor bug fixes. The following may change the values returned by, or written from, existing code.
 
 - `import_ghcn_hourly()` now calculates total cloud cover (`cl`/`sky_cover`) as the maximum of all cloud layer amounts, as documented and consistent with `import_isd_hourly()`. Previously, when `sky_condition` did not report a total, the lowest layer's amount was used instead, under-reporting cloud cover in roughly 10% of observations.
 
-- When `hourly = TRUE`, `import_ghcn_hourly()` and `import_isd_hourly()` no longer return duplicate hours for stations whose latitude, longitude or elevation change within the requested period. Station metadata is now also filled in for padded hours when `abbr_names = FALSE`.
-
-- `import_isd_hourly()` no longer discards a whole site-year when all of its 12-hour precipitation values are missing.
-
-- `import_isd_hourly(source = "fwf")` no longer ignores cloud, precipitation and present weather fields that appear in only one record of a file.
-
-- `import_isd_hourly(source = "fwf", hourly = FALSE)` no longer returns a `precip` column, or modifies `precip_6`, based on row positions rather than hours. This matches `source = "delim"`.
-
-- `import_isd_hourly()` is no longer affected by an object called `pwc` in the user's global environment.
-
-- `import_isd_hourly(source = "fwf", hourly = TRUE)` now returns the present weather (`pwc`) column, which was previously dropped during hourly averaging.
-
-- `import_isd_lite()` and `import_isd_hourly(source = "fwf")` no longer error when a station code is missing from the ISD station metadata; station name and coordinates are returned as `NA` instead.
-
-- `import_isd_lite()` now respects its `progress` argument. Previously the progress bar was controlled by `quiet`.
-
-- `import_ghcn_monthly_temp()` now always reads data flag columns as character. Previously flags could be guessed as logical (e.g., a "T" flag becoming `TRUE`), and the attempt to convert them to character matched no columns.
-
-- `import_ghcn_hourly()` now sets consistent types for cloud layer heights, ceiling height, sub-hourly precipitation, sky condition and remarks columns. Several of these were previously targeted using out-of-date column names, so combining years could fail with a column type conflict.
+- When `hourly = TRUE`, `import_ghcn_hourly()` and `import_isd_hourly()` no longer return duplicate hours for stations whose latitude, longitude or elevation change within the requested period.
 
 - `write_adms()` now writes every year present in the data. Previously only the year of the first row was written, and all other data were silently dropped.
 
-- `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
+The following fixes are more minor and broadly make `{worldmet}` more robust to variations in returned data.
 
-- `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.
+- `import_ghcn_hourly()`:
+    - Combining many years of data no longer fails with column type conflicts (e.g., in `minute`, cloud layer heights or sub-hourly precipitation).
+    - Unwanted code columns are now dropped when all but one code type is requested in `codes`.
+    - Station metadata is now filled in for padded hours when `abbr_names = FALSE`.
+
+- `import_ghcn_daily()`:
+    - `append_codes = TRUE` no longer errors for stations whose attributes include an observation time (e.g., precipitation at many US stations), and now returns flag columns when `extra = FALSE`.
+    - Soil temperature columns (`sn**`/`sx**`) are now converted from tenths of degrees when only one such column is present.
+
+- `import_ghcn_monthly_temp()` now always reads data flag columns as character, rather than sometimes as logical (e.g., a "T" flag becoming `TRUE`).
 
 - `import_ghcn_monthly_prcp()` now filters the returned data by `year`. Previously `year` was ignored, and using it with `table = "inventory"` alone caused an error.
+
+- `import_isd_hourly()`:
+    - A site-year is no longer discarded when all of its 12-hour precipitation values are missing.
+    - It is no longer affected by an object called `pwc` in the global environment.
+    - With `source = "fwf"`: present weather (`pwc`) is now returned when `hourly = TRUE`; fields appearing in only one record of a file are no longer ignored; `precip` is no longer derived from row positions when `hourly = FALSE`; and station codes missing from the ISD metadata no longer cause an error.
+
+- `import_isd_lite()` now respects its `progress` argument, and no longer errors when a station code is missing from the ISD metadata.
+
+- `write_met()`:
+    - `ext = "delim"` now writes files, using the `delim` argument and a `.csv`, `.tsv` or `.txt` extension as appropriate. Previously no files were written.
+    - Empty `_.<ext>` files are no longer written when stations in the data do not share the same years.
+
+- `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.
 
 # worldmet 1.1.0
 

@@ -116,7 +116,7 @@
 #'   mirai::daemons(4)
 #'
 #'   # import lots of data - NB: no change in the import function!
-#'   big_met <- import_ghcn_hourly(code = "UKI0000EGLL", year = 2010:2025)
+#'   big_met <- import_ghcn_hourly(station = "UKI0000EGLL", year = 2010:2025)
 #'   ```
 #'
 #' @author Jack Davison
@@ -485,28 +485,18 @@ import_single_ghcn_site <- function(
         )
       )
 
-    # derive total sky cover from sky_condition column
-    # format is up to 3 values separated by ";"; take the first non-empty one
-    if ("sky_condition" %in% names(data) && is.character(data$sky_condition)) {
-      sky_parts <- strsplit(data$sky_condition, ";", fixed = TRUE)
-      first_val <- vapply(
-        sky_parts,
-        function(p) {
-          non_empty <- p[nzchar(p)]
-          if (length(non_empty) == 0L) NA_character_ else non_empty[1L]
-        },
-        character(1L)
-      )
-      data$sky_cover <- as.integer(first_val)
-      data$sky_cover[
-        !is.na(data$sky_cover) & data$sky_cover == 9L
-      ] <- NA_integer_
-    }
-
-    # ensure sky_cover exists even if sky_condition was absent/non-character
-    if (!"sky_cover" %in% names(data)) {
-      data$sky_cover <- NA_integer_
-    }
+    # total sky cover is the maximum of all layer amounts, consistent with
+    # import_isd_hourly(); amounts above 8 oktas (e.g., 9 = sky obscured) are
+    # not cloud amounts, so are ignored
+    okta_cols <- grep(
+      "^sky_cover_layer_[123456789]_okta$",
+      names(data),
+      value = TRUE
+    )
+    data$sky_cover <-
+      data[okta_cols] |>
+      purrr::map(\(x) replace(x, x > 8, NA)) |>
+      purrr::reduce(pmax, na.rm = TRUE)
 
     # get ceiling height
     data <-
@@ -554,9 +544,15 @@ import_single_ghcn_site <- function(
             "pres_wx_aw1",
             "pres_wx_aw2",
             "pres_wx_aw3",
-            "remarks"
+            "remarks",
+            "rem",
+            "sky_condition"
           )
         ),
+        as.character
+      ),
+      dplyr::across(
+        dplyr::matches("^sky_cover_summation_[0-9]$"),
         as.character
       ),
       # these variables are all numeric
@@ -581,9 +577,11 @@ import_single_ghcn_site <- function(
             "visibility",
             "altimeter",
             "pressure_3hr_change",
-            "sky_cover_baseht_1",
-            "sky_cover_baseht_2",
-            "sky_cover_baseht_3",
+            "ceiling_height",
+            "sky_condition_baseht",
+            "sky_cover_baseht",
+            "precipitation_5_minute",
+            "precipitation_15_minute",
             "precipitation_3_hour",
             "precipitation_6_hour",
             "precipitation_9_hour",
@@ -594,6 +592,10 @@ import_single_ghcn_site <- function(
             "precipitation_24_hour"
           )
         ),
+        as.numeric
+      ),
+      dplyr::across(
+        dplyr::matches("^sky_cover_(layer|summation)_baseht_[0-9]$"),
         as.numeric
       )
     )

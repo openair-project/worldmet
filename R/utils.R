@@ -90,16 +90,20 @@ worldmet_time_average <- function(mydata, type) {
       dplyr::select(-dplyr::any_of(c("Uu", "Vv")))
   }
 
-  # ensure all hours are present
-  type_split <- c(type, "lat", "lng", "latitude", "longitude", "elev")
-  type_split <- type_split[type_split %in% names(mydata)]
+  # site metadata columns, carried into padded hours. These are not used to
+  # split the data, as stations whose coordinates/elevation change over time
+  # would otherwise be padded once per distinct value, duplicating every hour
+  meta_cols <- intersect(
+    c("lat", "lng", "latitude", "longitude", "elev", "elevation"),
+    names(mydata)
+  )
 
-  # split by type, lat, lng, elev, and complete by date
+  # split by type and complete by date
   mydata <-
     purrr::map(
       .x = split(
         mydata,
-        mydata[, type_split],
+        mydata[type],
         drop = TRUE
       ),
       .f = \(df) {
@@ -112,11 +116,13 @@ worldmet_time_average <- function(mydata, type) {
           tz = attr(df$date, "tzone")
         )
 
-        tidyr::complete(
-          df,
-          tidyr::nesting(!!!rlang::syms(type_split)),
-          date = seq(from, to, by = "hour")
-        )
+        df |>
+          tidyr::complete(
+            tidyr::nesting(!!!rlang::syms(type)),
+            date = seq(from, to, by = "hour")
+          ) |>
+          dplyr::arrange(.data$date) |>
+          tidyr::fill(dplyr::all_of(meta_cols), .direction = "downup")
       }
     ) |>
     dplyr::bind_rows()

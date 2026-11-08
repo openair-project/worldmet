@@ -576,7 +576,7 @@ getDatDelim <- function(code, year, hourly) {
   }
 
   ## add pwc back in
-  if (exists("pwc")) {
+  if (exists("pwc", inherits = FALSE)) {
     met_data <- dplyr::left_join(met_data, pwc, by = "date")
   }
 
@@ -591,11 +591,6 @@ getDatDelim <- function(code, year, hourly) {
 
     ## id where there is 12 hour data
     id <- which(!is.na(met_data$precip_12))
-
-    if (length(id) == 0L) {
-      return()
-    }
-
     id <- id[id > 11] ## make sure we don't run off beginning
 
     for (i in seq_along(id)) {
@@ -642,7 +637,7 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     # variables for precip amount
     dat[[out]] <- NA
 
-    if (length(id) > 1) {
+    if (length(id) > 0) {
       # location of begining of AA1 etc
 
       loc <- sapply(id, function(x) regexpr(field, add[x]))
@@ -678,7 +673,7 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     dat[[out]] <- NA
     dat[[height]] <- NA
 
-    if (length(id) > 1) {
+    if (length(id) > 0) {
       # location of begining of GA1 etc
 
       loc <- sapply(id, function(x) regexpr(field, add[x]))
@@ -717,7 +712,7 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     # fields that contain search string
     id <- grep(field, add)
 
-    if (length(id) > 1) {
+    if (length(id) > 0) {
       # name of output variable
       dat[["pwc"]] <- NA
 
@@ -967,7 +962,6 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     dates <- as.POSIXct(paste0(unique(pwc$date2), ":00:00"), tz = "GMT")
 
     pwc <- data.frame(date = dates, pwc = tmp$pwc)
-    PWC <- TRUE
   }
 
   # average to hourly
@@ -978,8 +972,14 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     )
   }
 
-  # add precipitation
-  if (precip) {
+  # add pwc back in (dropped by averaging as it is character)
+  if (exists("pwc", inherits = FALSE)) {
+    dat <- dplyr::left_join(dat, pwc, by = "date")
+  }
+
+  # add precipitation - row offsets below assume one row per hour, so only do
+  # this for hourly data (consistent with the "delim" source)
+  if (precip && hourly) {
     # spread out precipitation across each hour
     # met data gives 12 hour total and every other 6 hour total
 
@@ -1010,10 +1010,11 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
   meta <- getMeta(returnMap = FALSE, plot = FALSE, end.year = "all")
   info <- meta[meta$code == code, ]
 
-  dat$station <- as.character(info$station)
-  dat$latitude <- info$latitude
-  dat$longitude <- info$longitude
-  dat$elev <- info$`elev(m)`
+  # use [1] so that codes missing from the metadata give NA, not character(0)
+  dat$station <- as.character(info$station[1])
+  dat$latitude <- info$latitude[1]
+  dat$longitude <- info$longitude[1]
+  dat$elev <- info$`elev(m)`[1]
   dat$code <- code
 
   # rearrange columns, one to move to front

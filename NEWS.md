@@ -32,6 +32,8 @@
 
 - `import_isd_hourly(source = "fwf")` no longer ignores cloud, precipitation and present weather fields that appear in only one record of a file.
 
+- `import_isd_hourly(source = "fwf", hourly = FALSE)` no longer returns a `precip` column, or modifies `precip_6`, based on row positions rather than hours. This matches `source = "delim"`.
+
 - `import_ghcn_daily()` now correctly converts soil temperature columns (`sn**`/`sx**`) from tenths of degrees when only one such column is present.
 
 - `write_adms(interp = TRUE)` no longer exits early without writing a file when one of the interpolated variables is entirely missing.

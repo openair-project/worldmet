@@ -973,8 +973,9 @@ getDatFwf <- function(code, year, hourly, precip, PWC) {
     )
   }
 
-  # add precipitation
-  if (precip) {
+  # add precipitation - row offsets below assume one row per hour, so only do
+  # this for hourly data (consistent with the "delim" source)
+  if (precip && hourly) {
     # spread out precipitation across each hour
     # met data gives 12 hour total and every other 6 hour total
 

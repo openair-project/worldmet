@@ -8,6 +8,10 @@
 
 - The default `provider` has changed back to `OpenStreetMap` from `CartoDB.Voyager` as issues with OSM in Leaflet have been resolved.
 
+## Lifecycle Changes
+
+- The functions deprecated in worldmet 1.0.0 now give a deprecation warning when used: `getMeta()`, `getMetaLive()`, `importNOAA()`, `importNOAAlite()` and `exportADMS()`. They continue to work, but will be removed in a future release. Please use `import_isd_stations()`, `import_isd_stations_live()`, `import_isd_hourly()`, `import_isd_lite()` and `write_adms()` instead.
+
 ## Bug Fixes
 
 This update contains a myriad of minor bug fixes. The following may change the values returned by, or written from, existing code.
@@ -86,7 +90,7 @@ The Global Historical Climate Network (GHCN) has officially superseded NOAA's In
 
 - Added `import_ghcn_stations()`, `import_ghcn_inventory()`, and `import_ghcn_countries()` to grant access to metadata for the GHCN.
 
-- Added `import_ghcn_hourly()`, `import_ghcn_daily()` and `import_ghcn_monthly()` to grant access to the GHCNh, GHCNd and CHCNm services.
+- Added `import_ghcn_hourly()`, `import_ghcn_daily()` and `import_ghcn_monthly()` to grant access to the GHCNh, GHCNd and GHCNm services.
 
 - Added `import_isd_stations()`, `import_isd_hourly()` and `import_isd_lite()` to provide a consistent API with the newly added GHCN functions.
 
@@ -148,7 +152,7 @@ Several functions have been deprecated and replaced due to the updated `worldmet
 
 - Parallel importing of NOAA data is now powered by `{mirai}`. This reduces the number of dependencies of `{worldmet}`, and also allows users to be more flexible with how parallel processing is achieved.
 
-    - Due to this change, users are recommended to set `mirai::daemons()` themselves. `n.core` will stil work for back-compatibility, but will give a once-per-session warning.
+    - Due to this change, users are recommended to set `mirai::daemons()` themselves. `n.core` will still work for back-compatibility, but will give a once-per-session warning.
 
 - `getMeta()` has gained the `crs` argument to search NOAA ISD stations by coordinates other than latitude and longitude.
 
